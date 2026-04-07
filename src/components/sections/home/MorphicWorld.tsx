@@ -215,25 +215,22 @@ const ARC_FRAG = /* glsl */ `
 
 // ── Scroll camera (same system as v1) ────────────────────────────────────────
 
-// ── "Microscope descent" camera ───────────────────────────────────────────────
-// Hero: overhead god-view of the entire circuit board (y=40, steep downward pitch).
-// The camera descends and tilts through ~100° across the scroll — from looking
-// straight down at the PCB, through a lateral pan at eye level, up to a risen
-// view of the ferrofluid spikes below. Nothing like v1's horizontal flythrough.
+// ── Camera — wave-elevation patrol ───────────────────────────────────────────
+// The camera stays within y=3–16 the entire scroll so the line-of-sight always
+// intersects the fluid blobs (y=0–7) and equipment towers (y=0–18).
 //
-// In Three.js YXZ order: positive pitch = looking downward.
-// pitch≈1.1 ≈ 63° down (bird's eye), pitch≈0 = horizontal, pitch≈0.5 = 29° down.
-const START = { x: 2, y: 42, z: 22, yaw: 0.05, pitch: 1.10 };
+// Pitch is calibrated per waypoint: at height h, looking at content c units away,
+// pitch = atan(h / c). This keeps content in-frame regardless of camera height.
+//
+// Rhythm: moderate → risen → floor → aerial → mid → settled.
+// The Y oscillation gives wave-like depth without ever flying out of range.
+const START = { x: 0, y: 8, z: 55, yaw: 0.0, pitch: 0.22 };
 const WAYPOINTS = [
-  // Tilt up while descending — equipment towers come into perspective view
-  { x: 22,  y: 18, z: 22,  yaw: -0.38, pitch: 0.60, dur: 22 }, // About
-  // Ground-level immersion — surrounded by fluid and equipment
-  { x: 10,  y: 3,  z:  0,  yaw:  0.28, pitch: 0.04, dur: 22 }, // Projects
-  // Rise high above spike fields — looking steeply down at the formation
-  { x: -14, y: 24, z: -26, yaw:  0.18, pitch: 0.52, dur: 21 }, // Skills
-  // Descend back to mid-height, pulling toward the exit
-  { x: -5,  y: 7,  z: -52, yaw: -0.05, pitch: 0.06, dur: 20 }, // Contact
-  { x: 0,   y: 12, z: -65, yaw:  0.00, pitch: 0.08, dur: 15 }, // End
+  { x: 18,  y: 12, z: 28,  yaw: -0.22, pitch: 0.30, dur: 22 }, // About — slightly risen
+  { x: 8,   y: 3,  z: 2,   yaw:  0.20, pitch: 0.06, dur: 22 }, // Projects — floor immersion
+  { x: -12, y: 15, z: -22, yaw:  0.18, pitch: 0.36, dur: 21 }, // Skills — aerial spike view
+  { x: -5,  y: 7,  z: -50, yaw: -0.06, pitch: 0.18, dur: 20 }, // Contact — mid
+  { x: 0,   y: 10, z: -62, yaw:  0.00, pitch: 0.22, dur: 15 }, // End
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
