@@ -10,10 +10,10 @@ import { buildV2World } from "@/lib/three/v2-world";
 // Background: pure black abyss.
 // Structure (circuit + equipment): near-invisible dim steel-blue.
 // Fluid / spikes / arcs: bright luminous cyan-white.
-const COLOR_FLUID  = new THREE.Color(0x88d8ff); // bright fluid glow
-const COLOR_STRUCT = new THREE.Color(0x2a5a7a); // dim circuit infrastructure
-const COLOR_SPIKE  = new THREE.Color(0xaaeeff); // ferrofluid tip (near-white)
-const COLOR_ARC    = new THREE.Color(0x66ccff); // arc signal pulse
+const COLOR_FLUID  = new THREE.Color(0xb8f0ff); // bright phosphorescent cyan-white
+const COLOR_STRUCT = new THREE.Color(0x4488aa); // circuit infrastructure (slightly brighter so it's legible)
+const COLOR_SPIKE  = new THREE.Color(0xddf8ff); // ferrofluid tip — near white
+const COLOR_ARC    = new THREE.Color(0x88ddff); // arc signal pulse
 
 // ── Structure shader (PCB floor + equipment silhouettes) ─────────────────────
 // Static, dim — serves as spatial reference for the bright fluid.
@@ -27,7 +27,7 @@ const STRUCT_VERT = /* glsl */ `
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
     vDepth  = -mv.z;
     vBright = aBright;
-    gl_PointSize = clamp(90.0 / vDepth, 0.4, 2.2);
+    gl_PointSize = clamp(180.0 / vDepth, 0.8, 4.5);
     gl_Position  = projectionMatrix * mv;
   }
 `;
@@ -66,22 +66,23 @@ const FLUID_VERT = /* glsl */ `
 
   void main() {
     // Organic elastic drift — different frequency per axis for non-spherical motion
-    float amp = 0.9;
+    // Reduced amplitude (0.5) so blobs stay coherent and readable
+    float amp = 0.5;
     vec3 pos = vec3(
       position.x + sin(uTime * 0.62 + aPhase * 6.28 + position.z * 0.13) * amp,
-      position.y + sin(uTime * 0.85 + aSeed  * 3.14) * amp * 0.28,
+      position.y + sin(uTime * 0.85 + aSeed  * 3.14) * amp * 0.35,
       position.z + cos(uTime * 0.51 + aPhase * 5.40 + position.x * 0.11) * amp
     );
 
     // Secondary slow 'magnetic pull' oscillation (blob-level breathing)
-    float breathe = 1.0 + 0.07 * sin(uTime * 0.38 + aPhase * 2.0);
+    float breathe = 1.0 + 0.09 * sin(uTime * 0.38 + aPhase * 2.0);
     pos.xz *= breathe;
 
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     vDepth  = -mv.z;
-    vBright = 0.65 + 0.35 * abs(sin(uTime * 0.44 + aPhase * 3.0));
+    vBright = 0.70 + 0.30 * abs(sin(uTime * 0.44 + aPhase * 3.0));
 
-    gl_PointSize = clamp(650.0 / vDepth, 1.0, 8.0);
+    gl_PointSize = clamp(1600.0 / vDepth, 3.0, 16.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
@@ -99,14 +100,14 @@ const FLUID_FRAG = /* glsl */ `
     float d  = length(uv);
     if (d > 0.5) discard;
 
-    // Soft radial falloff — accumulates to a glow when many points overlap
-    float alpha = pow(1.0 - d * 2.0, 2.5) * 0.85;
+    // Wide soft glow — accumulates to a bright luminous mass when points overlap
+    float alpha = pow(max(0.0, 1.0 - d * 2.0), 1.4) * 0.90;
     float fog   = smoothstep(uFogNear, uFogFar, vDepth);
     alpha *= (1.0 - fog) * vBright * smoothstep(0.0, 1.2, uAppear);
     if (alpha < 0.005) discard;
 
-    // Slightly over-bright core creates the luminous mercury look
-    gl_FragColor = vec4(uColor * (1.3 + vBright * 0.5), alpha);
+    // Over-drive the color — additive blending accumulates this into a vivid glow
+    gl_FragColor = vec4(uColor * (2.0 + vBright * 0.8), alpha);
   }
 `;
 
@@ -133,7 +134,7 @@ const SPIKE_VERT = /* glsl */ `
     vDepth     = -mv.z;
     vT         = aT;
 
-    gl_PointSize = clamp(200.0 / vDepth, 0.4, 3.5);
+    gl_PointSize = clamp(500.0 / vDepth, 1.0, 7.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
@@ -165,45 +166,64 @@ const SPIKE_FRAG = /* glsl */ `
 // A bright pulse travels along each arc — like a signal propagating through
 // an energy conduit. Base glow remains dim between pulses.
 
+// Arc rendered as POINTS (not LINE) — gives controllable point size per vertex.
+// Base glow is always visible; a bright pulse travels along the arc.
 const ARC_VERT = /* glsl */ `
   uniform float uTime;
   attribute float aT;
   attribute float aSpeed;
   attribute float aPhase;
   varying  float  vBrightness;
+  varying  float  vDepth;
 
   void main() {
-    float flow = fract(uTime * aSpeed + aPhase);
-    float dist = abs(aT - flow);
-    dist = min(dist, 1.0 - dist);              // wrap-around
-    float pulse = 1.0 - smoothstep(0.0, 0.12, dist);
-    vBrightness = 0.06 + pulse * 0.94;         // dim base + bright pulse
+    float flow  = fract(uTime * aSpeed + aPhase);
+    float d     = abs(aT - flow);
+    d = min(d, 1.0 - d);                         // wrap-around distance
+    float pulse = 1.0 - smoothstep(0.0, 0.10, d);
+    // Strong base glow (0.40) so the full arc path is always visible
+    vBrightness = 0.40 + pulse * 0.60;
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec4 mv  = modelViewMatrix * vec4(position, 1.0);
+    vDepth   = -mv.z;
+    // Arc points are medium-large — overlapping makes a smooth glowing line
+    gl_PointSize = clamp(500.0 / vDepth, 2.0, 10.0);
+    gl_Position  = projectionMatrix * mv;
   }
 `;
 
 const ARC_FRAG = /* glsl */ `
   uniform vec3  uColor;
+  uniform float uFogNear;
+  uniform float uFogFar;
   uniform float uAppear;
   varying float vBrightness;
+  varying float vDepth;
 
   void main() {
-    float alpha = vBrightness * smoothstep(0.1, 1.0, uAppear);
+    vec2  uv = gl_PointCoord - 0.5;
+    float d  = length(uv);
+    if (d > 0.5) discard;
+
+    float alpha = (1.0 - smoothstep(0.15, 0.5, d)) * vBrightness;
+    float fog   = smoothstep(uFogNear, uFogFar, vDepth);
+    alpha *= (1.0 - fog) * smoothstep(0.0, 1.0, uAppear);
     if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor * (0.9 + vBrightness * 0.8), alpha * 0.75);
+    gl_FragColor = vec4(uColor * (1.4 + vBrightness * 0.8), alpha * 0.88);
   }
 `;
 
 // ── Scroll camera (same system as v1) ────────────────────────────────────────
 
-const START = { x: 0, y: 15, z: 55, yaw: 0.0, pitch: 0.12 };
+// Camera starts at y=4 (eye level inside the lab), looking nearly horizontally.
+// At y=15 with pitch=0.12 the camera was looking over everything into void.
+const START = { x: 0, y: 4, z: 58, yaw: 0.0, pitch: 0.04 };
 const WAYPOINTS = [
-  { x: 28,  y: 9,   z: 18,  yaw: -0.28, pitch:  0.18, dur: 22 }, // About
-  { x: 10,  y: 2.5, z: -5,  yaw:  0.35, pitch: -0.04, dur: 22 }, // Projects (ground)
-  { x: -12, y: 20,  z: -25, yaw:  0.22, pitch:  0.38, dur: 21 }, // Skills (risen)
-  { x: -5,  y: 10,  z: -50, yaw: -0.06, pitch:  0.04, dur: 20 }, // Contact
-  { x: 0,   y: 12,  z: -65, yaw:  0.00, pitch:  0.05, dur: 15 }, // End
+  { x: 28,  y: 5,   z: 18,  yaw: -0.28, pitch:  0.08, dur: 22 }, // About
+  { x: 10,  y: 2,   z: -5,  yaw:  0.35, pitch:  0.00, dur: 22 }, // Projects (ground)
+  { x: -12, y: 18,  z: -25, yaw:  0.22, pitch:  0.40, dur: 21 }, // Skills (risen — see spikes below)
+  { x: -5,  y: 6,   z: -50, yaw: -0.06, pitch:  0.04, dur: 20 }, // Contact
+  { x: 0,   y: 8,   z: -65, yaw:  0.00, pitch:  0.05, dur: 15 }, // End
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -314,9 +334,11 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
       vertexShader:   ARC_VERT,
       fragmentShader: ARC_FRAG,
       uniforms: {
-        uColor:  { value: COLOR_ARC },
-        uTime:   { value: 0.0 },
-        uAppear: { value: 0.0 },
+        uColor:   { value: COLOR_ARC },
+        uFogNear: { value: FOG_NEAR },
+        uFogFar:  { value: FOG_FAR  },
+        uTime:    { value: 0.0 },
+        uAppear:  { value: 0.0 },
       },
       transparent: true,
       depthWrite:  false,
@@ -330,7 +352,7 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
       geo.setAttribute("aT",       new THREE.BufferAttribute(arc.ts,        1));
       geo.setAttribute("aSpeed",   new THREE.BufferAttribute(arc.speeds,    1));
       geo.setAttribute("aPhase",   new THREE.BufferAttribute(arc.phases,    1));
-      scene.add(new THREE.Line(geo, arcMat));
+      scene.add(new THREE.Points(geo, arcMat)); // Points = controllable size per vertex
       arcGeos.push(geo);
     }
 
@@ -459,7 +481,7 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
         velocity.addScaledVector(moveVec, SPEED * delta);
         velocity.multiplyScalar(DAMPING);
         camera.position.addScaledVector(velocity, 1);
-        camera.position.y = Math.max(1.5, camera.position.y);
+        camera.position.y = Math.max(0.8, camera.position.y);
       } else {
         camera.position.set(cam.x, cam.y, cam.z);
         camera.rotation.y = cam.yaw;

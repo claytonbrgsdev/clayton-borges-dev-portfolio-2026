@@ -296,7 +296,7 @@ function addFluidPool(
     const r    = Math.cbrt(rng()); // cube-root for uniform volume fill
 
     pos[(off + i) * 3]     = cx + Math.cos(phi) * sinT * r * radius * 1.5;
-    pos[(off + i) * 3 + 1] = Math.abs(cosT) * r * radius * 0.35;
+    pos[(off + i) * 3 + 1] = Math.abs(cosT) * r * radius * 0.85; // taller blob — visible from camera height
     pos[(off + i) * 3 + 2] = cz + Math.sin(phi) * sinT * r * radius * 1.5;
 
     phases[off + i] = rng() * Math.PI * 2;
@@ -355,7 +355,7 @@ function buildArc(
   b:   [number, number, number],
   rng: () => number
 ): ArcData {
-  const COUNT = 65;
+  const COUNT = 180;
   const positions = new Float32Array(COUNT * 3);
   const ts        = new Float32Array(COUNT);
   const speed     = 0.25 + rng() * 0.35;
@@ -363,9 +363,9 @@ function buildArc(
   const speeds    = new Float32Array(COUNT).fill(speed);
   const phases    = new Float32Array(COUNT).fill(phase);
 
-  // Elevated midpoint — arc bends upward like an energy discharge
+  // Elevated midpoint — arc rises into view from camera's perspective
   const mx = (a[0] + b[0]) / 2 + (rng() - 0.5) * 8;
-  const my = 14 + rng() * 18;
+  const my = 8 + rng() * 14;  // lower than before — stays in view at y≈4 camera
   const mz = (a[2] + b[2]) / 2 + (rng() - 0.5) * 8;
 
   for (let i = 0; i < COUNT; i++) {
@@ -387,10 +387,10 @@ export function buildV2World(seed = 42): V2World {
   const _perm = makePermutation(seed);  // available for future noise use
   const rng   = makeRng(seed + 2077);
 
-  // Conservative pre-allocation
-  const MAX_STRUCT = 28_000;
-  const MAX_FLUID  = 16_000;
-  const MAX_SPIKES =  3_000;
+  // Pre-allocation — fluid is the dominant visual layer
+  const MAX_STRUCT = 30_000;
+  const MAX_FLUID  = 30_000;
+  const MAX_SPIKES =  5_000;
 
   const strPos    = new Float32Array(MAX_STRUCT * 3);
   const strBright = new Float32Array(MAX_STRUCT);
@@ -414,11 +414,11 @@ export function buildV2World(seed = 42): V2World {
   // ── Equipment + fluid + spikes per node ───────────────────────────────
   type EType = "flask" | "beaker" | "rack";
   const ETYPES: EType[] = ["flask", "beaker", "flask", "rack", "beaker", "flask", "beaker", "rack"];
-  const SPIKE_NODES = new Set([0, 2, 4, 6]); // alternate nodes get spike clusters
+  const SPIKE_NODES = new Set([0, 1, 2, 3, 4, 5, 6]); // most nodes get spikes
 
   for (let ni = 0; ni < NODES.length; ni++) {
     const [nx, , nz] = NODES[ni];
-    const scale = 0.75 + rng() * 0.55;
+    const scale = 0.90 + rng() * 0.70; // larger equipment — more visible at eye level
     const type  = ETYPES[ni];
 
     // Equipment silhouette
@@ -430,15 +430,15 @@ export function buildV2World(seed = 42): V2World {
       strCount += addTestTubeRack(strPos, strBright, strCount, nx, nz, rng);
     }
 
-    // Fluid pool at the base of each piece of equipment
-    const poolR    = 3.5 + rng() * 3.5;
-    const poolPts  = Math.floor(1100 + rng() * 700);
+    // Dense fluid pool — the primary visual element
+    const poolR    = 4.5 + rng() * 4.0;
+    const poolPts  = Math.floor(2500 + rng() * 1200);
     flCount += addFluidPool(flPos, flPhases, flSeeds, flCount, nx, nz, poolR, poolPts, rng);
 
-    // Ferrofluid spikes at selected nodes
+    // Ferrofluid spikes at most nodes
     if (SPIKE_NODES.has(ni)) {
-      const offX = (rng() - 0.5) * 6;
-      const offZ = (rng() - 0.5) * 6;
+      const offX = (rng() - 0.5) * 5;
+      const offZ = (rng() - 0.5) * 5;
       spCount += addSpikeCluster(spPos, spTs, spFreqs, spPhases, spMaxH, spCount, nx + offX, nz + offZ, rng);
     }
   }
