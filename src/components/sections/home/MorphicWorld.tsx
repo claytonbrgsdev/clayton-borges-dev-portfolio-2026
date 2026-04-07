@@ -215,15 +215,25 @@ const ARC_FRAG = /* glsl */ `
 
 // ── Scroll camera (same system as v1) ────────────────────────────────────────
 
-// Camera starts at y=4 (eye level inside the lab), looking nearly horizontally.
-// At y=15 with pitch=0.12 the camera was looking over everything into void.
-const START = { x: 0, y: 4, z: 58, yaw: 0.0, pitch: 0.04 };
+// ── "Microscope descent" camera ───────────────────────────────────────────────
+// Hero: overhead god-view of the entire circuit board (y=40, steep downward pitch).
+// The camera descends and tilts through ~100° across the scroll — from looking
+// straight down at the PCB, through a lateral pan at eye level, up to a risen
+// view of the ferrofluid spikes below. Nothing like v1's horizontal flythrough.
+//
+// In Three.js YXZ order: positive pitch = looking downward.
+// pitch≈1.1 ≈ 63° down (bird's eye), pitch≈0 = horizontal, pitch≈0.5 = 29° down.
+const START = { x: 2, y: 42, z: 22, yaw: 0.05, pitch: 1.10 };
 const WAYPOINTS = [
-  { x: 28,  y: 5,   z: 18,  yaw: -0.28, pitch:  0.08, dur: 22 }, // About
-  { x: 10,  y: 2,   z: -5,  yaw:  0.35, pitch:  0.00, dur: 22 }, // Projects (ground)
-  { x: -12, y: 18,  z: -25, yaw:  0.22, pitch:  0.40, dur: 21 }, // Skills (risen — see spikes below)
-  { x: -5,  y: 6,   z: -50, yaw: -0.06, pitch:  0.04, dur: 20 }, // Contact
-  { x: 0,   y: 8,   z: -65, yaw:  0.00, pitch:  0.05, dur: 15 }, // End
+  // Tilt up while descending — equipment towers come into perspective view
+  { x: 22,  y: 18, z: 22,  yaw: -0.38, pitch: 0.60, dur: 22 }, // About
+  // Ground-level immersion — surrounded by fluid and equipment
+  { x: 10,  y: 3,  z:  0,  yaw:  0.28, pitch: 0.04, dur: 22 }, // Projects
+  // Rise high above spike fields — looking steeply down at the formation
+  { x: -14, y: 24, z: -26, yaw:  0.18, pitch: 0.52, dur: 21 }, // Skills
+  // Descend back to mid-height, pulling toward the exit
+  { x: -5,  y: 7,  z: -52, yaw: -0.05, pitch: 0.06, dur: 20 }, // Contact
+  { x: 0,   y: 12, z: -65, yaw:  0.00, pitch: 0.08, dur: 15 }, // End
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
