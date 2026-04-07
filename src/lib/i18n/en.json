@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "hardware": "Hardware",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Hi, I'm",
+      "name": "Clayton Borges",
+      "title": "Full-Stack Developer",
+      "subtitle": "React & Next.js · Three.js 3D · Python & FastAPI",
+      "cta_projects": "View Projects",
+      "cta_contact": "Get In Touch"
+    },
+    "about_preview": {
+      "label": "About Me",
+      "heading": "Building products that move people.",
+      "body": "Full-Stack Developer with 2+ years delivering production web applications, 3D visualization platforms, and data-driven systems. Based in Brasília, Brazil — available for remote work worldwide.",
+      "cta": "Learn More"
+    },
+    "featured_projects": {
+      "label": "Selected Work",
+      "heading": "Projects",
+      "cta": "See All Projects"
+    },
+    "skills": {
+      "label": "Tech Stack",
+      "heading": "What I work with"
+    },
+    "contact_cta": {
+      "heading": "Let's build something together.",
+      "body": "Open to full-time remote roles, freelance contracts, and interesting collaborations.",
+      "cta": "Say Hello"
+    }
+  },
+  "projects": {
+    "heading": "All Projects",
+    "subheading": "A collection of client work, personal experiments, and open-source tools.",
+    "filter_all": "All",
+    "filter_3d": "3D / WebGL",
+    "filter_web": "Web Apps",
+    "filter_platform": "Platforms",
+    "filter_ai": "AI / ML",
+    "filter_audio": "Audio",
+    "filter_data": "Data Engineering",
+    "filter_embedded": "Embedded",
+    "view_code": "Code",
+    "view_live": "Live Demo",
+    "client_label": "Client"
+  },
+  "about": {
+    "heading": "About Me",
+    "subheading": "Developer · Creative · Builder",
+    "bio_1": "I'm a Full-Stack Developer based in Brasília, Brazil, with a background in Psychology and a passion for building things that combine technical rigor with creative expression.",
+    "bio_2": "My work spans interactive 3D experiences, production web platforms, AI-powered tools, and embedded systems. I care deeply about code quality, performance, and the craft of building software that actually matters to the people using it.",
+    "bio_3": "Currently available for remote full-time roles and freelance contracts worldwide.",
+    "experience_label": "Experience",
+    "education_label": "Education",
+    "skills_label": "Skills",
+    "download_resume": "Download Resume",
+    "languages_label": "Languages",
+    "portuguese": "Portuguese — Native",
+    "english": "English — Professional"
+  },
+  "contact": {
+    "heading": "Get In Touch",
+    "subheading": "Open to remote roles, freelance work, and interesting projects.",
+    "form_name": "Your Name",
+    "form_email": "Your Email",
+    "form_subject": "Subject",
+    "form_message": "Message",
+    "form_send": "Send Message",
+    "form_sending": "Sending...",
+    "form_success": "Message sent! I'll get back to you soon.",
+    "form_error": "Something went wrong. Please try again or email me directly.",
+    "or_reach": "Or reach me directly"
+  },
+  "hardware": {
+    "heading": "Hardware Projects",
+    "subheading": "Microcontrollers, circuits, and physical computing experiments.",
+    "status_completed": "Completed",
+    "status_in_progress": "In Progress",
+    "status_prototype": "Prototype",
+    "specs_label": "Specs",
+    "gallery_label": "Gallery",
+    "photo_label": "Photo",
+    "schematic_label": "Schematic",
+    "diagram_label": "Diagram",
+    "breadboard_label": "Breadboard",
+    "pcb_label": "PCB",
+    "view_code": "View Code",
+    "view_video": "Watch Demo",
+    "back_to_hardware": "← All Hardware"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "built_with": "Built with Next.js, Three.js & GSAP"
+  },
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "open_link": "Open link"
+  }
+}

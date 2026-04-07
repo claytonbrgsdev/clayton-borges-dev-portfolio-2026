@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "home": "Início",
+    "projects": "Projetos",
+    "hardware": "Hardware",
+    "about": "Sobre",
+    "contact": "Contato"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Olá, sou",
+      "name": "Clayton Borges",
+      "title": "Desenvolvedor Full-Stack",
+      "subtitle": "React & Next.js · Three.js 3D · Python & FastAPI",
+      "cta_projects": "Ver Projetos",
+      "cta_contact": "Entrar em Contato"
+    },
+    "about_preview": {
+      "label": "Sobre Mim",
+      "heading": "Construindo produtos que movem pessoas.",
+      "body": "Desenvolvedor Full-Stack com mais de 2 anos entregando aplicações web em produção, plataformas de visualização 3D e sistemas orientados a dados. Baseado em Brasília, Brasil — disponível para trabalho remoto em todo o mundo.",
+      "cta": "Saiba Mais"
+    },
+    "featured_projects": {
+      "label": "Trabalhos Selecionados",
+      "heading": "Projetos",
+      "cta": "Ver Todos os Projetos"
+    },
+    "skills": {
+      "label": "Stack Técnica",
+      "heading": "Com o que trabalho"
+    },
+    "contact_cta": {
+      "heading": "Vamos construir algo juntos.",
+      "body": "Aberto a vagas remotas em tempo integral, contratos freelance e colaborações interessantes.",
+      "cta": "Diga Olá"
+    }
+  },
+  "projects": {
+    "heading": "Todos os Projetos",
+    "subheading": "Uma coleção de trabalhos para clientes, experimentos pessoais e ferramentas open-source.",
+    "filter_all": "Todos",
+    "filter_3d": "3D / WebGL",
+    "filter_web": "Aplicações Web",
+    "filter_platform": "Plataformas",
+    "filter_ai": "IA / ML",
+    "filter_audio": "Áudio",
+    "filter_data": "Engenharia de Dados",
+    "filter_embedded": "Embarcados",
+    "view_code": "Código",
+    "view_live": "Demo ao Vivo",
+    "client_label": "Cliente"
+  },
+  "about": {
+    "heading": "Sobre Mim",
+    "subheading": "Desenvolvedor · Criativo · Construtor",
+    "bio_1": "Sou um Desenvolvedor Full-Stack baseado em Brasília, Brasil, com formação em Psicologia e paixão por construir coisas que combinam rigor técnico com expressão criativa.",
+    "bio_2": "Meu trabalho abrange experiências 3D interativas, plataformas web em produção, ferramentas com IA e sistemas embarcados. Me importo profundamente com qualidade de código, performance e o ofício de construir software que realmente importa para quem o usa.",
+    "bio_3": "Atualmente disponível para vagas remotas em tempo integral e contratos freelance em todo o mundo.",
+    "experience_label": "Experiência",
+    "education_label": "Educação",
+    "skills_label": "Habilidades",
+    "download_resume": "Baixar Currículo",
+    "languages_label": "Idiomas",
+    "portuguese": "Português — Nativo",
+    "english": "Inglês — Nível Profissional",
+    "cta": "Saiba Mais"
+  },
+  "contact": {
+    "heading": "Entre em Contato",
+    "subheading": "Aberto a vagas remotas, trabalho freelance e projetos interessantes.",
+    "form_name": "Seu Nome",
+    "form_email": "Seu E-mail",
+    "form_subject": "Assunto",
+    "form_message": "Mensagem",
+    "form_send": "Enviar Mensagem",
+    "form_sending": "Enviando...",
+    "form_success": "Mensagem enviada! Responderei em breve.",
+    "form_error": "Algo deu errado. Tente novamente ou me envie um e-mail diretamente.",
+    "or_reach": "Ou entre em contato diretamente"
+  },
+  "hardware": {
+    "heading": "Projetos de Hardware",
+    "subheading": "Microcontroladores, circuitos e experimentos de computação física.",
+    "status_completed": "Concluído",
+    "status_in_progress": "Em Andamento",
+    "status_prototype": "Protótipo",
+    "specs_label": "Especificações",
+    "gallery_label": "Galeria",
+    "photo_label": "Foto",
+    "schematic_label": "Esquemático",
+    "diagram_label": "Diagrama",
+    "breadboard_label": "Protoboard",
+    "pcb_label": "PCB",
+    "view_code": "Ver Código",
+    "view_video": "Ver Demo",
+    "back_to_hardware": "← Todo o Hardware"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados.",
+    "built_with": "Construído com Next.js, Three.js & GSAP"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "back": "Voltar",
+    "open_link": "Abrir link"
+  }
+}
