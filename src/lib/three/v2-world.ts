@@ -387,10 +387,10 @@ export function buildV2World(seed = 42): V2World {
   const _perm = makePermutation(seed);  // available for future noise use
   const rng   = makeRng(seed + 2077);
 
-  // Pre-allocation — fluid is the dominant visual layer
-  const MAX_STRUCT = 30_000;
-  const MAX_FLUID  = 30_000;
-  const MAX_SPIKES =  5_000;
+  // Pre-allocation — sized to actual usage with small headroom
+  const MAX_STRUCT = 22_000;
+  const MAX_FLUID  = 26_000;
+  const MAX_SPIKES =  4_000;
 
   const strPos    = new Float32Array(MAX_STRUCT * 3);
   const strBright = new Float32Array(MAX_STRUCT);
@@ -430,9 +430,9 @@ export function buildV2World(seed = 42): V2World {
       strCount += addTestTubeRack(strPos, strBright, strCount, nx, nz, rng);
     }
 
-    // Dense fluid pool — the primary visual element
+    // Dense fluid pool — primary visual element (8 pools × ~2000 avg = 16k < MAX_FLUID 26k)
     const poolR    = 4.5 + rng() * 4.0;
-    const poolPts  = Math.floor(2500 + rng() * 1200);
+    const poolPts  = Math.floor(1600 + rng() * 800);
     flCount += addFluidPool(flPos, flPhases, flSeeds, flCount, nx, nz, poolR, poolPts, rng);
 
     // Ferrofluid spikes at most nodes
