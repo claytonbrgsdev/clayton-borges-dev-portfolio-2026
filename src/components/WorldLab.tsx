@@ -472,6 +472,10 @@ export function WorldLab() {
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 1);
+    // Force canvas to fill its container via CSS — without this, Three.js sets
+    // only the HTML width/height attributes (2× on HiDPI), making the canvas
+    // physically larger than the viewport and blocking pointer events on the UI.
+    renderer.domElement.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;";
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -547,8 +551,8 @@ export function WorldLab() {
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden select-none">
-      {/* Canvas */}
-      <div ref={containerRef} className="absolute inset-0" />
+      {/* Canvas — z-0 keeps it below the z-10 UI overlay */}
+      <div ref={containerRef} className="absolute inset-0 z-0" />
 
       {/* Top bar */}
       <div className="absolute top-0 inset-x-0 z-10 flex items-stretch border-b border-white/10 bg-black/60 backdrop-blur-sm">
