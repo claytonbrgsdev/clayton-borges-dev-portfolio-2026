@@ -164,8 +164,8 @@ const V2_FLUID_VERT = /* glsl */ `
     pos.xz *= breathe;
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     vDepth  = -mv.z;
-    vBright = 0.70 + 0.30 * abs(sin(uTime * 0.44 + aPhase * 3.0));
-    gl_PointSize = clamp(1600.0 / vDepth, 3.0, 16.0);
+    vBright = 0.55 + 0.45 * abs(sin(uTime * 0.44 + aPhase * 3.0));
+    gl_PointSize = clamp(900.0 / vDepth, 1.5, 9.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
@@ -179,10 +179,10 @@ const V2_FLUID_FRAG = /* glsl */ `
     vec2  uv = gl_PointCoord - 0.5;
     float d  = length(uv);
     if (d > 0.5) discard;
-    float alpha = pow(max(0.0, 1.0 - d * 2.0), 1.4) * 0.90;
+    float alpha = pow(max(0.0, 1.0 - d * 2.0), 1.5) * 0.55;
     alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth)) * vBright;
     if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor * (2.0 + vBright * 0.8), alpha);
+    gl_FragColor = vec4(uColor * (1.0 + vBright * 0.5), alpha);
   }
 `;
 const V2_SPIKE_VERT = /* glsl */ `
@@ -251,6 +251,99 @@ const V2_ARC_FRAG = /* glsl */ `
     alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
     if (alpha < 0.005) discard;
     gl_FragColor = vec4(uColor * (1.4 + vBrightness * 0.8), alpha * 0.88);
+  }
+`;
+
+// ── V2 plasma animal shaders ──────────────────────────────────────────────────
+
+const V2_PLASMA_VERT = /* glsl */ `
+  uniform float uTime;
+  attribute float aPhase;
+  attribute float aT;
+  attribute float aSeed;
+  attribute float aAnimalPhase;
+  varying  float  vBright;
+  varying  float  vDepth;
+  varying  vec3   vColor;
+  void main() {
+    // Per-animal slow emerge/submerge: 0 → 1 → 0, ~30-second period
+    float cycle  = sin(uTime * 0.21 + aAnimalPhase) * 0.5 + 0.5;
+    float emerge = smoothstep(0.05, 0.55, cycle);
+
+    // Organic plasma drift — preserves creature shape while shimmering
+    float driftX = sin(uTime * 1.3 + aPhase * 6.28 + position.z * 0.4) * 0.40
+                 + sin(uTime * 0.65 + aSeed  * 4.0)                     * 0.18;
+    float driftZ = cos(uTime * 1.1 + aPhase * 5.1  + position.x * 0.35) * 0.35;
+    float driftY = sin(uTime * 0.9 + aPhase * 2.5)                      * 0.12;
+
+    // Vertical lift: tip (aT=1) rises most, base (aT=0) stays near pool
+    float liftY = aT * emerge * 11.0;
+
+    vec3 pos = vec3(
+      position.x + driftX,
+      position.y + driftY + liftY,
+      position.z + driftZ
+    );
+
+    // Hot-spot flicker
+    float heat   = 0.5 + 0.5 * abs(sin(uTime * 1.9 + aPhase * 4.2));
+    vBright = (0.45 + aT * 0.55) * (0.65 + heat * 0.50) * max(0.04, emerge);
+
+    // Color: cold phosphor cyan → hot near-white with violet tint
+    vColor = mix(
+      vec3(0.28, 0.82, 1.00),  // cold: deep cyan
+      vec3(0.92, 0.88, 1.00),  // hot: white-violet plasma
+      clamp(aT * heat, 0.0, 1.0)
+    );
+
+    vec4 mv      = modelViewMatrix * vec4(pos, 1.0);
+    vDepth       = -mv.z;
+    gl_PointSize = clamp(750.0 / vDepth, 1.5, 12.0);
+    gl_Position  = projectionMatrix * mv;
+  }
+`;
+const V2_PLASMA_FRAG = /* glsl */ `
+  uniform float uFogNear;
+  uniform float uFogFar;
+  varying float vBright;
+  varying float vDepth;
+  varying vec3  vColor;
+  void main() {
+    vec2  uv = gl_PointCoord - 0.5;
+    float d  = length(uv);
+    if (d > 0.5) discard;
+    float alpha = pow(max(0.0, 1.0 - d * 2.1), 1.25) * 0.92 * vBright;
+    alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
+    if (alpha < 0.005) discard;
+    gl_FragColor = vec4(vColor * (1.2 + vBright * 0.8), alpha);
+  }
+`;
+
+const V2_HAZE_VERT = /* glsl */ `
+  attribute float aBright;
+  varying  float  vBright;
+  varying  float  vDepth;
+  void main() {
+    vec4 mv      = modelViewMatrix * vec4(position, 1.0);
+    vDepth       = -mv.z;
+    vBright      = aBright;
+    gl_PointSize = clamp(90.0 / vDepth, 0.5, 1.8);
+    gl_Position  = projectionMatrix * mv;
+  }
+`;
+const V2_HAZE_FRAG = /* glsl */ `
+  uniform vec3  uColor;
+  uniform float uFogNear;
+  uniform float uFogFar;
+  varying float vBright;
+  varying float vDepth;
+  void main() {
+    vec2  uv = gl_PointCoord - 0.5;
+    if (length(uv) > 0.5) discard;
+    float alpha = (1.0 - smoothstep(0.2, 0.5, length(uv))) * vBright;
+    alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
+    if (alpha < 0.003) discard;
+    gl_FragColor = vec4(uColor, alpha);
   }
 `;
 
@@ -419,6 +512,39 @@ function buildV2(scene: THREE.Scene): SceneBundle {
     scene.add(pts);
   }
   mats.push(arcMat);
+
+  // Plasma animals
+  const plasmaMat = new THREE.ShaderMaterial({
+    vertexShader: V2_PLASMA_VERT, fragmentShader: V2_PLASMA_FRAG,
+    uniforms: {
+      uFogNear: { value: FOG_NEAR }, uFogFar: { value: FOG_FAR },
+      uTime:    { value: 0 },
+    },
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  });
+  const pa = world.plasmaAnimals;
+  const paGeo = new THREE.BufferGeometry();
+  paGeo.setAttribute("position",     new THREE.BufferAttribute(pa.positions,   3));
+  paGeo.setAttribute("aPhase",       new THREE.BufferAttribute(pa.phases,      1));
+  paGeo.setAttribute("aT",           new THREE.BufferAttribute(pa.ts,          1));
+  paGeo.setAttribute("aSeed",        new THREE.BufferAttribute(pa.seeds,       1));
+  paGeo.setAttribute("aAnimalPhase", new THREE.BufferAttribute(pa.animalPhase, 1));
+  add(new THREE.Points(paGeo, plasmaMat), paGeo, plasmaMat);
+
+  // Ambient nebula haze
+  const hazeMat = new THREE.ShaderMaterial({
+    vertexShader: V2_HAZE_VERT, fragmentShader: V2_HAZE_FRAG,
+    uniforms: {
+      uColor:   { value: new THREE.Color(0x224455) },
+      uFogNear: { value: FOG_NEAR * 0.6 }, uFogFar: { value: FOG_FAR },
+    },
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  });
+  const haze = world.ambientHaze;
+  const hazeGeo = new THREE.BufferGeometry();
+  hazeGeo.setAttribute("position", new THREE.BufferAttribute(haze.positions,  3));
+  hazeGeo.setAttribute("aBright",  new THREE.BufferAttribute(haze.brightness, 1));
+  add(new THREE.Points(hazeGeo, hazeMat), hazeGeo, hazeMat);
 
   return {
     timeMats: mats,
