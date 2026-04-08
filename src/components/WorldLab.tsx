@@ -118,21 +118,22 @@ const V1_TRACE_FRAG = /* glsl */ `
   }
 `;
 
-// ── V2 shaders (verbatim from MorphicWorld, uAppear fixed to 1.0) ─────────────
+// ── V2 shaders — Circuit Cathedral ────────────────────────────────────────────
 
-const V2_STRUCT_VERT = /* glsl */ `
+// Slab surface (static dim circuit traces)
+const V2_SLAB_VERT = /* glsl */ `
   attribute float aBright;
   varying  float  vBright;
   varying  float  vDepth;
   void main() {
-    vec4 mv = modelViewMatrix * vec4(position, 1.0);
-    vDepth  = -mv.z;
-    vBright = aBright;
-    gl_PointSize = clamp(180.0 / vDepth, 0.8, 4.5);
+    vec4 mv      = modelViewMatrix * vec4(position, 1.0);
+    vDepth       = -mv.z;
+    vBright      = aBright;
+    gl_PointSize = clamp(220.0 / vDepth, 0.7, 5.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
-const V2_STRUCT_FRAG = /* glsl */ `
+const V2_SLAB_FRAG = /* glsl */ `
   uniform vec3  uColor;
   uniform float uFogNear;
   uniform float uFogFar;
@@ -141,116 +142,53 @@ const V2_STRUCT_FRAG = /* glsl */ `
   void main() {
     vec2  uv = gl_PointCoord - 0.5;
     if (length(uv) > 0.5) discard;
-    float alpha = (1.0 - smoothstep(0.3, 0.5, length(uv))) * vBright;
+    float alpha = (1.0 - smoothstep(0.25, 0.5, length(uv))) * vBright;
     alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
-    if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor, alpha);
+    if (alpha < 0.004) discard;
+    gl_FragColor = vec4(uColor * (0.5 + vBright * 1.5), alpha);
   }
 `;
-const V2_FLUID_VERT = /* glsl */ `
+// Plasma cascade — flows DOWN each slab face
+const V2_CASCADE_VERT = /* glsl */ `
   uniform float uTime;
+  uniform float uSlabBottom;
+  uniform float uSlabH;
+  attribute float aSpeed;
   attribute float aPhase;
-  attribute float aSeed;
-  varying  float  vDepth;
   varying  float  vBright;
+  varying  float  vDepth;
   void main() {
-    float amp = 0.5;
-    vec3 pos = vec3(
-      position.x + sin(uTime * 0.62 + aPhase * 6.28 + position.z * 0.13) * amp,
-      position.y + sin(uTime * 0.85 + aSeed  * 3.14) * amp * 0.35,
-      position.z + cos(uTime * 0.51 + aPhase * 5.40 + position.x * 0.11) * amp
-    );
-    float breathe = 1.0 + 0.09 * sin(uTime * 0.38 + aPhase * 2.0);
-    pos.xz *= breathe;
-    vec4 mv = modelViewMatrix * vec4(pos, 1.0);
-    vDepth  = -mv.z;
-    vBright = 0.55 + 0.45 * abs(sin(uTime * 0.44 + aPhase * 3.0));
-    gl_PointSize = clamp(900.0 / vDepth, 1.5, 9.0);
+    // flow=0 → top of slab (head), increases → moves down, wraps back to top
+    float flow   = fract(aPhase - uTime * aSpeed * 0.11);
+    float worldY = uSlabBottom + (1.0 - flow) * uSlabH;  // invert: head at top
+
+    // Drip: bright at the leading edge (flow≈0), fading tail behind it
+    float bright = pow(1.0 - flow, 2.2);
+    // Extra bright drip-head just before next wrap
+    bright += smoothstep(0.88, 1.0, flow) * 0.9;
+    vBright = clamp(bright, 0.0, 1.4);
+
+    vec3 pos     = vec3(position.x, worldY, position.z);
+    vec4 mv      = modelViewMatrix * vec4(pos, 1.0);
+    vDepth       = -mv.z;
+    gl_PointSize = clamp(800.0 / vDepth, 1.0, 9.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
-const V2_FLUID_FRAG = /* glsl */ `
+const V2_CASCADE_FRAG = /* glsl */ `
   uniform vec3  uColor;
   uniform float uFogNear;
   uniform float uFogFar;
-  varying float vDepth;
   varying float vBright;
+  varying float vDepth;
   void main() {
     vec2  uv = gl_PointCoord - 0.5;
     float d  = length(uv);
     if (d > 0.5) discard;
-    float alpha = pow(max(0.0, 1.0 - d * 2.0), 1.5) * 0.55;
-    alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth)) * vBright;
-    if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor * (1.0 + vBright * 0.5), alpha);
-  }
-`;
-const V2_SPIKE_VERT = /* glsl */ `
-  uniform float uTime;
-  attribute float aT;
-  attribute float aFreq;
-  attribute float aPhase;
-  attribute float aMaxH;
-  varying  float  vT;
-  varying  float  vDepth;
-  void main() {
-    float anim  = 0.35 + 0.65 * abs(sin(uTime * aFreq + aPhase));
-    vec3 pos    = vec3(position.x, position.y + aT * aMaxH * anim, position.z);
-    vec4 mv     = modelViewMatrix * vec4(pos, 1.0);
-    vDepth      = -mv.z;
-    vT          = aT;
-    gl_PointSize = clamp(500.0 / vDepth, 1.0, 7.0);
-    gl_Position  = projectionMatrix * mv;
-  }
-`;
-const V2_SPIKE_FRAG = /* glsl */ `
-  uniform vec3  uColor;
-  uniform float uFogNear;
-  uniform float uFogFar;
-  varying float vT;
-  varying float vDepth;
-  void main() {
-    vec2  uv = gl_PointCoord - 0.5;
-    if (length(uv) > 0.5) discard;
-    float tip   = vT * vT;
-    float alpha = (1.0 - smoothstep(0.25, 0.5, length(uv))) * tip;
+    float alpha = pow(max(0.0, 1.0 - d * 2.0), 1.3) * 0.88 * vBright;
     alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
-    if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor * (0.7 + tip * 1.3), alpha * 0.88);
-  }
-`;
-const V2_ARC_VERT = /* glsl */ `
-  uniform float uTime;
-  attribute float aT;
-  attribute float aSpeed;
-  attribute float aPhase;
-  varying  float  vBrightness;
-  varying  float  vDepth;
-  void main() {
-    float flow  = fract(uTime * aSpeed + aPhase);
-    float d     = abs(aT - flow);
-    d = min(d, 1.0 - d);
-    float pulse = 1.0 - smoothstep(0.0, 0.10, d);
-    vBrightness = 0.40 + pulse * 0.60;
-    vec4 mv     = modelViewMatrix * vec4(position, 1.0);
-    vDepth      = -mv.z;
-    gl_PointSize = clamp(500.0 / vDepth, 2.0, 10.0);
-    gl_Position  = projectionMatrix * mv;
-  }
-`;
-const V2_ARC_FRAG = /* glsl */ `
-  uniform vec3  uColor;
-  uniform float uFogNear;
-  uniform float uFogFar;
-  varying float vBrightness;
-  varying float vDepth;
-  void main() {
-    vec2  uv = gl_PointCoord - 0.5;
-    if (length(uv) > 0.5) discard;
-    float alpha = (1.0 - smoothstep(0.15, 0.5, length(uv))) * vBrightness;
-    alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
-    if (alpha < 0.005) discard;
-    gl_FragColor = vec4(uColor * (1.4 + vBrightness * 0.8), alpha * 0.88);
+    if (alpha < 0.004) discard;
+    gl_FragColor = vec4(uColor * (1.2 + vBright * 1.1), alpha);
   }
 `;
 
@@ -266,33 +204,24 @@ const V2_PLASMA_VERT = /* glsl */ `
   varying  float  vDepth;
   varying  vec3   vColor;
   void main() {
-    // Slow breathe: stays between 0.5–1.0 — animals are always at least half-risen
-    float cycle  = sin(uTime * 0.18 + aAnimalPhase) * 0.25 + 0.75;
-    float emerge = smoothstep(0.45, 0.95, cycle);
+    // Whole-body floating bob (geometry Y already places creature at correct height)
+    float bob = sin(uTime * 0.22 + aAnimalPhase) * 2.2;
 
-    // Animals sit permanently above the fluid pool surface (pool top ~7 units).
-    // Base lift = 9 units so even aT=0 points are above the blob.
-    // Tip lift adds another 14 units for full creature height.
-    float liftY = 9.0 + aT * (14.0 * emerge);
-
-    // Gentle organic sway — small enough to keep the shape readable
-    float driftX = sin(uTime * 0.85 + aPhase * 6.28 + position.z * 0.25) * 0.55
-                 + sin(uTime * 0.45 + aSeed  * 3.50)                      * 0.20;
-    float driftZ = cos(uTime * 0.75 + aPhase * 5.10 + position.x * 0.20)  * 0.45;
-    float driftY = sin(uTime * 0.60 + aPhase * 2.50)                      * 0.18
-                 + sin(uTime * 0.22 + aAnimalPhase)                        * 1.2; // whole-body bob
+    // Gentle organic sway — preserves readable shape
+    float driftX = sin(uTime * 0.72 + aPhase * 6.28 + position.z * 0.18) * 0.55
+                 + sin(uTime * 0.40 + aSeed  * 3.50)                      * 0.18;
+    float driftZ = cos(uTime * 0.62 + aPhase * 4.80 + position.x * 0.15)  * 0.42;
+    float driftY = sin(uTime * 0.50 + aPhase * 2.20)                      * 0.18;
 
     vec3 pos = vec3(
       position.x + driftX,
-      position.y + driftY + liftY,
+      position.y + driftY + bob,
       position.z + driftZ
     );
 
-    // Hot-spot flicker drives brightness and color heat
     float heat  = 0.5 + 0.5 * abs(sin(uTime * 1.8 + aPhase * 4.0 + aT * 2.5));
     vBright = (0.60 + aT * 0.40) * (0.75 + heat * 0.50);
 
-    // Cold cyan base → hot white-violet at tips
     vColor = mix(
       vec3(0.20, 0.80, 1.00),  // cold: phosphor cyan
       vec3(0.95, 0.90, 1.00),  // hot: white with violet
@@ -435,7 +364,7 @@ function buildV1(scene: THREE.Scene): SceneBundle {
   };
 }
 
-// ── V2 scene builder ──────────────────────────────────────────────────────────
+// ── V2 scene builder — Circuit Cathedral ─────────────────────────────────────
 
 function buildV2(scene: THREE.Scene): SceneBundle {
   const geos: THREE.BufferGeometry[] = [];
@@ -446,77 +375,50 @@ function buildV2(scene: THREE.Scene): SceneBundle {
     geos.push(geo); mats.push(mat); objs.push(obj); scene.add(obj);
   };
 
-  const FOG_NEAR = 50, FOG_FAR = 220;
+  const FOG_NEAR = 55, FOG_FAR = 260;
   const world = buildV2World(42);
 
-  const structMat = new THREE.ShaderMaterial({
-    vertexShader: V2_STRUCT_VERT, fragmentShader: V2_STRUCT_FRAG,
+  // ── Slab surfaces (static circuit geometry) ────────────────────────────────
+  const slabMat = new THREE.ShaderMaterial({
+    vertexShader: V2_SLAB_VERT, fragmentShader: V2_SLAB_FRAG,
     uniforms: {
-      uColor:   { value: new THREE.Color(0x4488aa) },
+      uColor:   { value: new THREE.Color(0x336688) },
       uFogNear: { value: FOG_NEAR }, uFogFar: { value: FOG_FAR },
     },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
-  const sGeo = new THREE.BufferGeometry();
-  sGeo.setAttribute("position", new THREE.BufferAttribute(world.structure.positions, 3));
-  sGeo.setAttribute("aBright",  new THREE.BufferAttribute(world.structure.brightness, 1));
-  add(new THREE.Points(sGeo, structMat), sGeo, structMat);
-
-  const fluidMat = new THREE.ShaderMaterial({
-    vertexShader: V2_FLUID_VERT, fragmentShader: V2_FLUID_FRAG,
-    uniforms: {
-      uColor:   { value: new THREE.Color(0xb8f0ff) },
-      uFogNear: { value: FOG_NEAR }, uFogFar: { value: FOG_FAR },
-      uTime:    { value: 0 },
-    },
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-  });
-  const fGeo = new THREE.BufferGeometry();
-  fGeo.setAttribute("position", new THREE.BufferAttribute(world.fluid.positions, 3));
-  fGeo.setAttribute("aPhase",   new THREE.BufferAttribute(world.fluid.phases,    1));
-  fGeo.setAttribute("aSeed",    new THREE.BufferAttribute(world.fluid.seeds,     1));
-  add(new THREE.Points(fGeo, fluidMat), fGeo, fluidMat);
-
-  const spikeMat = new THREE.ShaderMaterial({
-    vertexShader: V2_SPIKE_VERT, fragmentShader: V2_SPIKE_FRAG,
-    uniforms: {
-      uColor:   { value: new THREE.Color(0xddf8ff) },
-      uFogNear: { value: FOG_NEAR }, uFogFar: { value: FOG_FAR },
-      uTime:    { value: 0 },
-    },
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-  });
-  const spGeo = new THREE.BufferGeometry();
-  spGeo.setAttribute("position", new THREE.BufferAttribute(world.spikes.positions, 3));
-  spGeo.setAttribute("aT",       new THREE.BufferAttribute(world.spikes.ts,        1));
-  spGeo.setAttribute("aFreq",    new THREE.BufferAttribute(world.spikes.freqs,     1));
-  spGeo.setAttribute("aPhase",   new THREE.BufferAttribute(world.spikes.phases,    1));
-  spGeo.setAttribute("aMaxH",    new THREE.BufferAttribute(world.spikes.maxH,      1));
-  add(new THREE.Points(spGeo, spikeMat), spGeo, spikeMat);
-
-  const arcMat = new THREE.ShaderMaterial({
-    vertexShader: V2_ARC_VERT, fragmentShader: V2_ARC_FRAG,
-    uniforms: {
-      uColor:   { value: new THREE.Color(0x88ddff) },
-      uFogNear: { value: FOG_NEAR }, uFogFar: { value: FOG_FAR },
-      uTime:    { value: 0 },
-    },
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-  });
-  for (const arc of world.arcs) {
+  for (const slab of world.slabs) {
     const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(arc.positions, 3));
-    g.setAttribute("aT",       new THREE.BufferAttribute(arc.ts,        1));
-    g.setAttribute("aSpeed",   new THREE.BufferAttribute(arc.speeds,    1));
-    g.setAttribute("aPhase",   new THREE.BufferAttribute(arc.phases,    1));
+    g.setAttribute("position", new THREE.BufferAttribute(slab.positions,  3));
+    g.setAttribute("aBright",  new THREE.BufferAttribute(slab.brightness, 1));
     geos.push(g);
-    const pts = new THREE.Points(g, arcMat);
+    const pts = new THREE.Points(g, slabMat);
     objs.push(pts);
     scene.add(pts);
   }
-  mats.push(arcMat);
+  mats.push(slabMat); // no uTime, but add for uViewH sync if needed
 
-  // Plasma animals
+  // ── Cascades (one ShaderMaterial per slab — needs per-slab uniforms) ───────
+  for (const cascade of world.cascades) {
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: V2_CASCADE_VERT, fragmentShader: V2_CASCADE_FRAG,
+      uniforms: {
+        uColor:      { value: new THREE.Color(0x55eeff) },
+        uFogNear:    { value: FOG_NEAR }, uFogFar:  { value: FOG_FAR },
+        uTime:       { value: 0 },
+        uSlabBottom: { value: cascade.slabBottom },
+        uSlabH:      { value: cascade.slabH },
+      },
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(cascade.positions, 3));
+    g.setAttribute("aSpeed",   new THREE.BufferAttribute(cascade.speeds,    1));
+    g.setAttribute("aPhase",   new THREE.BufferAttribute(cascade.phases,    1));
+    add(new THREE.Points(g, mat), g, mat);
+  }
+
+  // ── Plasma animals ─────────────────────────────────────────────────────────
   const plasmaMat = new THREE.ShaderMaterial({
     vertexShader: V2_PLASMA_VERT, fragmentShader: V2_PLASMA_FRAG,
     uniforms: {
@@ -534,12 +436,12 @@ function buildV2(scene: THREE.Scene): SceneBundle {
   paGeo.setAttribute("aAnimalPhase", new THREE.BufferAttribute(pa.animalPhase, 1));
   add(new THREE.Points(paGeo, plasmaMat), paGeo, plasmaMat);
 
-  // Ambient nebula haze
+  // ── Ambient haze ───────────────────────────────────────────────────────────
   const hazeMat = new THREE.ShaderMaterial({
     vertexShader: V2_HAZE_VERT, fragmentShader: V2_HAZE_FRAG,
     uniforms: {
-      uColor:   { value: new THREE.Color(0x224455) },
-      uFogNear: { value: FOG_NEAR * 0.6 }, uFogFar: { value: FOG_FAR },
+      uColor:   { value: new THREE.Color(0x1a3344) },
+      uFogNear: { value: FOG_NEAR * 0.5 }, uFogFar: { value: FOG_FAR },
     },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
@@ -568,10 +470,10 @@ const WORLDS = [
   },
   {
     id:      "v2",
-    label:   "v2 — Morphic Fluid Lab",
-    desc:    "PCB circuit floor · organic fluid blobs · ferrofluid spikes · field arcs",
-    camPos:  [40, 18, 40] as [number, number, number],
-    target:  [5,  4,   0] as [number, number, number],
+    label:   "v2 — Circuit Cathedral",
+    desc:    "Towering circuit monoliths · plasma cascade waterfalls · drifting plasma creatures",
+    camPos:  [0, 22, 90] as [number, number, number],
+    target:  [0, 20,  0] as [number, number, number],
     build:   buildV2,
   },
 ] as const;

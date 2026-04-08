@@ -284,84 +284,13 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
       blending:    THREE.AdditiveBlending,
     });
 
-    const structGeo = new THREE.BufferGeometry();
-    structGeo.setAttribute("position", new THREE.BufferAttribute(world.structure.positions,  3));
-    structGeo.setAttribute("aBright",  new THREE.BufferAttribute(world.structure.brightness, 1));
-    scene.add(new THREE.Points(structGeo, structMat));
-
-    // ── Fluid layer ───────────────────────────────────────────────
-    const fluidMat = new THREE.ShaderMaterial({
-      vertexShader:   FLUID_VERT,
-      fragmentShader: FLUID_FRAG,
-      uniforms: {
-        uColor:   { value: COLOR_FLUID },
-        uFogNear: { value: FOG_NEAR },
-        uFogFar:  { value: FOG_FAR  },
-        uTime:    { value: 0.0 },
-        uAppear:  { value: 0.0 },
-      },
-      transparent: true,
-      depthWrite:  false,
-      blending:    THREE.AdditiveBlending,
-    });
-
-    const fluidGeo = new THREE.BufferGeometry();
-    fluidGeo.setAttribute("position", new THREE.BufferAttribute(world.fluid.positions, 3));
-    fluidGeo.setAttribute("aPhase",   new THREE.BufferAttribute(world.fluid.phases,    1));
-    fluidGeo.setAttribute("aSeed",    new THREE.BufferAttribute(world.fluid.seeds,     1));
-    scene.add(new THREE.Points(fluidGeo, fluidMat));
-
-    // ── Ferrofluid spike layer ────────────────────────────────────
-    const spikeMat = new THREE.ShaderMaterial({
-      vertexShader:   SPIKE_VERT,
-      fragmentShader: SPIKE_FRAG,
-      uniforms: {
-        uColor:   { value: COLOR_SPIKE },
-        uFogNear: { value: FOG_NEAR },
-        uFogFar:  { value: FOG_FAR  },
-        uTime:    { value: 0.0 },
-        uAppear:  { value: 0.0 },
-      },
-      transparent: true,
-      depthWrite:  false,
-      blending:    THREE.AdditiveBlending,
-    });
-
-    const spikeGeo = new THREE.BufferGeometry();
-    spikeGeo.setAttribute("position", new THREE.BufferAttribute(world.spikes.positions, 3));
-    spikeGeo.setAttribute("aT",       new THREE.BufferAttribute(world.spikes.ts,        1));
-    spikeGeo.setAttribute("aFreq",    new THREE.BufferAttribute(world.spikes.freqs,     1));
-    spikeGeo.setAttribute("aPhase",   new THREE.BufferAttribute(world.spikes.phases,    1));
-    spikeGeo.setAttribute("aMaxH",    new THREE.BufferAttribute(world.spikes.maxH,      1));
-    scene.add(new THREE.Points(spikeGeo, spikeMat));
-
-    // ── Arc / field-line layer ────────────────────────────────────
-    // One shared material; per-arc data encoded as vertex attributes.
-    const arcMat = new THREE.ShaderMaterial({
-      vertexShader:   ARC_VERT,
-      fragmentShader: ARC_FRAG,
-      uniforms: {
-        uColor:   { value: COLOR_ARC },
-        uFogNear: { value: FOG_NEAR },
-        uFogFar:  { value: FOG_FAR  },
-        uTime:    { value: 0.0 },
-        uAppear:  { value: 0.0 },
-      },
-      transparent: true,
-      depthWrite:  false,
-      blending:    THREE.AdditiveBlending,
-    });
+    // ── World geometry stubs (MorphicWorld will be rewired once the final
+    //    world is chosen in /lab). For now the portfolio renders the ambient
+    //    haze only so the page compiles and the rest of the portfolio works. ──
+    const hazeGeo = new THREE.BufferGeometry();
+    hazeGeo.setAttribute("position", new THREE.BufferAttribute(world.ambientHaze.positions, 3));
 
     const arcGeos: THREE.BufferGeometry[] = [];
-    for (const arc of world.arcs) {
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute("position", new THREE.BufferAttribute(arc.positions, 3));
-      geo.setAttribute("aT",       new THREE.BufferAttribute(arc.ts,        1));
-      geo.setAttribute("aSpeed",   new THREE.BufferAttribute(arc.speeds,    1));
-      geo.setAttribute("aPhase",   new THREE.BufferAttribute(arc.phases,    1));
-      scene.add(new THREE.Points(geo, arcMat)); // Points = controllable size per vertex
-      arcGeos.push(geo);
-    }
 
     // ── Size sync ────────────────────────────────────────────────
     const syncSize = () => {
@@ -461,15 +390,6 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
 
       structMat.uniforms.uAppear.value = appear;
 
-      fluidMat.uniforms.uTime.value   = elapsed;
-      fluidMat.uniforms.uAppear.value = appear;
-
-      spikeMat.uniforms.uTime.value   = elapsed;
-      spikeMat.uniforms.uAppear.value = appear;
-
-      arcMat.uniforms.uTime.value   = elapsed;
-      arcMat.uniforms.uAppear.value = appear;
-
       // Camera
       if (isLocked) {
         camera.rotation.y = userYaw;
@@ -520,14 +440,9 @@ export function MorphicWorld({ onLockChange }: MorphicWorldProps) {
 
       if (document.pointerLockElement === canvas) document.exitPointerLock();
 
-      structGeo.dispose();
       structMat.dispose();
-      fluidGeo.dispose();
-      fluidMat.dispose();
-      spikeGeo.dispose();
-      spikeMat.dispose();
+      hazeGeo.dispose();
       arcGeos.forEach(g => g.dispose());
-      arcMat.dispose();
       renderer.dispose();
 
       if (container.contains(renderer.domElement)) {
