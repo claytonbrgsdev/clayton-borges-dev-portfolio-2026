@@ -266,18 +266,21 @@ const V2_PLASMA_VERT = /* glsl */ `
   varying  float  vDepth;
   varying  vec3   vColor;
   void main() {
-    // Per-animal slow emerge/submerge: 0 → 1 → 0, ~30-second period
-    float cycle  = sin(uTime * 0.21 + aAnimalPhase) * 0.5 + 0.5;
-    float emerge = smoothstep(0.05, 0.55, cycle);
+    // Slow breathe: stays between 0.5–1.0 — animals are always at least half-risen
+    float cycle  = sin(uTime * 0.18 + aAnimalPhase) * 0.25 + 0.75;
+    float emerge = smoothstep(0.45, 0.95, cycle);
 
-    // Organic plasma drift — preserves creature shape while shimmering
-    float driftX = sin(uTime * 1.3 + aPhase * 6.28 + position.z * 0.4) * 0.40
-                 + sin(uTime * 0.65 + aSeed  * 4.0)                     * 0.18;
-    float driftZ = cos(uTime * 1.1 + aPhase * 5.1  + position.x * 0.35) * 0.35;
-    float driftY = sin(uTime * 0.9 + aPhase * 2.5)                      * 0.12;
+    // Animals sit permanently above the fluid pool surface (pool top ~7 units).
+    // Base lift = 9 units so even aT=0 points are above the blob.
+    // Tip lift adds another 14 units for full creature height.
+    float liftY = 9.0 + aT * (14.0 * emerge);
 
-    // Vertical lift: tip (aT=1) rises most, base (aT=0) stays near pool
-    float liftY = aT * emerge * 11.0;
+    // Gentle organic sway — small enough to keep the shape readable
+    float driftX = sin(uTime * 0.85 + aPhase * 6.28 + position.z * 0.25) * 0.55
+                 + sin(uTime * 0.45 + aSeed  * 3.50)                      * 0.20;
+    float driftZ = cos(uTime * 0.75 + aPhase * 5.10 + position.x * 0.20)  * 0.45;
+    float driftY = sin(uTime * 0.60 + aPhase * 2.50)                      * 0.18
+                 + sin(uTime * 0.22 + aAnimalPhase)                        * 1.2; // whole-body bob
 
     vec3 pos = vec3(
       position.x + driftX,
@@ -285,20 +288,20 @@ const V2_PLASMA_VERT = /* glsl */ `
       position.z + driftZ
     );
 
-    // Hot-spot flicker
-    float heat   = 0.5 + 0.5 * abs(sin(uTime * 1.9 + aPhase * 4.2));
-    vBright = (0.45 + aT * 0.55) * (0.65 + heat * 0.50) * max(0.04, emerge);
+    // Hot-spot flicker drives brightness and color heat
+    float heat  = 0.5 + 0.5 * abs(sin(uTime * 1.8 + aPhase * 4.0 + aT * 2.5));
+    vBright = (0.60 + aT * 0.40) * (0.75 + heat * 0.50);
 
-    // Color: cold phosphor cyan → hot near-white with violet tint
+    // Cold cyan base → hot white-violet at tips
     vColor = mix(
-      vec3(0.28, 0.82, 1.00),  // cold: deep cyan
-      vec3(0.92, 0.88, 1.00),  // hot: white-violet plasma
-      clamp(aT * heat, 0.0, 1.0)
+      vec3(0.20, 0.80, 1.00),  // cold: phosphor cyan
+      vec3(0.95, 0.90, 1.00),  // hot: white with violet
+      clamp(aT * 0.6 + heat * 0.4, 0.0, 1.0)
     );
 
     vec4 mv      = modelViewMatrix * vec4(pos, 1.0);
     vDepth       = -mv.z;
-    gl_PointSize = clamp(750.0 / vDepth, 1.5, 12.0);
+    gl_PointSize = clamp(1400.0 / vDepth, 2.0, 22.0);
     gl_Position  = projectionMatrix * mv;
   }
 `;
@@ -312,10 +315,10 @@ const V2_PLASMA_FRAG = /* glsl */ `
     vec2  uv = gl_PointCoord - 0.5;
     float d  = length(uv);
     if (d > 0.5) discard;
-    float alpha = pow(max(0.0, 1.0 - d * 2.1), 1.25) * 0.92 * vBright;
+    float alpha = pow(max(0.0, 1.0 - d * 1.9), 1.1) * 0.95 * vBright;
     alpha *= (1.0 - smoothstep(uFogNear, uFogFar, vDepth));
-    if (alpha < 0.005) discard;
-    gl_FragColor = vec4(vColor * (1.2 + vBright * 0.8), alpha);
+    if (alpha < 0.004) discard;
+    gl_FragColor = vec4(vColor * (1.4 + vBright * 1.0), alpha);
   }
 `;
 

@@ -508,7 +508,7 @@ export function buildV2World(seed = 42): V2World {
   const MAX_STRUCT = 22_000;
   const MAX_FLUID  = 26_000;
   const MAX_SPIKES =  4_000;
-  const MAX_PLASMA =  2_200;
+  const MAX_PLASMA =  2_800;
 
   const strPos    = new Float32Array(MAX_STRUCT * 3);
   const strBright = new Float32Array(MAX_STRUCT);
@@ -567,13 +567,13 @@ export function buildV2World(seed = 42): V2World {
   const [n6x,,n6z] = NODES[6];
 
   plCount += addJellyfish(plPos, plPh, plTs, plSd, plAph, plCount,
-                          n0x, n0z, 1.0, rng, 0.0);
+                          n0x, n0z, 1.8, rng, 0.0);
   plCount += addMantaRay (plPos, plPh, plTs, plSd, plAph, plCount,
-                          n3x, n3z, 1.0, rng, Math.PI * 0.5);
+                          n3x, n3z, 1.7, rng, Math.PI * 0.5);
   plCount += addSerpent  (plPos, plPh, plTs, plSd, plAph, plCount,
-                          n5x, n5z - 5, 1.0, rng, Math.PI * 1.1);
+                          n5x, n5z - 5, 1.5, rng, Math.PI * 1.1);
   plCount += addJellyfish(plPos, plPh, plTs, plSd, plAph, plCount,
-                          n6x, n6z, 0.75, rng, Math.PI * 1.7); // smaller second jellyfish
+                          n6x, n6z, 1.3, rng, Math.PI * 1.7);
 
   // ── Field arcs ─────────────────────────────────────────────────────────
   const arcs: ArcData[] = ARC_PAIRS.map(([ai, bi]) => buildArc(NODES[ai], NODES[bi], rng));
