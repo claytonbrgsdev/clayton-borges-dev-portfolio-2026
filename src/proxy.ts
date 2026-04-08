@@ -4,10 +4,11 @@ import { locales, defaultLocale } from "@/lib/i18n";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip internal Next.js paths and static files
+  // Skip internal Next.js paths, static files, and locale-free dev routes
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
+    pathname.startsWith("/lab") || // dev preview — lives outside [locale] tree
     pathname.includes(".") // static files (favicon, images, etc.)
   ) {
     return NextResponse.next();
