@@ -12,33 +12,26 @@ interface AboutContentProps {
 
 const experience = [
   {
-    role: "Freelance Full-Stack Developer",
+    role: "Freelance Dev",
     company: "Evolut Digital",
     period: "Jan 2025 – Present",
-    highlights: ["MzPrime 3D Vehicle Showcase", "Pilot Pen Brazil Sustainability Site"],
+    highlights: ["MzPrime 3D — real-time vehicle cover customization (Three.js + GLB)"],
   },
   {
-    role: "Freelance Full-Stack Developer",
+    role: "Freelance Dev",
     company: "Moveo Filmes",
     period: "Jun 2024 – Present",
-    highlights: ["Bilingual film production platform", "Admin CMS with GSAP + Lenis"],
+    highlights: ["Bilingual film production platform with admin CMS", "GSAP ScrollTrigger + Lenis + Supabase RLS"],
   },
   {
-    role: "Full-Stack Developer",
-    company: "DSRPTV Records",
+    role: "Co-founder / Dev",
+    company: "DISCLAYMER (DSRPTV Records)",
     period: "Dec 2023 – Present",
-    highlights: ["Music e-commerce + streaming platform", "Three.js 3D + Stripe + Mercado Pago"],
-  },
-  {
-    role: "Freelance Web Developer",
-    company: "Tropical Twista Records",
-    period: "Jul 2023 – Present",
-    highlights: ["YouTube automation system", "Firebase Auth + FFmpeg"],
+    highlights: ["Music e-commerce + streaming platform (DSRPTV)", "Stripe + Mercado Pago + Spotify API + Three.js"],
   },
 ];
 
 const education = [
-  { school: "UniCEUB", degree: "Psychology", period: "2019 – 2025" },
   { school: "Casa Thomas Jefferson", degree: "Advanced English", period: "2013 – 2015" },
   { school: "Udemy", degree: "Web Development", period: "2023 – Present" },
 ];

@@ -10,15 +10,15 @@
     "hero": {
       "greeting": "Olá, sou",
       "name": "Clayton Borges",
-      "title": "Desenvolvedor Full-Stack",
-      "subtitle": "React & Next.js · Three.js 3D · Python & FastAPI",
+      "title": "Desenvolvedor Criativo / Full-Stack",
+      "subtitle": "React · Next.js · Three.js · Python · Ruby",
       "cta_projects": "Ver Projetos",
       "cta_contact": "Entrar em Contato"
     },
     "about_preview": {
       "label": "Sobre Mim",
-      "heading": "Construindo produtos que movem pessoas.",
-      "body": "Desenvolvedor Full-Stack com mais de 2 anos entregando aplicações web em produção, plataformas de visualização 3D e sistemas orientados a dados. Baseado em Brasília, Brasil — disponível para trabalho remoto em todo o mundo.",
+      "heading": "3 anos. Entregue.",
+      "body": "3 anos desenvolvendo aplicações web em produção, experiências 3D interativas e ferramentas criativas para clientes no Brasil e no exterior. Baseado em Brasília — aberto a relocação e trabalho remoto.",
       "cta": "Saiba Mais"
     },
     "featured_projects": {
@@ -31,8 +31,8 @@
       "heading": "Com o que trabalho"
     },
     "contact_cta": {
-      "heading": "Vamos construir algo juntos.",
-      "body": "Aberto a vagas remotas em tempo integral, contratos freelance e colaborações interessantes.",
+      "heading": "Vamos trabalhar juntos.",
+      "body": "Disponível para projetos freelance, vagas remotas e relocação.",
       "cta": "Diga Olá"
     }
   },
@@ -52,11 +52,11 @@
     "client_label": "Cliente"
   },
   "about": {
-    "heading": "Sobre Mim",
-    "subheading": "Desenvolvedor · Criativo · Construtor",
-    "bio_1": "Sou um Desenvolvedor Full-Stack baseado em Brasília, Brasil, com formação em Psicologia e paixão por construir coisas que combinam rigor técnico com expressão criativa.",
-    "bio_2": "Meu trabalho abrange experiências 3D interativas, plataformas web em produção, ferramentas com IA e sistemas embarcados. Me importo profundamente com qualidade de código, performance e o ofício de construir software que realmente importa para quem o usa.",
-    "bio_3": "Atualmente disponível para vagas remotas em tempo integral e contratos freelance em todo o mundo.",
+    "heading": "Sobre",
+    "subheading": "Desenvolvedor Criativo / Full-Stack",
+    "bio_1": "Desenvolvedor Criativo / Full-Stack baseado em Brasília, Brasil, com 3 anos entregando aplicações web em produção, experiências 3D interativas e ferramentas criativas.",
+    "bio_2": "O trabalho abrange shaders GLSL e WebGL, plataformas full-stack (Next.js, FastAPI, Supabase), ferramentas de áudio (Web Audio API, Python DSP) e integrações com IA. Freelance pela DISCLAYMER, estúdio co-fundado com Raphael Palmer.",
+    "bio_3": "Aberto a vagas remotas, contratos freelance e relocação.",
     "experience_label": "Experiência",
     "education_label": "Educação",
     "skills_label": "Habilidades",

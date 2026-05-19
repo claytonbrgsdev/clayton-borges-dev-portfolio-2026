@@ -10,19 +10,19 @@ interface SkillsSectionProps {
 const skillGroups = [
   {
     category: "Frontend",
-    skills: ["React 19", "Next.js 15/16", "TypeScript", "Three.js", "React Three Fiber", "GSAP", "Tailwind CSS", "Framer Motion"],
+    skills: ["React 19", "Next.js 16", "TypeScript", "Three.js", "GSAP", "Tailwind CSS"],
   },
   {
     category: "Backend",
-    skills: ["Node.js", "Express.js", "FastAPI", "Python", "Ruby/Rack", "REST APIs", "WebSocket", "GraphQL"],
+    skills: ["Node.js", "FastAPI", "Python", "Ruby", "REST / GraphQL", "WebSocket"],
   },
   {
-    category: "Databases & Cloud",
-    skills: ["PostgreSQL", "MongoDB", "Redis", "Firebase", "Supabase", "AWS S3", "Docker", "GitHub Actions"],
+    category: "Data & Cloud",
+    skills: ["PostgreSQL", "Prisma", "Supabase", "Redis", "Docker", "AWS S3"],
   },
   {
-    category: "AI / Audio / Embedded",
-    skills: ["OpenAI API", "Whisper", "pyannote.audio", "Web Audio API", "FFmpeg", "ESP32", "Arduino", "C++"],
+    category: "Creative",
+    skills: ["Web Audio API", "React Three Fiber", "PySide6", "FFmpeg", "OpenAI API"],
   },
 ];
 

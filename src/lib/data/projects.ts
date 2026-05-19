@@ -43,33 +43,35 @@ export const projects: Project[] = [
   },
   {
     id: "mzprime-3d-showcase",
-    nameEn: "MzPrime – 3D Vehicle Showcase",
-    namePt: "MzPrime – Showcase 3D de Veículos",
-    name: "MzPrime – 3D Vehicle Showcase",
+    nameEn: "MzPrime – 3D Car Cover Showroom",
+    namePt: "MzPrime – Showroom 3D de Capas",
+    name: "MzPrime – 3D Car Cover Showroom",
     descriptionEn:
-      "Interactive 3D vehicle showroom with 12+ car models, real-time color and material editing, HDR environments, multi-region logo placement, and cinematic camera controls built for Evolut Digital.",
+      "3D car cover showroom with live customization. One rigged GLB per vehicle category (12+ types); Three.js applies fabric color, sewing line color, and customer-uploaded logo to the model in real time. Zero pre-rendered composites.",
     descriptionPt:
-      "Showroom 3D interativo de veículos com mais de 12 modelos de carros, edição de cor e material em tempo real, ambientes HDR, posicionamento de logotipo em múltiplas regiões e controles de câmera cinematográficos, desenvolvido para a Evolut Digital.",
-    tech: ["Next.js 16", "React 19", "Three.js", "React Three Fiber", "Radix UI", "Tailwind CSS"],
+      "Showroom 3D de capas automotivas com personalização ao vivo. Um GLB rigado por categoria de veículo (12+ tipos); Three.js aplica cor do tecido, cor da costura e logotipo enviado pelo cliente ao modelo em tempo real. Sem composições pré-renderizadas.",
+    tech: ["Next.js 16", "React 19", "Three.js", "React Three Fiber", "Tailwind CSS"],
     categories: ["3d-visualization", "web-app"],
+    liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
     featured: true,
     year: 2025,
     client: "Evolut Digital",
   },
   {
-    id: "pilot-pen-brazil",
-    nameEn: "Pilot Pen Brazil – Sustainability Site",
-    namePt: "Pilot Pen Brasil – Site de Sustentabilidade",
-    name: "Pilot Pen Brazil",
+    id: "metanova-labs",
+    nameEn: "Metanova Labs – Bittensor Dashboard",
+    namePt: "Metanova Labs – Dashboard Bittensor",
+    name: "Metanova Labs",
     descriptionEn:
-      "Scroll-triggered sustainability website with GSAP scroll animations, parallax effects, and responsive mobile-first design for Pilot Pen Brazil.",
+      "Dashboard for Bittensor subnet 68 — an on-chain AI drug-discovery network. Implemented the Algorithms tab frontend/backend integration. Tracks molecular competitions, miner leaderboards, and protein data across epochs.",
     descriptionPt:
-      "Site de sustentabilidade com animações de scroll GSAP, efeitos de paralaxe e design responsivo mobile-first para a Pilot Pen Brasil.",
-    tech: ["HTML5", "CSS3/SCSS", "JavaScript", "GSAP", "Lenis", "jQuery"],
-    categories: ["web-app"],
+      "Dashboard para a subnet 68 do Bittensor — uma rede de descoberta de medicamentos por IA on-chain. Implementou a aba Algorithms com integração frontend/backend. Rastreia competições moleculares, rankings de mineradores e dados de proteínas por época.",
+    tech: ["Next.js 15", "TypeScript", "Bittensor", "Radix UI"],
+    categories: ["dashboard", "web-app"],
+    liveUrl: "https://metanovalabs.ai/dashboard",
     featured: true,
     year: 2025,
-    client: "Pilot Pen Brazil",
+    client: "Metanova Labs",
   },
   {
     id: "dsrptv-records",
@@ -77,10 +79,10 @@ export const projects: Project[] = [
     namePt: "DSRPTV Records – Plataforma de Música",
     name: "DSRPTV Records",
     descriptionEn:
-      "E-commerce and music streaming platform with vinyl purchases, music playback, and artist profiles. Integrated Stripe and Mercado Pago payments, Spotify API for previews, AWS S3 for storage, and 3D graphics via Three.js.",
+      "Music e-commerce and streaming platform. Stripe + Mercado Pago dual checkout, Spotify API, AWS S3 asset storage, Three.js visuals. Built with Raphael Palmer (DISCLAYMER).",
     descriptionPt:
-      "Plataforma de e-commerce e streaming musical com compra de vinis, reprodução de música e perfis de artistas. Integração com Stripe e Mercado Pago, Spotify API para prévias, AWS S3 para armazenamento e gráficos 3D com Three.js.",
-    tech: ["React", "TypeScript", "Vite", "Three.js", "Firebase", "AWS S3", "Stripe", "Mercado Pago", "Redux", "Ant Design"],
+      "Plataforma de e-commerce e streaming musical. Checkout duplo Stripe + Mercado Pago, Spotify API, armazenamento AWS S3, visuais Three.js. Construído com Raphael Palmer (DISCLAYMER).",
+    tech: ["React", "TypeScript", "Vite", "Three.js", "Firebase", "AWS S3", "Stripe", "Mercado Pago"],
     categories: ["platform", "web-app"],
     liveUrl: "http://dsrptvrec.com",
     featured: true,
@@ -104,6 +106,21 @@ export const projects: Project[] = [
   },
 
   // --- PERSONAL / OPEN SOURCE PROJECTS ---
+  {
+    id: "habitos",
+    nameEn: "Habitos – Habit & Therapy Tracker",
+    namePt: "Habitos – Rastreador de Hábitos e Terapia",
+    name: "Habitos",
+    descriptionEn:
+      "Full-stack habit and therapy tracking app for patient/therapist pairs. Built for ADHD support, then adapted and open-sourced.",
+    descriptionPt:
+      "App full-stack de rastreamento de hábitos e terapia para pares paciente/terapeuta. Desenvolvido para suporte a TDAH, depois adaptado e disponibilizado como open-source.",
+    tech: ["Next.js 16", "Prisma", "PostgreSQL", "Tailwind CSS"],
+    categories: ["web-app"],
+    githubUrl: "https://github.com/claytonbrgsdev/habitos",
+    featured: false,
+    year: 2025,
+  },
   {
     id: "novo-rio",
     nameEn: "Novo Rio – Agroforestry Gamification",

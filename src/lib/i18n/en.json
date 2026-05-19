@@ -10,15 +10,15 @@
     "hero": {
       "greeting": "Hi, I'm",
       "name": "Clayton Borges",
-      "title": "Full-Stack Developer",
-      "subtitle": "React & Next.js · Three.js 3D · Python & FastAPI",
+      "title": "Creative / Full-Stack Developer",
+      "subtitle": "React · Next.js · Three.js · Python · Ruby",
       "cta_projects": "View Projects",
       "cta_contact": "Get In Touch"
     },
     "about_preview": {
       "label": "About Me",
-      "heading": "Building products that move people.",
-      "body": "Full-Stack Developer with 2+ years delivering production web applications, 3D visualization platforms, and data-driven systems. Based in Brasília, Brazil — available for remote work worldwide.",
+      "heading": "3 years. Shipped.",
+      "body": "3 years building production web apps, interactive 3D experiences, and creative developer tools for clients in Brazil and worldwide. Based in Brasília — open to relocation and remote work.",
       "cta": "Learn More"
     },
     "featured_projects": {
@@ -31,8 +31,8 @@
       "heading": "What I work with"
     },
     "contact_cta": {
-      "heading": "Let's build something together.",
-      "body": "Open to full-time remote roles, freelance contracts, and interesting collaborations.",
+      "heading": "Let's work together.",
+      "body": "Available for freelance, remote roles, and relocation.",
       "cta": "Say Hello"
     }
   },
@@ -52,11 +52,11 @@
     "client_label": "Client"
   },
   "about": {
-    "heading": "About Me",
-    "subheading": "Developer · Creative · Builder",
-    "bio_1": "I'm a Full-Stack Developer based in Brasília, Brazil, with a background in Psychology and a passion for building things that combine technical rigor with creative expression.",
-    "bio_2": "My work spans interactive 3D experiences, production web platforms, AI-powered tools, and embedded systems. I care deeply about code quality, performance, and the craft of building software that actually matters to the people using it.",
-    "bio_3": "Currently available for remote full-time roles and freelance contracts worldwide.",
+    "heading": "About",
+    "subheading": "Creative / Full-Stack Developer",
+    "bio_1": "Creative / Full-Stack Developer based in Brasília, Brazil, with 3 years shipping production web applications, interactive 3D experiences, and creative developer tools.",
+    "bio_2": "Work spans GLSL shaders and WebGL, full-stack platforms (Next.js, FastAPI, Supabase), audio tools (Web Audio API, Python DSP), and AI integrations. Freelance through DISCLAYMER, a studio co-run with Raphael Palmer.",
+    "bio_3": "Open to remote roles, freelance contracts, and relocation worldwide.",
     "experience_label": "Experience",
     "education_label": "Education",
     "skills_label": "Skills",
