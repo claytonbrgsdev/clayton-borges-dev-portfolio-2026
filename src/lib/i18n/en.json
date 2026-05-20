@@ -1,0 +1,107 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "hardware": "Hardware",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Hi, I'm",
+      "name": "Clayton Borges",
+      "title": "Creative / Full-Stack Developer",
+      "subtitle": "React · Next.js · Three.js · Python · Ruby",
+      "cta_projects": "View Projects",
+      "cta_contact": "Get In Touch"
+    },
+    "about_preview": {
+      "label": "About Me",
+      "heading": "3 years. Shipped.",
+      "body": "3 years building production web apps, interactive 3D experiences, and creative developer tools for clients in Brazil and worldwide. Based in Brasília — open to relocation and remote work.",
+      "cta": "Learn More"
+    },
+    "featured_projects": {
+      "label": "Selected Work",
+      "heading": "Projects",
+      "cta": "See All Projects"
+    },
+    "skills": {
+      "label": "Tech Stack",
+      "heading": "What I work with"
+    },
+    "contact_cta": {
+      "heading": "Let's work together.",
+      "body": "Available for freelance, remote roles, and relocation.",
+      "cta": "Say Hello"
+    }
+  },
+  "projects": {
+    "heading": "All Projects",
+    "subheading": "A collection of client work, personal experiments, and open-source tools.",
+    "filter_all": "All",
+    "filter_3d": "3D / WebGL",
+    "filter_web": "Web Apps",
+    "filter_platform": "Platforms",
+    "filter_ai": "AI / ML",
+    "filter_audio": "Audio",
+    "filter_data": "Data Engineering",
+    "filter_embedded": "Embedded",
+    "view_code": "Code",
+    "view_live": "Live Demo",
+    "client_label": "Client"
+  },
+  "about": {
+    "heading": "About",
+    "subheading": "Creative / Full-Stack Developer",
+    "bio_1": "Creative / Full-Stack Developer based in Brasília, Brazil, with 3 years shipping production web applications, interactive 3D experiences, and creative developer tools.",
+    "bio_2": "Work spans GLSL shaders and WebGL, full-stack platforms (Next.js, FastAPI, Supabase), audio tools (Web Audio API, Python DSP), and AI integrations. Freelance through DISCLAYMER, a studio co-run with Raphael Palmer.",
+    "bio_3": "Open to remote roles, freelance contracts, and relocation worldwide.",
+    "experience_label": "Experience",
+    "education_label": "Education",
+    "skills_label": "Skills",
+    "download_resume": "Download Resume",
+    "languages_label": "Languages",
+    "portuguese": "Portuguese — Native",
+    "english": "English — Professional"
+  },
+  "contact": {
+    "heading": "Get In Touch",
+    "subheading": "Open to remote roles, freelance work, and interesting projects.",
+    "form_name": "Your Name",
+    "form_email": "Your Email",
+    "form_subject": "Subject",
+    "form_message": "Message",
+    "form_send": "Send Message",
+    "form_sending": "Sending...",
+    "form_success": "Message sent! I'll get back to you soon.",
+    "form_error": "Something went wrong. Please try again or email me directly.",
+    "or_reach": "Or reach me directly"
+  },
+  "hardware": {
+    "heading": "Hardware Projects",
+    "subheading": "Microcontrollers, circuits, and physical computing experiments.",
+    "status_completed": "Completed",
+    "status_in_progress": "In Progress",
+    "status_prototype": "Prototype",
+    "specs_label": "Specs",
+    "gallery_label": "Gallery",
+    "photo_label": "Photo",
+    "schematic_label": "Schematic",
+    "diagram_label": "Diagram",
+    "breadboard_label": "Breadboard",
+    "pcb_label": "PCB",
+    "view_code": "View Code",
+    "view_video": "Watch Demo",
+    "back_to_hardware": "← All Hardware"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "built_with": "Built with Next.js, Three.js & GSAP"
+  },
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "open_link": "Open link"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "nav": {
+    "home": "Início",
+    "projects": "Projetos",
+    "hardware": "Hardware",
+    "about": "Sobre",
+    "contact": "Contato"
+  },
+  "home": {
+    "hero": {
+      "greeting": "Olá, sou",
+      "name": "Clayton Borges",
+      "title": "Desenvolvedor Criativo / Full-Stack",
+      "subtitle": "React · Next.js · Three.js · Python · Ruby",
+      "cta_projects": "Ver Projetos",
+      "cta_contact": "Entrar em Contato"
+    },
+    "about_preview": {
+      "label": "Sobre Mim",
+      "heading": "3 anos. Entregue.",
+      "body": "3 anos desenvolvendo aplicações web em produção, experiências 3D interativas e ferramentas criativas para clientes no Brasil e no exterior. Baseado em Brasília — aberto a relocação e trabalho remoto.",
+      "cta": "Saiba Mais"
+    },
+    "featured_projects": {
+      "label": "Trabalhos Selecionados",
+      "heading": "Projetos",
+      "cta": "Ver Todos os Projetos"
+    },
+    "skills": {
+      "label": "Stack Técnica",
+      "heading": "Com o que trabalho"
+    },
+    "contact_cta": {
+      "heading": "Vamos trabalhar juntos.",
+      "body": "Disponível para projetos freelance, vagas remotas e relocação.",
+      "cta": "Diga Olá"
+    }
+  },
+  "projects": {
+    "heading": "Todos os Projetos",
+    "subheading": "Uma coleção de trabalhos para clientes, experimentos pessoais e ferramentas open-source.",
+    "filter_all": "Todos",
+    "filter_3d": "3D / WebGL",
+    "filter_web": "Aplicações Web",
+    "filter_platform": "Plataformas",
+    "filter_ai": "IA / ML",
+    "filter_audio": "Áudio",
+    "filter_data": "Engenharia de Dados",
+    "filter_embedded": "Embarcados",
+    "view_code": "Código",
+    "view_live": "Demo ao Vivo",
+    "client_label": "Cliente"
+  },
+  "about": {
+    "heading": "Sobre",
+    "subheading": "Desenvolvedor Criativo / Full-Stack",
+    "bio_1": "Desenvolvedor Criativo / Full-Stack baseado em Brasília, Brasil, com 3 anos entregando aplicações web em produção, experiências 3D interativas e ferramentas criativas.",
+    "bio_2": "O trabalho abrange shaders GLSL e WebGL, plataformas full-stack (Next.js, FastAPI, Supabase), ferramentas de áudio (Web Audio API, Python DSP) e integrações com IA. Freelance pela DISCLAYMER, estúdio co-fundado com Raphael Palmer.",
+    "bio_3": "Aberto a vagas remotas, contratos freelance e relocação.",
+    "experience_label": "Experiência",
+    "education_label": "Educação",
+    "skills_label": "Habilidades",
+    "download_resume": "Baixar Currículo",
+    "languages_label": "Idiomas",
+    "portuguese": "Português — Nativo",
+    "english": "Inglês — Nível Profissional",
+    "cta": "Saiba Mais"
+  },
+  "contact": {
+    "heading": "Entre em Contato",
+    "subheading": "Aberto a vagas remotas, trabalho freelance e projetos interessantes.",
+    "form_name": "Seu Nome",
+    "form_email": "Seu E-mail",
+    "form_subject": "Assunto",
+    "form_message": "Mensagem",
+    "form_send": "Enviar Mensagem",
+    "form_sending": "Enviando...",
+    "form_success": "Mensagem enviada! Responderei em breve.",
+    "form_error": "Algo deu errado. Tente novamente ou me envie um e-mail diretamente.",
+    "or_reach": "Ou entre em contato diretamente"
+  },
+  "hardware": {
+    "heading": "Projetos de Hardware",
+    "subheading": "Microcontroladores, circuitos e experimentos de computação física.",
+    "status_completed": "Concluído",
+    "status_in_progress": "Em Andamento",
+    "status_prototype": "Protótipo",
+    "specs_label": "Especificações",
+    "gallery_label": "Galeria",
+    "photo_label": "Foto",
+    "schematic_label": "Esquemático",
+    "diagram_label": "Diagrama",
+    "breadboard_label": "Protoboard",
+    "pcb_label": "PCB",
+    "view_code": "Ver Código",
+    "view_video": "Ver Demo",
+    "back_to_hardware": "← Todo o Hardware"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados.",
+    "built_with": "Construído com Next.js, Three.js & GSAP"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "back": "Voltar",
+    "open_link": "Abrir link"
+  }
+}
