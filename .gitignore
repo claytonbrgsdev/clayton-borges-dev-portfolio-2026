@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 3D models — host on Vercel Blob or CDN, don't commit
+public/models/*.glb
+public/models/*.ply
+public/models/*.gltf
+public/models/*.zip
