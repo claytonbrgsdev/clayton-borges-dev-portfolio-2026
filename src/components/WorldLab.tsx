@@ -1657,44 +1657,8 @@ function buildV5(scene: THREE.Scene): SceneBundle {
 
 // ── v6 Model Viewer ───────────────────────────────────────────────────────────
 
-// All .glb and .ply files in public/models (symlinked from Downloads folder).
-// Large-file labels include a rough size warning.
-export const MODEL_CATALOG = [
-  { filename: "abstract_cloud.glb",                                     label: "Abstract Cloud" },
-  { filename: "animated_giant_pacific_octopus_free.glb",               label: "Pacific Octopus (animated)" },
-  { filename: "art_gallery.glb",                                        label: "Art Gallery" },
-  { filename: "ancient_bath_house_-_modular_set.glb",                  label: "Ancient Bath House" },
-  { filename: "boyd_accessway__opentopography.glb",                     label: "Boyd Accessway (Topo)" },
-  { filename: "boyd_accessway_combined.glb",                            label: "Boyd Accessway" },
-  { filename: "boyd_accessway_contours (1).glb",                        label: "Boyd Accessway Contours" },
-  { filename: "cable_mountain_tree_cleaned.glb",                        label: "Cable Mountain Tree" },
-  { filename: "central_park_hybrid_point_cloud_model.glb",             label: "Central Park (Hybrid)" },
-  { filename: "chao_garden.glb",                                        label: "Chao Garden" },
-  { filename: "complete_intersection_cy_flux__papp.glb",               label: "CY Flux Intersection" },
-  { filename: "crystal-coves-in-the-abyss-2500k-pts.glb",             label: "Crystal Coves Abyss" },
-  { filename: "deep-sea_corals.glb",                                    label: "Deep Sea Corals" },
-  { filename: "flower_of_life_-_flux_complexity__papp.glb",            label: "Flower of Life (Flux)" },
-  { filename: "flower_of_life_v309__papp_generative_topology.glb",     label: "Flower of Life v309" },
-  { filename: "free_-_skybox_basic_sky.glb",                           label: "Skybox Basic Sky" },
-  { filename: "heightmap_pointcloud_experimental.glb",                 label: "Heightmap Point Cloud" },
-  { filename: "interdimensional_art_gallery_-_floating_platform.glb",  label: "Interdimensional Gallery" },
-  { filename: "large_chalice.glb",                                      label: "Large Chalice" },
-  { filename: "lava_flow_-_geopedregal_unam_tls.glb",                 label: "Lava Flow (Geo)" },
-  { filename: "lava_flow_tls.glb",                                      label: "Lava Flow TLS ⚠ 150 MB" },
-  { filename: "major_chord_flux_tube__papp (1).glb",                   label: "Major Chord Flux Tube" },
-  { filename: "night_sky_visible_spectrum_monochromatic.glb",          label: "Night Sky Spectrum" },
-  { filename: "northumberlandia_-_3d_model_from_lidar.glb",           label: "Northumberlandia (LiDAR)" },
-  { filename: "notre-dame_cathedral_of_paris (3).glb",                 label: "Notre-Dame Cathedral" },
-  { filename: "office_studio.glb",                                      label: "Office Studio ⚠ 106 MB" },
-  { filename: "old_palace_interior.glb",                               label: "Old Palace Interior ⚠ 82 MB" },
-  { filename: "siple_coast_icesat-2_point_cloud.glb",                  label: "Siple Coast ICESat-2 ⚠ 188 MB" },
-  { filename: "swarm.glb",                                              label: "Swarm" },
-  { filename: "taal_volcano.glb",                                       label: "Taal Volcano" },
-  { filename: "tls_scan_point_cloud_faro_focus.glb",                   label: "TLS Scan (FARO Focus)" },
-  { filename: "torus_fiber_elliptic_cy_flux__papp (1).glb",            label: "Torus Fiber CY Flux" },
-  { filename: "wetland_microtopography_-_terrestrial_lidar.glb",       label: "Wetland Microtopography" },
-  { filename: "unnamed (2)_tiled_morton_1852307pts.ply",               label: "Point Cloud 1.85M pts ⚠ 71 MB" },
-] as const;
+// Model catalog — empty, models removed.
+export const MODEL_CATALOG = [] as const;
 
 type ModelFilename = typeof MODEL_CATALOG[number]["filename"];
 
@@ -1964,38 +1928,8 @@ interface RegionDef {
 }
 
 const REGION_DEFS: RegionDef[] = [
-  { id: 'origin',    zoneId: 'origin',  filename: null,
-    pos: [0, 0, 0],         targetSize: 80, zoneRadius: 110, animMode: 0 },
-
-  { id: 'cloud',     zoneId: 'sky',     filename: 'abstract_cloud.glb',
-    pos: [0, 35, -55],      targetSize: 35, zoneRadius: 75,  animMode: 2 },
-
-  { id: 'heightmap', zoneId: 'geology', filename: 'heightmap_pointcloud_experimental.glb',
-    pos: [85, 0, -35],      targetSize: 55, zoneRadius: 75,  animMode: 1 },
-
-  { id: 'deep',      zoneId: 'deep',    filename: 'crystal-coves-in-the-abyss-2500k-pts.glb',
-    pos: [-95, -12, -65],   targetSize: 55, zoneRadius: 75,  animMode: 4 },
-
-  { id: 'boyd1',     zoneId: 'geology', filename: 'boyd_accessway_combined.glb',
-    pos: [-80, 0, 45],      targetSize: 50, zoneRadius: 70,  animMode: 1 },
-  { id: 'boyd2',     zoneId: 'geology', filename: 'boyd_accessway__opentopography.glb',
-    pos: [-100, 0, 90],     targetSize: 45, zoneRadius: 65,  animMode: 1 },
-  { id: 'boyd3',     zoneId: 'geology', filename: 'boyd_accessway_contours (1).glb',
-    pos: [-50, 0, 85],      targetSize: 45, zoneRadius: 65,  animMode: 1 },
-
-  { id: 'ice',       zoneId: 'ice',     filename: 'siple_coast_icesat-2_point_cloud.glb',
-    pos: [10, -6, -150],    targetSize: 75, zoneRadius: 100, animMode: 6 },
-
-  { id: 'park',      zoneId: 'life',    filename: 'central_park_hybrid_point_cloud_model.glb',
-    pos: [45, 0, 105],      targetSize: 40, zoneRadius: 65,  animMode: 3 },
-
-  { id: 'volcano',   zoneId: 'fire',    filename: 'taal_volcano.glb',
-    pos: [90, 0, 55],       targetSize: 50, zoneRadius: 75,  animMode: 5 },
-  { id: 'lava1',     zoneId: 'fire',    filename: 'lava_flow_-_geopedregal_unam_tls.glb',
-    pos: [110, 0, 90],      targetSize: 40, zoneRadius: 65,  animMode: 5 },
-
-  { id: 'scan',      zoneId: 'scan',    filename: 'tls_scan_point_cloud_faro_focus.glb',
-    pos: [-90, 0, -20],     targetSize: 45, zoneRadius: 65,  animMode: 7 },
+  { id: 'origin', zoneId: 'origin', filename: null,
+    pos: [0, 0, 0], targetSize: 80, zoneRadius: 110, animMode: 0 },
 ];
 
 // ── Mono material factory ─────────────────────────────────────────────────────
