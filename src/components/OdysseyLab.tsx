@@ -931,7 +931,7 @@ export function OdysseyLab() {
       <div ref={s0Ref} style={{ ...sec, top: "11%", left: "7%", color: "#e8eaf2" }}>
         <span style={lbl("rgba(200,210,240,0.30)")}>01</span>
         <h2 style={{ fontSize: "clamp(2.2rem,5.5vw,4.5rem)", fontWeight: 700, lineHeight: 1.02, margin: 0 }}>
-          Lorem ipsum<br />dolor sit amet
+          Becoming.<br />Density as form.
         </h2>
       </div>
 
@@ -939,7 +939,7 @@ export function OdysseyLab() {
       <div ref={s1Ref} style={{ ...sec, bottom: "13%", right: "7%", textAlign: "right", color: "#dde0f0" }}>
         <span style={lbl("rgba(190,200,235,0.28)")}>02</span>
         <p style={{ fontSize: "clamp(1rem,2.4vw,1.7rem)", lineHeight: 1.85, margin: 0 }}>
-          Lorem ipsum dolor<br />consectetur adipiscing<br />sed do eiusmod
+          A compound-sine vector field.<br />No source, no sink —<br />direction as a function of position.
         </p>
       </div>
 
@@ -947,7 +947,7 @@ export function OdysseyLab() {
       <div ref={s2Ref} style={{ ...sec, top: "11%", left: "7%", color: "#ced6e8" }}>
         <span style={lbl("#4a5870")}>03</span>
         <h2 style={{ fontSize: "clamp(2.2rem,5.5vw,4.5rem)", fontWeight: 700, lineHeight: 1.02, margin: 0 }}>
-          Consectetur<br />adipiscing elit
+          Polar form.<br />In transit.
         </h2>
       </div>
 
@@ -955,7 +955,7 @@ export function OdysseyLab() {
       <div ref={s3Ref} style={{ ...sec, bottom: "13%", right: "7%", textAlign: "right", color: "#ced6e8" }}>
         <span style={lbl("#4a5870")}>04</span>
         <p style={{ fontSize: "clamp(1rem,2.4vw,1.7rem)", lineHeight: 1.85, margin: 0 }}>
-          Sed do eiusmod<br />tempor incididunt<br />ut labore et dolore
+          r = 1 + a·cos(nθ + φt)<br />Each harmonic adds one vertex.<br />Remove one term — lose one point.
         </p>
       </div>
 
@@ -963,7 +963,7 @@ export function OdysseyLab() {
       <div ref={s4Ref} style={{ ...sec, top: "50%", transform: "translateY(-50%)", left: "7%", color: "#c0b2e0" }}>
         <span style={lbl("#5a36a8")}>05</span>
         <h2 style={{ fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.05, margin: 0 }}>
-          Lorem ipsum<br />eiusmod
+          Underground.<br />The network<br />precedes itself.
         </h2>
       </div>
 
@@ -971,7 +971,7 @@ export function OdysseyLab() {
       <div ref={s5Ref} style={{ ...sec, top: "11%", right: "7%", textAlign: "right", color: "#c0b2e0" }}>
         <span style={lbl("#5a36a8")}>06</span>
         <p style={{ fontSize: "clamp(1rem,2.2vw,1.5rem)", lineHeight: 1.95, margin: 0 }}>
-          Lorem ipsum dolor<br />amet consectetur<br />eiusmod tempor
+          Growth by least resistance.<br />Each branch a path found<br />before the territory was mapped.
         </p>
       </div>
 
@@ -979,7 +979,7 @@ export function OdysseyLab() {
       <div ref={s6Ref} style={{ ...sec, bottom: "13%", left: "7%", color: "#dece98" }}>
         <span style={lbl("#876018")}>07</span>
         <p style={{ fontSize: "clamp(1rem,2.4vw,1.7rem)", lineHeight: 1.85, margin: 0 }}>
-          Sed do eiusmod tempor<br />incididunt ut labore<br />et dolore magna
+          The harmonic circles complete their figures.<br />Frequency added to frequency — the form emerges.<br />Plus ça change, plus c'est la même chose.
         </p>
       </div>
 
@@ -987,7 +987,7 @@ export function OdysseyLab() {
       <div ref={s7Ref} style={{ ...sec, bottom: "11%", left: "50%", transform: "translateX(-50%)", textAlign: "center", color: "#dece98" }}>
         <span style={lbl("#876018")}>08</span>
         <p style={{ fontSize: "clamp(0.9rem,1.9vw,1.3rem)", margin: 0 }}>
-          Lorem ipsum dolor sit amet
+          Every form returns to the circle.
         </p>
       </div>
     </div>

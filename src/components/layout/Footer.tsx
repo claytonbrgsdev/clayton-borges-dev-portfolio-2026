@@ -12,11 +12,11 @@ export function Footer({ dict, locale }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 px-6 py-10 md:px-12">
+    <footer className="border-t border-black/10 px-6 py-10 md:px-12">
       <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-1">
           <span className="text-sm font-mono font-bold tracking-widest uppercase">
-            CB<span className="text-blue-500">.</span>dev
+            CB<span style={{ color: "#6B35D9" }}>.</span>dev
           </span>
           <span className="text-xs opacity-40 font-mono">
             © {year} Clayton Borges. {dict.footer.rights}

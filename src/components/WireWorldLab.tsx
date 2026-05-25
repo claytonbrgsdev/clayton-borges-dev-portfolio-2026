@@ -233,6 +233,25 @@ function buildSketch(
         dc.imageSmoothingEnabled = false;
         dc.drawImage(offscreen, 0, 0, W, H);
 
+        // Additive glow on each electron head
+        const [,hd,,] = CH_PALS_WW[chIdx];
+        const glowR = W / GW * 3.5;
+        dc.globalCompositeOperation = "lighter";
+        for (let gy = 0; gy < GH; gy++) {
+          for (let gx = 0; gx < GW; gx++) {
+            if (gridWW[gy*GW+gx] === 1) {
+              const pcx = (gx + 0.5) / GW * W;
+              const pcy = (gy + 0.5) / GH * H;
+              const grd = dc.createRadialGradient(pcx, pcy, 0, pcx, pcy, glowR);
+              grd.addColorStop(0, `rgba(${hd[0]},${hd[1]},${hd[2]},0.50)`);
+              grd.addColorStop(1, "rgba(0,0,0,0)");
+              dc.fillStyle = grd;
+              dc.fillRect(pcx - glowR, pcy - glowR, glowR*2, glowR*2);
+            }
+          }
+        }
+        dc.globalCompositeOperation = "source-over";
+
         const hudA = ss(0.04, 0.16, sp);
         if (hudA > 0.01) {
           const [,hd,,] = CH_PALS_WW[chIdx];

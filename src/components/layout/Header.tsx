@@ -30,10 +30,10 @@ export function Header({ dict }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12 border-b border-black/[0.08]" style={{ background: "rgba(242,240,236,0.85)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
       {/* Logo */}
       <Link href={`/${locale}`} className="text-sm font-mono font-bold tracking-widest uppercase">
-        CB<span className="text-blue-500">.</span>dev
+        CB<span style={{ color: "#6B35D9" }}>.</span>dev
       </Link>
 
       {/* Desktop Nav */}
@@ -69,7 +69,7 @@ export function Header({ dict }: HeaderProps) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="absolute top-full left-0 right-0 flex flex-col items-center gap-6 py-8 bg-black/90 backdrop-blur-sm md:hidden">
+        <div className="absolute top-full left-0 right-0 flex flex-col items-center gap-6 py-8 md:hidden border-b border-black/[0.08]" style={{ background: "rgba(242,240,236,0.97)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
           {navLinks.map((link) => (
             <Link
               key={link.href}

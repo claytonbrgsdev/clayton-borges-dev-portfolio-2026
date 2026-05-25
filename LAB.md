@@ -67,6 +67,10 @@ The lab routes sit outside the locale tree (no site navbar, no i18n wrapper). Th
 | 24b | `/lab-phase-24-b` | `PercolationLab` | Site percolation — BFS cluster coloring, monotonic randThresh activation, gradient spanning cluster (cyan→gold), cluster-size log histogram | active |
 | 24c | `/lab-phase-24-c` | `LSystemLab`    | L-system grammar — Koch/Dragon/Hilbert/Plant, progressive reveal with pulsing tip cursor, canvas gradient coloring, vignette | active |
 | 24d | `/lab-phase-24-d` | `ChuaLab`       | Chua's circuit double-scroll — α-driven period-doubling cascade (period-1→2→4→chaos), dual warm/cool density wings, tracer trail, bifurcation ticks | active |
+| 25  | `/lab-phase-25`   | `GasLab`        | 2D molecular gas dynamics — 250-particle hard-sphere MD, periodic boundary, elastic collisions, velocity-rescaling thermostat, bond network at low T | active |
+| 25b | `/lab-phase-25-b` | `WireWorldLab`  | WireWorld cellular automaton — 4-state 8-connected CA, electron-head/tail signals, 4 circuit topologies (ring/Lissajous/rose/hypocycloid), additive glow | active |
+| 25c | `/lab-phase-25-c` | `SpiroLab`          | Parametric curve families — rose r=cos(kθ), Lissajous x=sin(at+δ), hypotrochoid, Gielis superformula; incremental trail accumulation, guide grid, vignette | active |
+| 26  | `/lab-phase-26`   | `SuperpositionLab`  | Time-dependent Schrödinger equation — Gaussian beam source, leapfrog finite-difference solver (NX=192×NY=128), absorbing PML boundaries, 3 chapters: single/double/triple slit; phase-hue coloring (hue=arg ψ, value=\|ψ\|²) | active |
 
 ---
 
@@ -544,9 +548,11 @@ Adjacent chapters blend over `[0.75, 1.0]` of each chapter's `chT`.
 
 ---
 
-## What's next
+## Current state (May 2026)
 
-- Replace Lorem Ipsum with real content once the form is fully locked (OdysseyLab)
-- Decide which phases to link from the main portfolio as canonical experiences
-- Consider whether OdysseyLab becomes the actual homepage background or stays as a standalone `/lab` page
-- QA CircuitLab, OscilloLab, and NexusLab — mark liked/active after review
+- **42 phases exist** (2 through 25c). See full index above.
+- **Phase 26 (SISYPHUS):** attempted twice, both deleted. No route exists.
+- **OdysseyLab (phase 13):** form locked, text overlays still Lorem Ipsum.
+- **Orphaned components (no route):** `DendriteLab.tsx`, `JupiterLab.tsx`.
+- **`/lab` route:** uses `WorldLab.tsx` — 3D world dev preview, not part of the phase series.
+- **QA needed:** phases 14–25c have not been formally marked liked/active.

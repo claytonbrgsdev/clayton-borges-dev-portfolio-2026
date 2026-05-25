@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { getDictionary } from "@/lib/i18n";
-import { featuredProjects } from "@/lib/data/projects";
 import type { Locale } from "@/types";
 
-import { MorphicWorld } from "@/components/sections/home/MorphicWorld";
-import { HeroSection } from "@/components/sections/home/HeroSection";
-import { AboutPreview } from "@/components/sections/home/AboutPreview";
-import { FeaturedProjects } from "@/components/sections/home/FeaturedProjects";
-import { SkillsSection } from "@/components/sections/home/SkillsSection";
-import { ContactCTA } from "@/components/sections/home/ContactCTA";
+import { IndexSection }   from "@/components/sections/home/IndexSection";
+import { WorkSection }    from "@/components/sections/home/WorkSection";
+import { LabSection }     from "@/components/sections/home/LabSection";
+import { AboutSection }   from "@/components/sections/home/AboutSection";
+import { ContactSection } from "@/components/sections/home/ContactSection";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -24,13 +22,11 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <>
-      {/* Fixed morphic world — v2: organic fluid / circuit lab */}
-      <MorphicWorld />
-      <HeroSection dict={dict} locale={locale as Locale} />
-      <AboutPreview dict={dict} locale={locale as Locale} />
-      <FeaturedProjects dict={dict} locale={locale as Locale} projects={featuredProjects} />
-      <SkillsSection dict={dict} />
-      <ContactCTA dict={dict} locale={locale as Locale} />
+      <IndexSection   dict={dict} locale={locale as Locale} />
+      <WorkSection    dict={dict} locale={locale as Locale} />
+      <LabSection     dict={dict} locale={locale as Locale} />
+      <AboutSection   dict={dict} locale={locale as Locale} />
+      <ContactSection dict={dict} locale={locale as Locale} />
     </>
   );
 }

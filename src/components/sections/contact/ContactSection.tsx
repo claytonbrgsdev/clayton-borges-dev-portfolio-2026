@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP reveal animations + form submission with Resend or similar
 import { useState } from "react";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
@@ -10,6 +9,22 @@ interface ContactSectionProps {
   dict: Dictionary;
   locale: Locale;
 }
+
+const mono: React.CSSProperties = { fontFamily: "var(--font-geist-mono, monospace)" };
+const sans: React.CSSProperties = { fontFamily: "var(--font-geist-sans, sans-serif)" };
+
+const inputStyle: React.CSSProperties = {
+  ...sans,
+  background: "transparent",
+  border: "none",
+  borderBottom: "1px solid rgba(10,10,10,0.2)",
+  padding: "12px 0",
+  fontSize: 14,
+  color: "#0A0A0A",
+  width: "100%",
+  outline: "none",
+  transition: "border-color 0.12s",
+};
 
 export function ContactSection({ dict }: ContactSectionProps) {
   const { contact } = dict;
@@ -21,8 +36,8 @@ export function ContactSection({ dict }: ContactSectionProps) {
 
     const form = e.currentTarget;
     const payload = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      name:    (form.elements.namedItem("name")    as HTMLInputElement).value,
+      email:   (form.elements.namedItem("email")   as HTMLInputElement).value,
       subject: (form.elements.namedItem("subject") as HTMLInputElement).value,
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
     };
@@ -40,107 +55,119 @@ export function ContactSection({ dict }: ContactSectionProps) {
   }
 
   return (
-    <div>
-      <div className="mb-16">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">{contact.heading}</h1>
-        <p className="text-lg opacity-50">{contact.subheading}</p>
+    <div style={{ ...sans, color: "#0A0A0A" }}>
+      <div style={{ marginBottom: 64 }}>
+        <h1 style={{ fontSize: "clamp(2rem, 5vw, 4rem)", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 12 }}>
+          {contact.heading}
+        </h1>
+        <p style={{ fontSize: 16, color: "rgba(10,10,10,0.5)", lineHeight: 1.6 }}>{contact.subheading}</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-16">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 64 }}>
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
-              {contact.form_name}
-            </label>
-            <input
-              name="name"
-              type="text"
-              required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
-              {contact.form_email}
-            </label>
-            <input
-              name="email"
-              type="email"
-              required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
-              {contact.form_subject}
-            </label>
-            <input
-              name="subject"
-              type="text"
-              required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          {[
+            { name: "name",    label: contact.form_name,    type: "text" },
+            { name: "email",   label: contact.form_email,   type: "email" },
+            { name: "subject", label: contact.form_subject, type: "text" },
+          ].map(({ name, label, type }) => (
+            <div key={name} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <label style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)" }}>
+                {label}
+              </label>
+              <input
+                name={name}
+                type={type}
+                required
+                style={inputStyle}
+                onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderBottomColor = "#0A0A0A"; }}
+                onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderBottomColor = "rgba(10,10,10,0.2)"; }}
+              />
+            </div>
+          ))}
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <label style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)" }}>
               {contact.form_message}
             </label>
             <textarea
               name="message"
               required
               rows={5}
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm resize-none"
+              style={{ ...inputStyle, resize: "none" }}
+              onFocus={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderBottomColor = "#0A0A0A"; }}
+              onBlur={(e) => { (e.currentTarget as HTMLTextAreaElement).style.borderBottomColor = "rgba(10,10,10,0.2)"; }}
             />
           </div>
 
           {status === "success" && (
-            <p className="text-sm text-green-400 font-mono">{contact.form_success}</p>
+            <p style={{ ...mono, fontSize: 12, color: "#2A9D5C" }}>{contact.form_success}</p>
           )}
           {status === "error" && (
-            <p className="text-sm text-red-400 font-mono">{contact.form_error}</p>
+            <p style={{ ...mono, fontSize: 12, color: "#C0392B" }}>{contact.form_error}</p>
           )}
 
           <button
             type="submit"
             disabled={status === "sending" || status === "success"}
-            className="mt-2 px-8 py-3 bg-white text-black font-mono text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start"
+            style={{
+              ...mono,
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              padding: "12px 28px",
+              background: "#0A0A0A",
+              color: "#F2F0EC",
+              border: "none",
+              cursor: status === "sending" || status === "success" ? "not-allowed" : "pointer",
+              opacity: status === "sending" || status === "success" ? 0.5 : 1,
+              alignSelf: "flex-start",
+              transition: "background 0.12s",
+            }}
+            onMouseEnter={(e) => {
+              if (status === "idle") (e.currentTarget as HTMLButtonElement).style.background = "#6B35D9";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "#0A0A0A";
+            }}
           >
             {status === "sending" ? contact.form_sending : contact.form_send}
           </button>
         </form>
 
         {/* Direct links */}
-        <div className="flex flex-col gap-8">
-          <span className="font-mono text-xs tracking-widest uppercase opacity-40">
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)" }}>
             {contact.or_reach}
           </span>
-          <div className="flex flex-col gap-4">
-            <a
-              href={`mailto:${contactInfo.email}`}
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <span className="font-mono text-xs opacity-40 w-16">Email</span>
-              <span>{contactInfo.email}</span>
-            </a>
-            <a
-              href={contactInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <span className="font-mono text-xs opacity-40 w-16">GitHub</span>
-              <span>claytonbrgsdev</span>
-            </a>
-            <a
-              href={contactInfo.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <span className="font-mono text-xs opacity-40 w-16">LinkedIn</span>
-              <span>clayton-borges-web-dev</span>
-            </a>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "1px solid rgba(10,10,10,0.08)" }}>
+            {[
+              { label: "Email",    href: `mailto:${contactInfo.email}`,  value: contactInfo.email },
+              { label: "GitHub",   href: contactInfo.github,             value: "claytonbrgsdev" },
+              { label: "LinkedIn", href: contactInfo.linkedin,           value: "clayton-borges-web-dev" },
+            ].map(({ label, href, value }) => (
+              <div key={label} style={{ borderBottom: "1px solid rgba(10,10,10,0.08)", padding: "14px 0", display: "flex", alignItems: "baseline", gap: 20 }}>
+                <span style={{ ...mono, fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(10,10,10,0.35)", minWidth: 64 }}>
+                  {label}
+                </span>
+                <a
+                  href={href}
+                  target={href.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  style={{ ...sans, fontSize: 14, color: "#0A0A0A", textDecoration: "none", borderBottom: "1px solid rgba(10,10,10,0.2)", paddingBottom: 1, transition: "color 0.12s, border-color 0.12s" }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#6B35D9";
+                    (e.currentTarget as HTMLAnchorElement).style.borderBottomColor = "#6B35D9";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#0A0A0A";
+                    (e.currentTarget as HTMLAnchorElement).style.borderBottomColor = "rgba(10,10,10,0.2)";
+                  }}
+                >
+                  {value}
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </div>

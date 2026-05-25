@@ -13,7 +13,11 @@
       "title": "Desenvolvedor Criativo / Full-Stack",
       "subtitle": "React · Next.js · Three.js · Python · Ruby",
       "cta_projects": "Ver Projetos",
-      "cta_contact": "Entrar em Contato"
+      "cta_contact": "Entrar em Contato",
+      "index_code": "01 — ÍNDICE",
+      "descriptor": "Brasília · 3 anos · DISCLAYMER",
+      "scroll_hint": "↓ TRABALHO",
+      "tech_strip": "React · Next.js · Three.js · p5.js · Web Audio"
     },
     "about_preview": {
       "label": "Sobre Mim",
@@ -34,6 +38,51 @@
       "heading": "Vamos trabalhar juntos.",
       "body": "Disponível para projetos freelance, vagas remotas e relocação.",
       "cta": "Diga Olá"
+    },
+    "instrument": {
+      "live_label": "AO VIVO",
+      "portfolio_code": "PORTFÓLIO / 001 / 2026",
+      "tagline": "código que se move",
+      "seed_label": "SEMENTE",
+      "kb_hint": "1–6 SINTETIZADOR · ARRASTE KNOBS · CLIQUE STEPS · M MUDO",
+      "drum_label": "BATERIA"
+    },
+    "work_section": {
+      "code": "02 — TRABALHO",
+      "heading": "Trabalhos Selecionados"
+    },
+    "lab_section": {
+      "code": "03 — LAB",
+      "heading": "Lab Generativo",
+      "sub": "42 peças generativas independentes. Matemática pura tornada visível.",
+      "open": "ABRIR →"
+    },
+    "about_section": {
+      "code": "04 — SOBRE",
+      "manifesto": "3D em tempo real. Arte computacional. Plataformas em produção. Tudo entregue.",
+      "bio": "Trabalha na interseção de engenharia criativa e desenvolvimento de produto. Constrói coisas que a maioria dos desenvolvedores não tentaria, e entrega. As 42 peças generativas neste site são projetos pessoais. O trabalho para clientes é de nível de produção.",
+      "available_for": "Disponível para freelance, posições full-time, remoto e relocação.",
+      "spec_location": "LOCALIZAÇÃO",
+      "spec_tools": "FERRAMENTAS",
+      "spec_discipline": "DISCIPLINA",
+      "spec_year": "ANO DE FAB",
+      "spec_studio": "ESTÚDIO",
+      "spec_available": "DISPONÍVEL PARA",
+      "location_val": "Brasília, Brasil",
+      "tools_val": "React · Next.js · Three.js · p5.js · FastAPI",
+      "discipline_val": "Criativo / Full-Stack",
+      "year_val": "2023",
+      "studio_val": "DISCLAYMER c/ Raphael Palmer",
+      "available_val": "Freelance · Remoto · Relocação"
+    },
+    "contact_section": {
+      "code": "05 — CONTATO",
+      "cta_code": "CT-01",
+      "cta_label": "ENVIAR MENSAGEM",
+      "email_label": "E-MAIL",
+      "github_label": "GITHUB",
+      "linkedin_label": "LINKEDIN",
+      "instagram_label": "INSTAGRAM"
     }
   },
   "projects": {

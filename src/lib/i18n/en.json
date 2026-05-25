@@ -13,7 +13,11 @@
       "title": "Creative / Full-Stack Developer",
       "subtitle": "React · Next.js · Three.js · Python · Ruby",
       "cta_projects": "View Projects",
-      "cta_contact": "Get In Touch"
+      "cta_contact": "Get In Touch",
+      "index_code": "01 — INDEX",
+      "descriptor": "Brasília · 3 yrs · DISCLAYMER",
+      "scroll_hint": "↓ WORK",
+      "tech_strip": "React · Next.js · Three.js · p5.js · Web Audio"
     },
     "about_preview": {
       "label": "About Me",
@@ -34,6 +38,51 @@
       "heading": "Let's work together.",
       "body": "Available for freelance, remote roles, and relocation.",
       "cta": "Say Hello"
+    },
+    "instrument": {
+      "live_label": "LIVE",
+      "portfolio_code": "PORTFOLIO / 001 / 2026",
+      "tagline": "code that moves",
+      "seed_label": "SEED",
+      "kb_hint": "1–6 SYNTH · DRAG KNOBS · CLICK STEPS · M MUTE",
+      "drum_label": "DRUM MACHINE"
+    },
+    "work_section": {
+      "code": "02 — WORK",
+      "heading": "Selected Work"
+    },
+    "lab_section": {
+      "code": "03 — LAB",
+      "heading": "Generative Lab",
+      "sub": "42 standalone generative pieces. Pure mathematics made visible.",
+      "open": "OPEN →"
+    },
+    "about_section": {
+      "code": "04 — ABOUT",
+      "manifesto": "Real-time 3D. Computational art. Production platforms. All shipped.",
+      "bio": "Works at the intersection of creative engineering and production. Builds things most developers wouldn't attempt, and ships them. The 42 generative pieces on this site are side projects. The client work is production-grade.",
+      "available_for": "Available for freelance, full-time positions, remote and relocation.",
+      "spec_location": "LOCATION",
+      "spec_tools": "TOOLS",
+      "spec_discipline": "DISCIPLINE",
+      "spec_year": "YEAR OF MFG",
+      "spec_studio": "STUDIO",
+      "spec_available": "AVAILABLE FOR",
+      "location_val": "Brasília, Brazil",
+      "tools_val": "React · Next.js · Three.js · p5.js · FastAPI",
+      "discipline_val": "Creative / Full-Stack",
+      "year_val": "2023",
+      "studio_val": "DISCLAYMER w/ Raphael Palmer",
+      "available_val": "Freelance · Remote · Relocation"
+    },
+    "contact_section": {
+      "code": "05 — CONTACT",
+      "cta_code": "CT-01",
+      "cta_label": "SEND MESSAGE",
+      "email_label": "EMAIL",
+      "github_label": "GITHUB",
+      "linkedin_label": "LINKEDIN",
+      "instagram_label": "INSTAGRAM"
     }
   },
   "projects": {
@@ -63,7 +112,8 @@
     "download_resume": "Download Resume",
     "languages_label": "Languages",
     "portuguese": "Portuguese — Native",
-    "english": "English — Professional"
+    "english": "English — Professional",
+    "cta": "Learn More"
   },
   "contact": {
     "heading": "Get In Touch",

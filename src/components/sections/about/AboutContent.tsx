@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP scroll-triggered reveals for each block
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
 import { contactInfo } from "@/lib/data/contact";
@@ -9,6 +8,10 @@ interface AboutContentProps {
   dict: Dictionary;
   locale: Locale;
 }
+
+const border = "1px solid rgba(10,10,10,0.1)";
+const mono: React.CSSProperties = { fontFamily: "var(--font-geist-mono, monospace)" };
+const sans: React.CSSProperties = { fontFamily: "var(--font-geist-sans, sans-serif)" };
 
 const experience = [
   {
@@ -36,42 +39,42 @@ const education = [
   { school: "Udemy", degree: "Web Development", period: "2023 – Present" },
 ];
 
-export function AboutContent({ dict, locale }: AboutContentProps) {
+export function AboutContent({ dict }: AboutContentProps) {
   const { about } = dict;
 
   return (
-    <div>
+    <div style={{ ...sans, color: "#0A0A0A" }}>
       {/* Header */}
-      <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+      <div style={{ marginBottom: 80 }}>
+        <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 16 }}>
           {about.subheading}
         </span>
-        <h1 className="text-4xl md:text-6xl font-bold mb-10">{about.heading}</h1>
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
-          <p className="opacity-60 leading-relaxed">{about.bio_1}</p>
-          <p className="opacity-60 leading-relaxed">{about.bio_2}</p>
+        <h1 style={{ fontSize: "clamp(2rem, 5vw, 4rem)", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 40 }}>
+          {about.heading}
+        </h1>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 32, maxWidth: 720, marginBottom: 24 }}>
+          <p style={{ opacity: 0.6, lineHeight: 1.7, fontSize: 14 }}>{about.bio_1}</p>
+          <p style={{ opacity: 0.6, lineHeight: 1.7, fontSize: 14 }}>{about.bio_2}</p>
         </div>
-        <p className="opacity-80 mt-6 font-medium">{about.bio_3}</p>
+        <p style={{ opacity: 0.8, fontWeight: 500, fontSize: 14 }}>{about.bio_3}</p>
       </div>
 
       {/* Experience */}
-      <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
+      <div style={{ marginBottom: 80 }}>
+        <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 32 }}>
           {about.experience_label}
         </span>
-        <div className="flex flex-col gap-8">
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {experience.map((job) => (
-            <div key={job.company} className="grid md:grid-cols-[200px_1fr] gap-4 pb-8 border-b border-white/10">
+            <div key={job.company} style={{ borderBottom: border, padding: "20px 0", display: "grid", gridTemplateColumns: "180px 1fr", gap: 16 }}>
+              <span style={{ ...mono, fontSize: 10, color: "rgba(10,10,10,0.4)", paddingTop: 2 }}>{job.period}</span>
               <div>
-                <span className="font-mono text-xs opacity-40">{job.period}</span>
-              </div>
-              <div>
-                <h3 className="font-bold mb-1">{job.role}</h3>
-                <span className="font-mono text-sm opacity-50 block mb-3">{job.company}</span>
-                <ul className="flex flex-col gap-1">
+                <h3 style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>{job.role}</h3>
+                <span style={{ ...mono, fontSize: 11, color: "rgba(10,10,10,0.45)", display: "block", marginBottom: 10 }}>{job.company}</span>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 4, listStyle: "none", padding: 0, margin: 0 }}>
                   {job.highlights.map((h) => (
-                    <li key={h} className="text-sm opacity-50 before:content-['—'] before:mr-2">
-                      {h}
+                    <li key={h} style={{ fontSize: 13, color: "rgba(10,10,10,0.55)", lineHeight: 1.5 }}>
+                      <span style={{ marginRight: 8, opacity: 0.4 }}>—</span>{h}
                     </li>
                   ))}
                 </ul>
@@ -82,31 +85,31 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
       </div>
 
       {/* Education */}
-      <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
+      <div style={{ marginBottom: 80 }}>
+        <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 32 }}>
           {about.education_label}
         </span>
-        <div className="flex flex-col gap-4">
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {education.map((edu) => (
-            <div key={edu.school} className="flex items-baseline justify-between border-b border-white/10 pb-4">
+            <div key={edu.school} style={{ borderBottom: border, padding: "14px 0", display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
               <div>
-                <span className="font-bold">{edu.school}</span>
-                <span className="opacity-50 ml-3 text-sm">{edu.degree}</span>
+                <span style={{ fontWeight: 600, fontSize: 14 }}>{edu.school}</span>
+                <span style={{ fontSize: 13, color: "rgba(10,10,10,0.5)", marginLeft: 12 }}>{edu.degree}</span>
               </div>
-              <span className="font-mono text-xs opacity-40">{edu.period}</span>
+              <span style={{ ...mono, fontSize: 10, color: "rgba(10,10,10,0.4)" }}>{edu.period}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Languages */}
-      <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-6">
+      <div style={{ marginBottom: 80 }}>
+        <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 24 }}>
           {about.languages_label}
         </span>
-        <div className="flex gap-8">
-          <span className="text-sm">{about.portuguese}</span>
-          <span className="text-sm">{about.english}</span>
+        <div style={{ display: "flex", gap: 32 }}>
+          <span style={{ fontSize: 14 }}>{about.portuguese}</span>
+          <span style={{ fontSize: 14 }}>{about.english}</span>
         </div>
       </div>
 
@@ -115,7 +118,26 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
         href={contactInfo.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block px-8 py-3 border border-white/30 font-mono text-sm tracking-wide hover:border-white/70 transition-colors"
+        style={{
+          ...mono,
+          fontSize: 11,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          display: "inline-block",
+          padding: "12px 28px",
+          border: "1px solid rgba(10,10,10,0.3)",
+          color: "#0A0A0A",
+          textDecoration: "none",
+          transition: "border-color 0.12s, color 0.12s",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "#6B35D9";
+          (e.currentTarget as HTMLAnchorElement).style.color = "#6B35D9";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.3)";
+          (e.currentTarget as HTMLAnchorElement).style.color = "#0A0A0A";
+        }}
       >
         {about.download_resume} ↗
       </a>

@@ -26,10 +26,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-black`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      {/* bg-black lives on <html> so fixed canvases at z-index:-1 are visible above it */}
-      <body className="min-h-full flex flex-col text-white">{children}</body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

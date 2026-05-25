@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP scroll-triggered entrance, image gallery lightbox
 import { useState } from "react";
 import Image from "next/image";
 import type { Dictionary } from "@/lib/i18n";
@@ -15,68 +14,70 @@ interface HardwareCardProps {
 }
 
 const IMAGE_TYPE_LABELS: Record<HardwareImage["type"], keyof Dictionary["hardware"]> = {
-  photo: "photo_label",
-  schematic: "schematic_label",
-  diagram: "diagram_label",
+  photo:      "photo_label",
+  schematic:  "schematic_label",
+  diagram:    "diagram_label",
   breadboard: "breadboard_label",
-  pcb: "pcb_label",
+  pcb:        "pcb_label",
 };
 
 const STATUS_LABELS: Record<HardwareProject["status"], keyof Dictionary["hardware"]> = {
-  completed: "status_completed",
+  completed:   "status_completed",
   "in-progress": "status_in_progress",
-  prototype: "status_prototype",
+  prototype:   "status_prototype",
 };
+
+const STATUS_STYLE: Record<HardwareProject["status"], React.CSSProperties> = {
+  completed:   { border: "1px solid rgba(42,157,92,0.5)",  color: "#2A9D5C" },
+  "in-progress": { border: "1px solid rgba(214,158,46,0.5)", color: "#8B6914" },
+  prototype:   { border: "1px solid rgba(10,10,10,0.2)",   color: "rgba(10,10,10,0.45)" },
+};
+
+const border = "1px solid rgba(10,10,10,0.1)";
+const mono: React.CSSProperties = { fontFamily: "var(--font-geist-mono, monospace)" };
+const sans: React.CSSProperties = { fontFamily: "var(--font-geist-sans, sans-serif)" };
 
 export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const name = locale === "pt" ? project.namePt : project.nameEn;
-  const tagline = locale === "pt" ? project.taglinePt : project.taglineEn;
+  const name        = locale === "pt" ? project.namePt        : project.nameEn;
+  const tagline     = locale === "pt" ? project.taglinePt     : project.taglineEn;
   const description = locale === "pt" ? project.descriptionPt : project.descriptionEn;
-  const body = locale === "pt" ? project.bodyPt : project.bodyEn;
-  const paragraphs = body.split("\n\n").filter(Boolean);
+  const body        = locale === "pt" ? project.bodyPt        : project.bodyEn;
+  const paragraphs  = body.split("\n\n").filter(Boolean);
 
   const hw = dict.hardware;
 
   return (
-    <article className="border-t border-white/10 pt-16">
+    <article style={{ borderTop: border, paddingTop: 48, ...sans, color: "#0A0A0A" }}>
       {/* Header row */}
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-12">
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 40 }}>
         <div>
-          <div className="flex items-center gap-4 mb-3">
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+            <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)" }}>
               {project.microcontroller}
             </span>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">·</span>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">
-              {project.year}
-            </span>
-            <span
-              className={`font-mono text-xs tracking-wide px-2 py-0.5 border ${
-                project.status === "completed"
-                  ? "border-green-500/40 text-green-400 opacity-70"
-                  : project.status === "in-progress"
-                  ? "border-yellow-500/40 text-yellow-400 opacity-70"
-                  : "border-white/20 opacity-40"
-              }`}
-            >
+            <span style={{ color: "rgba(10,10,10,0.25)", fontSize: 10 }}>·</span>
+            <span style={{ ...mono, fontSize: 9, letterSpacing: "0.1em", color: "rgba(10,10,10,0.4)" }}>{project.year}</span>
+            <span style={{ ...mono, fontSize: 9, letterSpacing: "0.06em", textTransform: "uppercase", padding: "2px 8px", ...STATUS_STYLE[project.status] }}>
               {hw[STATUS_LABELS[project.status]] as string}
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">{name}</h2>
-          <p className="opacity-50 text-lg">{tagline}</p>
+          <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 6 }}>{name}</h2>
+          <p style={{ fontSize: 15, color: "rgba(10,10,10,0.5)", lineHeight: 1.5 }}>{tagline}</p>
         </div>
 
         {/* Links */}
-        <div className="flex gap-4 shrink-0">
+        <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
           {project.githubUrl && (
             <a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
+              style={{ ...mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", border, padding: "8px 16px", color: "rgba(10,10,10,0.5)", textDecoration: "none", transition: "all 0.1s" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#0A0A0A"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.4)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(10,10,10,0.5)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.1)"; }}
             >
               {hw.view_code} ↗
             </a>
@@ -86,7 +87,9 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
               href={project.videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
+              style={{ ...mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", border, padding: "8px 16px", color: "rgba(10,10,10,0.5)", textDecoration: "none", transition: "all 0.1s" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#0A0A0A"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.4)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(10,10,10,0.5)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.1)"; }}
             >
               {hw.view_video} ↗
             </a>
@@ -95,71 +98,72 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
       </div>
 
       {/* Main content grid */}
-      <div className="grid lg:grid-cols-2 gap-16">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 48 }}>
         {/* Left — Image gallery */}
         <div>
           {project.images.length > 0 ? (
             <div>
               {/* Main image */}
               <div
-                className="relative aspect-[4/3] bg-white/5 border border-white/10 overflow-hidden cursor-zoom-in mb-3"
+                style={{ position: "relative", aspectRatio: "4/3", background: "rgba(10,10,10,0.04)", border, overflow: "hidden", cursor: "zoom-in", marginBottom: 10 }}
                 onClick={() => setLightboxOpen(true)}
               >
                 <Image
                   src={project.images[activeImage].src}
                   alt={project.images[activeImage].alt}
                   fill
-                  className="object-cover"
+                  style={{ objectFit: "cover" }}
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  onError={(e) => {
-                    // Graceful fallback while real images are pending
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
-                {/* Fallback overlay (shown when image is missing) */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-mono text-xs opacity-20">
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ ...mono, fontSize: 9, color: "rgba(10,10,10,0.25)" }}>
                     [{hw[IMAGE_TYPE_LABELS[project.images[activeImage].type]] as string}]
                   </span>
                 </div>
-                <div className="absolute bottom-3 right-3 font-mono text-xs opacity-40 bg-black/60 px-2 py-1">
+                <div style={{ position: "absolute", bottom: 10, right: 10, ...mono, fontSize: 9, color: "rgba(10,10,10,0.4)", background: "rgba(242,240,236,0.85)", padding: "2px 8px" }}>
                   {hw[IMAGE_TYPE_LABELS[project.images[activeImage].type]] as string}
                 </div>
               </div>
 
               {/* Caption */}
               {project.images[activeImage].caption && (
-                <p className="text-xs opacity-40 font-mono mb-4">
+                <p style={{ ...mono, fontSize: 10, color: "rgba(10,10,10,0.4)", marginBottom: 12 }}>
                   {project.images[activeImage].caption}
                 </p>
               )}
 
               {/* Thumbnails */}
               {project.images.length > 1 && (
-                <div className="flex gap-2 flex-wrap">
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {project.images.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveImage(i)}
-                      className={`relative w-16 h-16 border overflow-hidden transition-all ${
-                        i === activeImage
-                          ? "border-white/60"
-                          : "border-white/10 opacity-50 hover:opacity-80"
-                      }`}
+                      style={{
+                        position: "relative",
+                        width: 56,
+                        height: 56,
+                        border: i === activeImage ? "1.5px solid #0A0A0A" : "1px solid rgba(10,10,10,0.15)",
+                        overflow: "hidden",
+                        opacity: i === activeImage ? 1 : 0.55,
+                        cursor: "pointer",
+                        background: "rgba(10,10,10,0.04)",
+                        transition: "opacity 0.1s, border-color 0.1s",
+                        padding: 0,
+                      }}
                       aria-label={img.alt}
                     >
                       <Image
                         src={img.src}
                         alt={img.alt}
                         fill
-                        className="object-cover"
-                        sizes="64px"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
+                        style={{ objectFit: "cover" }}
+                        sizes="56px"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                       />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="font-mono text-[8px] opacity-30">
+                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ ...mono, fontSize: 7, color: "rgba(10,10,10,0.3)" }}>
                           {hw[IMAGE_TYPE_LABELS[img.type]] as string}
                         </span>
                       </div>
@@ -169,37 +173,30 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
               )}
             </div>
           ) : (
-            <div className="aspect-[4/3] bg-white/5 border border-white/10 flex items-center justify-center">
-              <span className="font-mono text-xs opacity-20">[{hw.gallery_label}]</span>
+            <div style={{ aspectRatio: "4/3", background: "rgba(10,10,10,0.04)", border, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ ...mono, fontSize: 9, color: "rgba(10,10,10,0.25)" }}>[{hw.gallery_label}]</span>
             </div>
           )}
         </div>
 
         {/* Right — Content */}
-        <div className="flex flex-col gap-8">
-          {/* Description */}
-          <p className="opacity-70 leading-relaxed">{description}</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "rgba(10,10,10,0.7)" }}>{description}</p>
 
-          {/* Body paragraphs */}
-          <div className="flex flex-col gap-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {paragraphs.map((para, i) => (
-              <p key={i} className="opacity-50 text-sm leading-relaxed">
-                {para}
-              </p>
+              <p key={i} style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(10,10,10,0.55)" }}>{para}</p>
             ))}
           </div>
 
           {/* Tech stack */}
           <div>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-3">
+            <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 10 }}>
               Stack
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-xs border border-white/15 px-3 py-1.5 opacity-60"
-                >
+                <span key={t} style={{ ...mono, fontSize: 9, border: "1px solid rgba(10,10,10,0.15)", padding: "4px 10px", color: "rgba(10,10,10,0.55)" }}>
                   {t}
                 </span>
               ))}
@@ -209,17 +206,19 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
           {/* Specs table */}
           {project.specs.length > 0 && (
             <div>
-              <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-3">
+              <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(10,10,10,0.4)", display: "block", marginBottom: 10 }}>
                 {hw.specs_label}
               </span>
-              <table className="w-full text-sm">
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <tbody>
                   {project.specs.map((spec) => (
-                    <tr key={spec.label} className="border-b border-white/5">
-                      <td className="py-2 pr-4 font-mono text-xs opacity-40 whitespace-nowrap align-top">
+                    <tr key={spec.label} style={{ borderBottom: "1px solid rgba(10,10,10,0.06)" }}>
+                      <td style={{ ...mono, fontSize: 9, color: "rgba(10,10,10,0.4)", padding: "8px 14px 8px 0", whiteSpace: "nowrap", verticalAlign: "top", letterSpacing: "0.06em", textTransform: "uppercase" }}>
                         {spec.label}
                       </td>
-                      <td className="py-2 opacity-70 align-top">{spec.value}</td>
+                      <td style={{ fontSize: 13, color: "rgba(10,10,10,0.7)", padding: "8px 0", verticalAlign: "top", lineHeight: 1.5 }}>
+                        {spec.value}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -232,26 +231,26 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
       {/* Lightbox */}
       {lightboxOpen && project.images.length > 0 && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(0,0,0,0.94)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 font-mono text-sm opacity-50 hover:opacity-100"
+            style={{ position: "absolute", top: 24, right: 24, ...mono, fontSize: 11, color: "rgba(255,255,255,0.5)", background: "none", border: "none", cursor: "pointer" }}
             onClick={() => setLightboxOpen(false)}
           >
             ✕ close
           </button>
-          <div className="relative max-w-4xl w-full max-h-[80vh] aspect-[4/3]">
+          <div style={{ position: "relative", maxWidth: 900, width: "100%", maxHeight: "80vh", aspectRatio: "4/3" }}>
             <Image
               src={project.images[activeImage].src}
               alt={project.images[activeImage].alt}
               fill
-              className="object-contain"
+              style={{ objectFit: "contain" }}
               sizes="90vw"
             />
           </div>
           {project.images[activeImage].caption && (
-            <p className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-xs opacity-40">
+            <p style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", ...mono, fontSize: 10, color: "rgba(255,255,255,0.4)" }}>
               {project.images[activeImage].caption}
             </p>
           )}
