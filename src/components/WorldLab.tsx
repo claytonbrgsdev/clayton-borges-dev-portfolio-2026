@@ -1658,9 +1658,9 @@ function buildV5(scene: THREE.Scene): SceneBundle {
 // ── v6 Model Viewer ───────────────────────────────────────────────────────────
 
 // Model catalog — empty, models removed.
-export const MODEL_CATALOG = [] as const;
+export const MODEL_CATALOG: ReadonlyArray<{ filename: string; label: string }> = [];
 
-type ModelFilename = typeof MODEL_CATALOG[number]["filename"];
+type ModelFilename = string;
 
 function buildV6(scene: THREE.Scene): SceneBundle {
   let currentModel: THREE.Object3D | null = null;
@@ -2339,7 +2339,7 @@ export function WorldLab() {
   );
   const [brightness,     setBrightness]     = useState(1.0);
   const [bgColor,        setBgColor]        = useState<string>(BG_PRESETS[0].hex);
-  const [selectedModel,  setSelectedModel]  = useState<ModelFilename>(MODEL_CATALOG[0].filename);
+  const [selectedModel,  setSelectedModel]  = useState<ModelFilename>("");
   const [audioOn,        setAudioOn]        = useState(false);
 
   // Three.js state persists in refs — never recreated on re-render
