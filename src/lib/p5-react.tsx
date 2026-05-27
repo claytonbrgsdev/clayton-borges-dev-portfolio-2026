@@ -22,6 +22,16 @@ export function P5Canvas({ sketch, className, style }: P5CanvasProps) {
     let instance: p5Type | null = null;
     let alive = true;
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!instance) return;
+        if (entry.isIntersecting) instance.loop();
+        else instance.noLoop();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(host);
+
     import("p5").then(({ default: P5 }) => {
       if (!alive || !host) return;
       instance = new P5(sketch, host) as unknown as p5Type;
@@ -29,6 +39,7 @@ export function P5Canvas({ sketch, className, style }: P5CanvasProps) {
 
     return () => {
       alive = false;
+      observer.disconnect();
       if (instance) instance.remove();
       instance = null;
     };
