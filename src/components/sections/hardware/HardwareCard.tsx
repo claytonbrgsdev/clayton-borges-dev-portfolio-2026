@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP scroll-triggered entrance, image gallery lightbox
 import { useState } from "react";
 import Image from "next/image";
 import type { Dictionary } from "@/lib/i18n";
@@ -28,7 +27,7 @@ const STATUS_LABELS: Record<HardwareProject["status"], keyof Dictionary["hardwar
   prototype: "status_prototype",
 };
 
-export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
+export function HardwareCard({ project, dict, locale, index }: HardwareCardProps) {
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
@@ -46,6 +45,10 @@ export function HardwareCard({ project, dict, locale }: HardwareCardProps) {
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-12">
         <div>
           <div className="flex items-center gap-4 mb-3">
+            <span className="font-mono text-xs tracking-widest opacity-20 select-none">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="font-mono text-xs opacity-20">·</span>
             <span className="font-mono text-xs tracking-widest uppercase opacity-40">
               {project.microcontroller}
             </span>

@@ -550,6 +550,66 @@ Adjacent chapters blend over `[0.75, 1.0]` of each chapter's `chT`.
 ## What's next
 
 - Replace Lorem Ipsum with real content once the form is fully locked (OdysseyLab)
-- Decide which phases to link from the main portfolio as canonical experiences
-- Consider whether OdysseyLab becomes the actual homepage background or stays as a standalone `/lab` page
 - QA CircuitLab, OscilloLab, and NexusLab — mark liked/active after review
+- Refine the three portfolio page backgrounds (see below) — they are a deliberate starting point, not a finished product
+
+---
+
+## Portfolio Page Backgrounds — Three-Group System
+
+The 15 selected lab phases are split into three groups and reused as ambient backgrounds across the three main portfolio pages. Each renderer is adapted from its standalone lab version: no scroll progress, time-based phase cycling instead (22-second chapters, requestAnimationFrame), canvas drawn at `globalAlpha = 0.32` so content text stays readable.
+
+**Architecture:** Each page gets a fixed fullscreen `<canvas>` behind the content (z-index 0). Content sits at z-index 10 with `position: relative`. The canvas components are client components (`"use client"`) mounted in the corresponding `page.tsx` files.
+
+### Group 1 — Homepage (`PortfolioExperience.tsx`)
+
+Scroll-driven (uses existing Lenis + GSAP ticker pattern). Progress `p` = scroll fraction over all homepage sections.
+
+| Phase | Renderer | Visual character |
+|-------|----------|-----------------|
+| 13 | `OdysseyRenderer` (partial — attractor+flow acts only) | Peter de Jong attractor, particle field |
+| 21-b | `LorenzRenderer` | Lorenz dual-wing density heatmap, ρ=14→60 |
+| 21-c | `NewtonRenderer` | Newton fractal basin coloring, n=3→6 |
+| 24 | `MandelbrotRenderer` | Mandelbrot zoom journey |
+| 25-c | `SpiroRenderer` | Parametric rose/Lissajous/hypotrochoid trail accumulation |
+
+The Lorenz renderer was the most technically demanding adaptation: the standalone LorenzLab uses a pixel-buffer density accumulation (620-particle RK4 swarm, dual `densW`/`densC` Float32Arrays at 240×160, sqrt-mapped two-wing color output). The homepage version had to replicate this exactly — the sparse dot-trail approach used earlier was wrong and was corrected to match.
+
+### Group 2 — Projects Page (`ProjectsBackground.tsx`)
+
+Selected for **technical/geometric** character. These phases evoke precision, computation, data structures.
+
+| Phase | Renderer | Visual character |
+|-------|----------|-----------------|
+| 14 | `CircuitRenderer` | Procedural PCB traces, signal pulses, via circles |
+| 22-b | `WolframRenderer` | Rule 110 1D CA kymograph, blue-teal gradient |
+| 22-c | `LangtonRenderer` | Langton's ant, hue-mapped cell grid, white ant marker |
+| 17 | `KikaiRenderer` | Hypotrochoid spirograph machine, Japanese circuit terms |
+| 23-b | `WaveOpticsRenderer` | Wave interference pixel field, 4 source configs |
+
+### Group 3 — About Page (`AboutBackground.tsx`)
+
+Selected for **organic/warm/living** character. These phases evoke biology, growth, physical systems.
+
+| Phase | Renderer | Visual character |
+|-------|----------|-----------------|
+| 23-c | `IFSRenderer` | IFS chaos game — Barnsley fern/Sierpinski/Lévy/Dragon density buffer |
+| 24-c | `LSystemRenderer` | L-system grammar — Koch/Dragon/Hilbert/Plant progressive reveal |
+| 25-b | `WireWorldRenderer` | WireWorld CA — 4 circuit topologies, pixel-art rendering |
+| 20-c | `SandRenderer` | Falling-sand physics — sand/water/stone 3-material simulation |
+| 23 | `IsingRenderer` | 2D Ising model — Metropolis, T=3.5→1.5 (sub-critical cooling) |
+
+---
+
+## Starting point — what to do next
+
+**This implementation is a deliberate starting point.** The three backgrounds work correctly and are TypeScript-clean, but they have not been tuned for visual coherence with the portfolio page content. The next phase is to adapt each in detail until every page feels like one unified thing — background and content speaking the same visual language.
+
+Specific work to do:
+
+- **Opacity/contrast calibration.** The current `0.32` opacity is a placeholder. Each page needs its own value tuned against its actual content density and text color. Projects has dark card overlays; About has long prose paragraphs — they need different ambient intensities.
+- **Chapter timing.** 22 seconds per chapter is arbitrary. Each group should cycle at a rhythm that matches how long a user actually reads that page before scrolling.
+- **Color harmony.** Right now each renderer uses its own palette from the original lab. The about page backgrounds should shift toward warmer hues that complement the biography content; the projects page backgrounds should lean cooler/monochromatic to not compete with project card imagery.
+- **Phase selection.** The current grouping is aesthetically motivated but not final. After seeing the pages in use, some renderers may feel mismatched and need swapping.
+- **Fade-in behavior.** Currently all renderers start at full opacity immediately. A soft fade-in on page load (e.g. 1–2 seconds) would reduce visual jarring when navigating.
+- **Performance budget.** On low-end devices, running 5 concurrent renderers per page is expensive. Each renderer should have a `reducedMotion` mode that halts the rAF loop if `prefers-reduced-motion: reduce` is set.

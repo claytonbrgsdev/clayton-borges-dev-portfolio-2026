@@ -34,6 +34,21 @@
       "heading": "Let's work together.",
       "body": "Available for freelance, remote roles, and relocation.",
       "cta": "Say Hello"
+    },
+    "principles": {
+      "heading": "How I Work",
+      "subheading": "Five principles that shape every project."
+    },
+    "lab": {
+      "heading": "The Lab",
+      "subheading": "Generative experiments — computational art, physics simulations, and interactive systems.",
+      "enter": "Enter",
+      "explore_all": "Explore all 27 experiments →"
+    },
+    "hardware_callout": {
+      "heading": "Hardware",
+      "subheading": "Physical computing — microcontrollers, embedded audio synthesis, and circuit design.",
+      "cta": "View Hardware Projects"
     }
   },
   "projects": {
@@ -49,7 +64,18 @@
     "filter_embedded": "Embedded",
     "view_code": "Code",
     "view_live": "Live Demo",
-    "client_label": "Client"
+    "client_label": "Client",
+    "view_case_study": "Case Study",
+    "back_to_projects": "← All Projects",
+    "case_study_overview": "Overview",
+    "case_study_problem": "Problem",
+    "case_study_goal": "Goal",
+    "case_study_role": "My Role",
+    "case_study_stack": "Stack",
+    "case_study_decisions": "Technical Decisions",
+    "case_study_learnings": "What I Learned",
+    "case_study_status": "Status",
+    "case_study_links": "Links"
   },
   "about": {
     "heading": "About",

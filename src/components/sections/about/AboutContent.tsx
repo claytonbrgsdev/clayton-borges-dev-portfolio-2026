@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP scroll-triggered reveals for each block
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
 import { contactInfo } from "@/lib/data/contact";
@@ -55,23 +54,25 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
       </div>
 
       {/* Experience */}
-      <div className="mb-20">
+      <div className="mb-20 border-t border-white/10 pt-12">
         <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.experience_label}
         </span>
-        <div className="flex flex-col gap-8">
-          {experience.map((job) => (
-            <div key={job.company} className="grid md:grid-cols-[200px_1fr] gap-4 pb-8 border-b border-white/10">
-              <div>
+        <div className="flex flex-col gap-0">
+          {experience.map((job, idx) => (
+            <div key={job.company} className="grid md:grid-cols-[200px_1fr] gap-4 py-8 border-b border-white/8">
+              <div className="flex flex-col gap-1">
+                <span className="font-mono text-xs opacity-20 select-none">{String(idx + 1).padStart(2, "0")}</span>
                 <span className="font-mono text-xs opacity-40">{job.period}</span>
               </div>
               <div>
-                <h3 className="font-bold mb-1">{job.role}</h3>
-                <span className="font-mono text-sm opacity-50 block mb-3">{job.company}</span>
-                <ul className="flex flex-col gap-1">
+                <h3 className="font-bold mb-0.5">{job.role}</h3>
+                <span className="font-mono text-sm opacity-45 block mb-4">{job.company}</span>
+                <ul className="flex flex-col gap-1.5">
                   {job.highlights.map((h) => (
-                    <li key={h} className="text-sm opacity-50 before:content-['—'] before:mr-2">
-                      {h}
+                    <li key={h} className="flex items-start gap-2 text-sm opacity-50">
+                      <span className="font-mono opacity-40 shrink-0 mt-0.5">→</span>
+                      <span>{h}</span>
                     </li>
                   ))}
                 </ul>
@@ -82,7 +83,7 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
       </div>
 
       {/* Education */}
-      <div className="mb-20">
+      <div className="mb-20 border-t border-white/10 pt-12">
         <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.education_label}
         </span>
@@ -100,25 +101,50 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
       </div>
 
       {/* Languages */}
-      <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-6">
+      <div className="mb-20 border-t border-white/10 pt-12">
+        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.languages_label}
         </span>
-        <div className="flex gap-8">
-          <span className="text-sm">{about.portuguese}</span>
-          <span className="text-sm">{about.english}</span>
+        <div className="flex flex-col gap-4 max-w-xs">
+          {[
+            { label: about.portuguese, level: 1.0 },
+            { label: about.english, level: 0.88 },
+          ].map(({ label, level }) => {
+            const [lang, proficiency] = label.split(" — ");
+            return (
+              <div key={label}>
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="text-sm font-medium">{lang}</span>
+                  <span className="font-mono text-xs opacity-35">{proficiency}</span>
+                </div>
+                <div className="h-px bg-white/8 relative">
+                  <div className="h-px bg-white/40 absolute left-0 top-0" style={{ width: `${level * 100}%` }} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Resume CTA */}
-      <a
-        href={contactInfo.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-block px-8 py-3 border border-white/30 font-mono text-sm tracking-wide hover:border-white/70 transition-colors"
-      >
-        {about.download_resume} ↗
-      </a>
+      {/* Resume / Connect */}
+      <div className="border-t border-white/10 pt-12 flex flex-wrap gap-4">
+        <a
+          href={contactInfo.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-8 py-3 border border-white/30 font-mono text-sm tracking-wide hover:border-white/70 transition-colors"
+        >
+          {about.download_resume} ↗
+        </a>
+        <a
+          href={contactInfo.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-8 py-3 border border-white/10 font-mono text-sm tracking-wide opacity-50 hover:opacity-90 hover:border-white/30 transition-all"
+        >
+          GitHub ↗
+        </a>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP scroll-triggered reveal per project card
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
 import type { HardwareProject } from "@/lib/data/hardware";

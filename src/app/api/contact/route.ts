@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { contactInfo } from "@/lib/data/contact";
 
 interface ContactPayload {
   name: string;
@@ -11,8 +12,6 @@ interface ContactPayload {
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
-
-const TO_EMAIL = "claytonborgesdev@gmail.com";
 
 export async function POST(request: NextRequest) {
   let body: ContactPayload;
@@ -47,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   const { error } = await resend.emails.send({
     from: "Portfolio Contact <onboarding@resend.dev>",
-    to: TO_EMAIL,
+    to: contactInfo.email,
     replyTo: email,
     subject: `[Portfolio] ${subject}`,
     html: `

@@ -30,7 +30,8 @@ export function Header({ dict }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12"
+      style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 100%)", backdropFilter: "none" }}>
       {/* Logo */}
       <Link href={`/${locale}`} className="text-sm font-mono font-bold tracking-widest uppercase">
         CB<span className="text-blue-500">.</span>dev

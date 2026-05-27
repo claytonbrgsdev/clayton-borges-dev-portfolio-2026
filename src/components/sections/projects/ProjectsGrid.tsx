@@ -1,7 +1,7 @@
 "use client";
 
-// TODO: Add filter animations with GSAP + category filter state
 import { useState } from "react";
+import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
 import type { Project, ProjectCategory } from "@/lib/data/projects";
@@ -50,12 +50,19 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
         ))}
       </div>
 
+      {/* Count */}
+      <div className="mb-8 font-mono text-xs opacity-30 tracking-widest">
+        {filtered.length === projects.length
+          ? `${projects.length} projects`
+          : `${filtered.length} of ${projects.length}`}
+      </div>
+
       {/* Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((project) => (
           <div
             key={project.id}
-            className="border border-white/10 p-6 hover:border-white/30 transition-colors flex flex-col"
+            className="border border-white/10 p-6 hover:border-white/25 transition-all duration-300 flex flex-col hover:-translate-y-0.5"
           >
             <div className="flex items-start justify-between mb-3">
               <span className="font-mono text-xs opacity-30">{project.year}</span>
@@ -66,9 +73,12 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
               )}
             </div>
 
-            <h3 className="font-bold text-lg mb-3">
+            <h3 className="font-bold text-lg mb-1">
               {locale === "pt" ? project.namePt : project.nameEn}
             </h3>
+            {project.type && (
+              <span className="font-mono text-xs opacity-35 block mb-3">{project.type}</span>
+            )}
 
             <p className="text-sm opacity-50 leading-relaxed mb-4 flex-1">
               {locale === "pt" ? project.descriptionPt : project.descriptionEn}
@@ -83,24 +93,32 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
             </div>
 
             <div className="flex gap-4 mt-auto">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-xs tracking-wide opacity-50 hover:opacity-100 transition-opacity"
+              {project.overview && (
+                <Link
+                  href={`/${locale}/projects/${project.id}`}
+                  className="font-mono text-xs tracking-wide opacity-55 hover:opacity-100 transition-opacity"
                 >
-                  {dict.projects.view_code} ↗
-                </a>
+                  {dict.projects.view_case_study} →
+                </Link>
               )}
               {project.liveUrl && (
                 <a
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-mono text-xs tracking-wide opacity-50 hover:opacity-100 transition-opacity"
+                  className="font-mono text-xs tracking-wide opacity-40 hover:opacity-80 transition-opacity"
                 >
                   {dict.projects.view_live} ↗
+                </a>
+              )}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-xs tracking-wide opacity-35 hover:opacity-70 transition-opacity"
+                >
+                  {dict.projects.view_code} ↗
                 </a>
               )}
             </div>

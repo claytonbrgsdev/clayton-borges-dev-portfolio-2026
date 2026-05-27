@@ -15,8 +15,26 @@ export interface Project {
   namePt: string;
   descriptionEn: string;
   descriptionPt: string;
+  type?: string;
   tech: string[];
   categories: ProjectCategory[];
+  highlights?: string[];
+  overview?: string;
+  overviewPt?: string;
+  problem?: string;
+  problemPt?: string;
+  goal?: string;
+  goalPt?: string;
+  role?: string[];
+  rolePt?: string[];
+  technicalDecisions?: string[];
+  technicalDecisionsPt?: string[];
+  learnings?: string[];
+  learningsPt?: string[];
+  status?: string;
+  statusPt?: string;
+  image?: string;
+  gallery?: string[];
   githubUrl?: string;
   liveUrl?: string;
   featured: boolean;
@@ -31,12 +49,62 @@ export const projects: Project[] = [
     nameEn: "Moveo Filmes",
     namePt: "Moveo Filmes",
     name: "Moveo Filmes",
+    type: "Full-Stack Client Platform / CMS",
     descriptionEn:
-      "Bilingual (PT/EN) web platform for an independent film production company. Full CMS with admin dashboard, CRUD for films, crew, and news. Features TipTap rich text editor, drag-and-drop management, role-based auth via Supabase RLS, advanced GSAP animations, and Lenis smooth scroll.",
+      "Bilingual full-stack platform and CMS for an independent film production company in Brasília. Features a dynamic film catalog organized by production stage, automatically generated film pages, an admin dashboard for full content control, and a cinematic interface built around horizontal grids and monochromatic structure.",
     descriptionPt:
-      "Plataforma bilíngue (PT/EN) para produtora de cinema independente. CMS completo com dashboard admin, CRUD para filmes, equipe e notícias. Inclui editor de texto rico TipTap, gerenciamento drag-and-drop, autenticação por funções via Supabase RLS, animações GSAP avançadas e scroll suave com Lenis.",
+      "Plataforma full-stack bilíngue e CMS para uma produtora de cinema independente em Brasília. Catálogo dinâmico de filmes organizado por fase de produção, páginas de filmes geradas automaticamente, dashboard admin para controle total do conteúdo e interface cinematográfica com grids horizontais e estrutura monocromática.",
     tech: ["Next.js 16", "React 19", "TypeScript", "Supabase", "PostgreSQL", "GSAP", "Lenis", "TipTap", "dnd-kit", "Tailwind CSS"],
     categories: ["platform", "web-app"],
+    highlights: [
+      "Bilingual full-stack platform built for an independent film production company in Brasília.",
+      "Admin dashboard for adding, editing, reordering, and managing films dynamically.",
+      "Database-driven film catalog with automatically generated pages for each new film.",
+      "Cinematic interface using horizontal grids, monochromatic structure, and film-first visual hierarchy.",
+      "Visual identity connected to Brasília through typography and layout decisions.",
+    ],
+    overview:
+      "Moveo Filmes is a bilingual full-stack platform for an independent film production company based in Brasília. The film catalog is organized by production stage — production, post-production, distribution — and each new film added through the admin dashboard automatically generates its own public page with no code changes required. The interface is cinematic: horizontal grids, monochromatic structure, and film-first visual hierarchy.",
+    overviewPt:
+      "Moveo Filmes é uma plataforma full-stack bilíngue para uma produtora de cinema independente em Brasília. O catálogo de filmes é organizado por fase de produção — produção, pós-produção, distribuição — e cada novo filme adicionado pelo dashboard admin gera automaticamente sua própria página pública sem necessidade de alterações no código. A interface é cinematográfica: grids horizontais, estrutura monocromática e hierarquia visual centrada nos filmes.",
+    problem:
+      "A static institutional site was not enough. As a film production company, Moveo Filmes needed to present films at different stages of the production lifecycle — not just finished projects — requiring a flexible portfolio structure rather than a simple gallery. The client also needed full content autonomy: adding films and news without touching the codebase. A workflow connecting Instagram-driven news updates to the website's editorial structure was also required.",
+    problemPt:
+      "Um site institucional estático não era suficiente. Como produtora de cinema, a Moveo Filmes precisava apresentar filmes em diferentes fases do ciclo de produção — não apenas projetos finalizados — exigindo uma estrutura de portfólio flexível em vez de uma galeria simples. O cliente também precisava de autonomia total sobre o conteúdo: adicionar filmes e notícias sem tocar no código. Era necessário ainda um fluxo conectando atualizações de notícias do Instagram à estrutura editorial do site.",
+    goal:
+      "Build a bilingual full-stack platform with a dynamic film catalog organized by production stage, where each new film automatically generates its own public page. Give the client an admin dashboard for full content autonomy. Create a cinematic visual language connected to Brasília through typography and layout, while supporting news workflows tied to the company's social media presence.",
+    goalPt:
+      "Construir uma plataforma full-stack bilíngue com catálogo dinâmico de filmes organizado por fase de produção, onde cada novo filme gera automaticamente sua própria página pública. Dar ao cliente um dashboard admin para autonomia total sobre o conteúdo. Criar uma linguagem visual cinematográfica conectada a Brasília por meio de tipografia e layout, além de suportar fluxos de notícias vinculados à presença da empresa nas redes sociais.",
+    role: ["Full-stack developer (solo contract)"],
+    rolePt: ["Desenvolvedor full-stack (contrato solo)"],
+    technicalDecisions: [
+      "Data-driven film catalog architecture — admin writes to database, public site renders pages dynamically. Each new film submitted through the admin form automatically generates its own public page with no code changes required.",
+      "Next.js 16 App Router for SSR — critical for film discovery SEO in a market where Google is the primary traffic source.",
+      "Supabase RLS for row-level access control — editors can update their own content; only admins can publish or delete. Policies defined at schema level so security never leaks through app bugs.",
+      "TipTap chosen over other rich text editors for its headless React architecture — fully controlled styling with no iframe isolation issues.",
+      "dnd-kit for drag-and-drop ordering with optimistic state updates — server reconciliation on error so the UI never gets stuck in a wrong order.",
+      "GSAP ScrollTrigger + Lenis for cinematic scroll feel — matching the aesthetic of a film production company without sacrificing performance.",
+    ],
+    technicalDecisionsPt: [
+      "Arquitetura de catálogo de filmes orientada a dados — admin escreve no banco de dados, o site público renderiza as páginas dinamicamente. Cada novo filme enviado pelo formulário admin gera automaticamente sua própria página pública sem necessidade de alterações no código.",
+      "Next.js 16 App Router com SSR — crítico para SEO de descoberta de filmes em um mercado onde o Google é a principal fonte de tráfego.",
+      "Supabase RLS para controle de acesso por linha — editores podem atualizar seu próprio conteúdo; apenas admins podem publicar ou excluir. Políticas definidas no nível do schema para que a segurança nunca vaze por bugs do app.",
+      "TipTap escolhido sobre outros editores de texto rico por sua arquitetura React headless — estilização totalmente controlada sem problemas de isolamento de iframe.",
+      "dnd-kit para ordenação drag-and-drop com atualizações de estado otimistas — reconciliação no servidor em caso de erro para que a UI nunca fique presa em uma ordem errada.",
+      "GSAP ScrollTrigger + Lenis para sensação cinematográfica de scroll — combinando com a estética de uma produtora de cinema sem sacrificar performance.",
+    ],
+    learnings: [
+      "Supabase RLS policies require up-front schema design. Retrofitting permissions onto an existing schema is painful and error-prone — define the access model before writing any data layer code.",
+      "dnd-kit optimistic state needs explicit reconciliation on server errors. A failed reorder that silently reverts to server state is far better than a UI that displays a wrong order indefinitely.",
+      "Designing for client content autonomy requires thinking about the admin UX as carefully as the public site — a CMS that the client doesn't understand is as useless as one that doesn't exist.",
+    ],
+    learningsPt: [
+      "As políticas de RLS do Supabase exigem design de schema antecipado. Reajustar permissões em um schema existente é trabalhoso e sujeito a erros — defina o modelo de acesso antes de escrever qualquer código da camada de dados.",
+      "O estado otimista do dnd-kit precisa de reconciliação explícita em erros do servidor. Um reordenamento que falha silenciosamente e volta ao estado do servidor é muito melhor que uma UI que exibe uma ordem errada indefinidamente.",
+      "Projetar para a autonomia de conteúdo do cliente exige pensar no UX do admin com o mesmo cuidado que o site público — um CMS que o cliente não entende é tão inútil quanto um que não existe.",
+    ],
+    status: "Delivered and live",
+    statusPt: "Entregue e no ar",
     featured: true,
     year: 2024,
     client: "Moveo Filmes",
@@ -46,12 +114,60 @@ export const projects: Project[] = [
     nameEn: "MzPrime – 3D Car Cover Showroom",
     namePt: "MzPrime – Showroom 3D de Capas",
     name: "MzPrime – 3D Car Cover Showroom",
+    type: "3D Interactive Showroom",
     descriptionEn:
-      "3D car cover showroom with live customization. One rigged GLB per vehicle category (12+ types); Three.js applies fabric color, sewing line color, and customer-uploaded logo to the model in real time. Zero pre-rendered composites.",
+      "Real-time 3D configurator for customizable luxury vehicle covers. Users change cover color, stitching color, vehicle category, and apply uploaded PNG logos to predefined placement spots on the model — all without reloading full model variations. Browser-optimized for a lightweight interactive showroom experience.",
     descriptionPt:
-      "Showroom 3D de capas automotivas com personalização ao vivo. Um GLB rigado por categoria de veículo (12+ tipos); Three.js aplica cor do tecido, cor da costura e logotipo enviado pelo cliente ao modelo em tempo real. Sem composições pré-renderizadas.",
+      "Configurador 3D em tempo real para capas de veículos de luxo personalizáveis. Os usuários alteram cor da capa, cor da costura, categoria do veículo e aplicam logotipos PNG enviados em áreas predefinidas do modelo — sem recarregar variações completas do modelo. Otimizado para uma experiência leve e interativa no navegador.",
     tech: ["Next.js 16", "React 19", "Three.js", "React Three Fiber", "Tailwind CSS"],
     categories: ["3d-visualization", "web-app"],
+    highlights: [
+      "Real-time 3D configurator for customizable luxury vehicle covers.",
+      "Instant updates for cover color, stitching color, vehicle type, and logo placement.",
+      "PNG logo upload system applied directly to predefined spots on the 3D model.",
+      "Three.js material, shader, and texture updates without reloading full model variations.",
+      "Optimized browser performance for a lightweight interactive showroom experience.",
+    ],
+    overview:
+      "MzPrime is an interactive 3D showroom for luxury custom vehicle covers. Users customize cover color, stitching color, vehicle category, and logo placement in real time — without reloading models for every configuration change. Predefined logo placement spots let customers upload a PNG and see it applied directly on the 3D cover, keeping the experience lightweight and immediately responsive in the browser.",
+    overviewPt:
+      "MzPrime é um showroom 3D interativo para capas de veículos de luxo personalizadas. Os usuários personalizam cor da capa, cor da costura, categoria do veículo e posicionamento de logo em tempo real — sem recarregar modelos a cada mudança de configuração. Áreas predefinidas para logos permitem que os clientes façam upload de um PNG e vejam ele aplicado diretamente na capa 3D, mantendo a experiência leve e imediatamente responsiva no navegador.",
+    problem:
+      "Loading separate pre-rendered models for every customization variation — each cover color, stitching color, or vehicle type — creates loading interruptions that break the experience. For a luxury configurator where customers test many combinations quickly, any delay or loading screen destroys the sense of immediacy the product demands.",
+    problemPt:
+      "Carregar modelos pré-renderizados separados para cada variação de personalização — cada cor de capa, cor de costura ou tipo de veículo — gera interrupções de carregamento que quebram a experiência. Para um configurador de luxo onde os clientes testam muitas combinações rapidamente, qualquer atraso ou tela de carregamento destrói a sensação de imediatismo que o produto exige.",
+    goal:
+      "Build a browser-based 3D showroom where all customization — cover color, stitching color, vehicle category, and logo placement — happens through real-time material and shader mutations with no model reloads. Support multiple vehicle categories with predefined UV-mapped logo placement spots, so customers can upload a PNG and apply it directly to the 3D cover.",
+    goalPt:
+      "Construir um showroom 3D no navegador onde toda a personalização — cor da capa, cor da costura, categoria do veículo e posicionamento de logo — aconteça por meio de mutações em tempo real de materiais e shaders, sem recarregar modelos. Suportar múltiplas categorias de veículos com áreas predefinidas mapeadas em UV para logos, para que os clientes possam fazer upload de um PNG e aplicá-lo diretamente na capa 3D.",
+    role: ["Frontend and 3D developer (Evolut Digital client)"],
+    rolePt: ["Desenvolvedor frontend e 3D (cliente Evolut Digital)"],
+    technicalDecisions: [
+      "Predefined logo placement spots defined at model level — each vehicle category specifies UV-mapped regions where logos can appear. The user selects a spot, uploads a PNG, and the system composites it as a CanvasTexture into that exact UV region.",
+      "One rigged GLB per vehicle category — rigging at the model level means one material swap changes the entire cover appearance, not dozens of texture variants.",
+      "Three.js MeshStandardMaterial for real-time color changes — physically-based rendering makes fabric colours look accurate under the scene lighting without baking.",
+      "Dynamic CanvasTexture for logo upload — the customer's image is drawn onto an HTML canvas that Three.js uses as a live texture, no server roundtrip needed.",
+      "React Three Fiber for component architecture — wrapping Three.js objects as React components makes the configurator state (color selection, logo upload) easy to wire to the UI.",
+    ],
+    technicalDecisionsPt: [
+      "Áreas predefinidas para logo definidas no nível do modelo — cada categoria de veículo especifica regiões mapeadas em UV onde os logos podem aparecer. O usuário seleciona uma área, faz upload de um PNG e o sistema o compõe como CanvasTexture exatamente nessa região UV.",
+      "Um GLB rigado por categoria de veículo — o rigging no nível do modelo significa que uma troca de material muda toda a aparência da capa, não dezenas de variantes de textura.",
+      "Three.js MeshStandardMaterial para mudanças de cor em tempo real — a renderização baseada em física faz as cores do tecido parecerem precisas sob a iluminação da cena sem baking.",
+      "CanvasTexture dinâmica para upload de logotipo — a imagem do cliente é desenhada em um canvas HTML que o Three.js usa como textura ao vivo, sem necessidade de roundtrip ao servidor.",
+      "React Three Fiber para arquitetura de componentes — envolver objetos Three.js como componentes React torna fácil conectar o estado do configurador (seleção de cor, upload de logo) à UI.",
+    ],
+    learnings: [
+      "Logo texture projection requires precise UV island positioning during 3D modelling — this is a design constraint that cannot be fixed in code after the fact. Define UV requirements before the models are made.",
+      "GLB file size is the primary performance constraint, not render cost. Geometry optimisation and texture compression matter far more than draw call count for a single-model configurator.",
+      "The 'no reload' constraint requires deciding upfront that all customization states must be achievable through material and shader mutations alone — this is an architectural decision that cannot be easily retrofitted once models are rigged.",
+    ],
+    learningsPt: [
+      "A projeção de textura de logotipo requer posicionamento preciso das ilhas UV durante a modelagem 3D — isso é uma restrição de design que não pode ser corrigida no código depois. Defina os requisitos de UV antes de criar os modelos.",
+      "O tamanho do arquivo GLB é a principal restrição de performance, não o custo de renderização. Otimização de geometria e compressão de textura importam muito mais do que a contagem de draw calls para um configurador de modelo único.",
+      "A restrição de 'sem reload' exige decidir desde o início que todos os estados de personalização devem ser alcançáveis apenas por meio de mutações de materiais e shaders — esta é uma decisão arquitetural que não pode ser facilmente reajustada depois que os modelos estão rigados.",
+    ],
+    status: "Delivered and live",
+    statusPt: "Entregue e no ar",
     liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
     featured: true,
     year: 2025,
@@ -62,12 +178,56 @@ export const projects: Project[] = [
     nameEn: "Metanova Labs – Bittensor Dashboard",
     namePt: "Metanova Labs – Dashboard Bittensor",
     name: "Metanova Labs",
+    type: "Data Dashboard / Product",
     descriptionEn:
       "Dashboard for Bittensor subnet 68 — an on-chain AI drug-discovery network. Implemented the Algorithms tab frontend/backend integration. Tracks molecular competitions, miner leaderboards, and protein data across epochs.",
     descriptionPt:
       "Dashboard para a subnet 68 do Bittensor — uma rede de descoberta de medicamentos por IA on-chain. Implementou a aba Algorithms com integração frontend/backend. Rastreia competições moleculares, rankings de mineradores e dados de proteínas por época.",
     tech: ["Next.js 15", "TypeScript", "Bittensor", "Radix UI"],
     categories: ["dashboard", "web-app"],
+    highlights: [
+      "Algorithms tab with full frontend/backend integration",
+      "Molecular competition tracking per epoch on Bittensor subnet 68",
+      "Miner leaderboard and protein data visualisation",
+      "Strict TypeScript typing for Bittensor chain data shapes",
+      "Radix UI primitives for accessible, unstyled base components",
+    ],
+    overview:
+      "Metanova Labs is a dashboard for Bittensor subnet 68 — an on-chain AI drug-discovery network where miners compete to produce the best molecular candidates for protein binding. My contribution was the Algorithms tab, which gives researchers a human-readable view of competition results, miner rankings, and protein data across epochs.",
+    overviewPt:
+      "Metanova Labs é um dashboard para a subnet 68 do Bittensor — uma rede de descoberta de medicamentos por IA on-chain onde os mineradores competem para produzir os melhores candidatos moleculares para ligação de proteínas. Minha contribuição foi a aba Algorithms, que fornece aos pesquisadores uma visão legível dos resultados de competições, rankings de mineradores e dados de proteínas por época.",
+    problem:
+      "Subnet 68 had no dedicated UI. All data lived on-chain and in raw API endpoints — accessible only to developers who could read JSON responses and understand Bittensor's epoch-indexed data model. Researchers had no way to track competition progress or compare miner performance without writing code.",
+    problemPt:
+      "A subnet 68 não tinha UI dedicada. Todos os dados ficavam on-chain e em endpoints de API brutos — acessíveis apenas a desenvolvedores que pudessem ler respostas JSON e entender o modelo de dados indexado por época do Bittensor. Pesquisadores não tinham como acompanhar o progresso das competições ou comparar o desempenho dos mineradores sem escrever código.",
+    goal:
+      "Implement the Algorithms tab with full frontend/backend integration — molecular competition tracking, miner leaderboards, and protein data display per epoch — in a way that works reliably against live Bittensor chain data.",
+    goalPt:
+      "Implementar a aba Algorithms com integração completa frontend/backend — rastreamento de competições moleculares, rankings de mineradores e exibição de dados de proteínas por época — de forma que funcione de maneira confiável com dados ao vivo da chain Bittensor.",
+    role: ["Frontend developer, API integration (client work)"],
+    rolePt: ["Desenvolvedor frontend, integração de API (trabalho para cliente)"],
+    technicalDecisions: [
+      "Next.js 15 with SSR for the Algorithms tab — epoch data is relatively stable within a window, so server-rendering reduces client bundle size and improves first-load performance for researcher workflows.",
+      "Strict TypeScript typing for all Bittensor API response shapes — the chain data is complex and partially undocumented; defensive types with runtime validation caught several shape changes during development.",
+      "Radix UI primitives for accessible base components — the dashboard needed to be screen-reader accessible for researchers who use assistive tools; Radix handles keyboard navigation and ARIA out of the box.",
+      "Epoch-keyed request deduplication — multiple tab renders requesting the same epoch do one fetch; subsequent renders serve from cache until the epoch advances.",
+    ],
+    technicalDecisionsPt: [
+      "Next.js 15 com SSR para a aba Algorithms — os dados de época são relativamente estáveis dentro de uma janela, então a renderização no servidor reduz o tamanho do bundle do cliente e melhora a performance de primeiro carregamento para fluxos de pesquisadores.",
+      "Tipagem TypeScript estrita para todos os formatos de resposta da API Bittensor — os dados da chain são complexos e parcialmente não documentados; tipos defensivos com validação em tempo de execução detectaram várias mudanças de formato durante o desenvolvimento.",
+      "Primitivos Radix UI para componentes base acessíveis — o dashboard precisava ser acessível por leitores de tela para pesquisadores que usam ferramentas assistivas; o Radix lida com navegação por teclado e ARIA nativamente.",
+      "Deduplicação de requisições por chave de época — múltiplas renderizações de aba solicitando a mesma época fazem um único fetch; renderizações subsequentes servem do cache até que a época avance.",
+    ],
+    learnings: [
+      "Blockchain data is append-only and epoch-indexed — standard REST pagination patterns (page/offset) don't apply. Epoch-keyed caching is the right mental model, not cursor-based pagination.",
+      "Data shapes in active Bittensor subnets change between versions without notice. Defensive parsing with explicit fallback values is not paranoia — it's the baseline.",
+    ],
+    learningsPt: [
+      "Dados de blockchain são append-only e indexados por época — padrões de paginação REST padrão (page/offset) não se aplicam. Cache por chave de época é o modelo mental correto, não paginação baseada em cursor.",
+      "Formatos de dados em subnets Bittensor ativas mudam entre versões sem aviso. Parsing defensivo com valores de fallback explícitos não é paranoia — é a linha de base.",
+    ],
+    status: "Delivered — live in production",
+    statusPt: "Entregue — no ar em produção",
     liveUrl: "https://metanovalabs.ai/dashboard",
     featured: true,
     year: 2025,
@@ -78,12 +238,62 @@ export const projects: Project[] = [
     nameEn: "DSRPTV Records – Music Platform",
     namePt: "DSRPTV Records – Plataforma de Música",
     name: "DSRPTV Records",
+    type: "Creative Commerce Platform",
     descriptionEn:
       "Music e-commerce and streaming platform. Stripe + Mercado Pago dual checkout, Spotify API, AWS S3 asset storage, Three.js visuals. Built with Raphael Palmer (DISCLAYMER).",
     descriptionPt:
       "Plataforma de e-commerce e streaming musical. Checkout duplo Stripe + Mercado Pago, Spotify API, armazenamento AWS S3, visuais Three.js. Construído com Raphael Palmer (DISCLAYMER).",
     tech: ["React", "TypeScript", "Vite", "Three.js", "Firebase", "AWS S3", "Stripe", "Mercado Pago"],
     categories: ["platform", "web-app"],
+    highlights: [
+      "Dual-market checkout: Stripe (international) + Mercado Pago (Brazil)",
+      "Spotify API integration for streaming and catalogue sync",
+      "AWS S3 asset storage with signed URL delivery",
+      "Three.js visuals for product pages and visual identity",
+      "Built with Raphael Palmer at DISCLAYMER studio",
+    ],
+    overview:
+      "DSRPTV Records is a music e-commerce and streaming platform for an independent Brazilian record label. It lets fans buy and stream music through a single experience — handling both Brazilian and international payment flows, audio asset delivery, and a distinctive Three.js visual identity that reflects the label's aesthetic.",
+    overviewPt:
+      "DSRPTV Records é uma plataforma de e-commerce e streaming musical para uma gravadora independente brasileira. Permite que os fãs comprem e ouçam música em uma única experiência — gerenciando fluxos de pagamento brasileiro e internacional, entrega de assets de áudio e uma identidade visual Three.js distintiva que reflete a estética da gravadora.",
+    problem:
+      "The label needed to monetise their catalogue directly — without splitting revenue with distributors — while reaching both Brazilian and international audiences. No existing off-the-shelf platform supported dual-currency checkout with Spotify integration and a custom visual identity.",
+    problemPt:
+      "A gravadora precisava monetizar seu catálogo diretamente — sem dividir receita com distribuidoras — enquanto alcançava públicos brasileiros e internacionais. Nenhuma plataforma pronta existente suportava checkout de dupla moeda com integração Spotify e identidade visual personalizada.",
+    goal:
+      "Build a complete music commerce platform with streaming, digital purchases, dual-payment checkout, and a visual identity strong enough to function as a standalone brand experience.",
+    goalPt:
+      "Construir uma plataforma completa de comércio musical com streaming, compras digitais, checkout de pagamento duplo e uma identidade visual forte o suficiente para funcionar como experiência de marca independente.",
+    role: [
+      "Co-developer with Raphael Palmer (DISCLAYMER studio)",
+      "Frontend, Three.js visuals, payment integration",
+    ],
+    rolePt: [
+      "Co-desenvolvedor com Raphael Palmer (estúdio DISCLAYMER)",
+      "Frontend, visuais Three.js, integração de pagamento",
+    ],
+    technicalDecisions: [
+      "Stripe for international payments, Mercado Pago for Brazil — both with webhook-verified purchase fulfillment. A shared purchase event model normalises both providers into a single fulfilment flow, so downstream audio delivery doesn't care which gateway fired.",
+      "Spotify API for catalogue sync and embedded playback — keeping the in-platform listening experience consistent with what fans already know, rather than building a custom audio player from scratch.",
+      "AWS S3 with signed URL delivery for purchased audio files — time-limited URLs mean purchased files cannot be shared or hotlinked after the window expires.",
+      "Three.js for visual identity — the label's aesthetic is central to the product, not an afterthought. WebGL allowed motion and depth that static CSS could not achieve.",
+    ],
+    technicalDecisionsPt: [
+      "Stripe para pagamentos internacionais, Mercado Pago para o Brasil — ambos com confirmação de compra por webhook. Um modelo de evento de compra compartilhado normaliza os dois provedores em um único fluxo de fulfillment, para que a entrega de áudio downstream não dependa de qual gateway disparou.",
+      "Spotify API para sincronização de catálogo e reprodução incorporada — mantendo a experiência de escuta dentro da plataforma consistente com o que os fãs já conhecem, em vez de construir um player de áudio personalizado do zero.",
+      "AWS S3 com entrega por URL assinada para arquivos de áudio comprados — URLs com tempo limitado significam que os arquivos comprados não podem ser compartilhados ou hotlinkados após o vencimento.",
+      "Three.js para identidade visual — a estética da gravadora é central para o produto, não um detalhe. WebGL permitiu movimento e profundidade que o CSS estático não poderia alcançar.",
+    ],
+    learnings: [
+      "Dual payment providers means dual webhook handlers. The critical insight is to normalise both into a provider-agnostic purchase event as early as possible — downstream fulfillment (audio delivery, DB write) should never contain if-Stripe / if-MercadoPago branches.",
+      "Spotify embed tokens expire silently. Without a proactive refresh mechanism, playback breaks mid-session. Silent background token refresh triggered before expiry is table stakes for Spotify-integrated apps.",
+    ],
+    learningsPt: [
+      "Dois provedores de pagamento significam dois handlers de webhook. O insight crítico é normalizar os dois em um evento de compra agnóstico de provedor o mais cedo possível — o fulfillment downstream (entrega de áudio, escrita no DB) nunca deve conter ramificações if-Stripe / if-MercadoPago.",
+      "Os tokens de embed do Spotify expiram silenciosamente. Sem um mecanismo de atualização proativo, a reprodução quebra no meio da sessão. A atualização silenciosa de token em segundo plano, acionada antes da expiração, é o mínimo necessário para apps integrados ao Spotify.",
+    ],
+    status: "Live",
+    statusPt: "No ar",
     liveUrl: "http://dsrptvrec.com",
     featured: true,
     year: 2023,

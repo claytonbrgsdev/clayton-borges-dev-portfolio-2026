@@ -12,7 +12,7 @@ export function Footer({ dict, locale }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 px-6 py-10 md:px-12">
+    <footer className="border-t border-white/10 px-6 py-10 md:px-12 bg-black relative z-10">
       <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-1">
           <span className="text-sm font-mono font-bold tracking-widest uppercase">

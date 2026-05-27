@@ -1,6 +1,5 @@
 "use client";
 
-// TODO: Add GSAP reveal animations + form submission with Resend or similar
 import { useState } from "react";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
@@ -42,6 +41,9 @@ export function ContactSection({ dict }: ContactSectionProps) {
   return (
     <div>
       <div className="mb-16">
+        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+          Get in touch
+        </span>
         <h1 className="text-4xl md:text-6xl font-bold mb-4">{contact.heading}</h1>
         <p className="text-lg opacity-50">{contact.subheading}</p>
       </div>
@@ -104,8 +106,11 @@ export function ContactSection({ dict }: ContactSectionProps) {
           <button
             type="submit"
             disabled={status === "sending" || status === "success"}
-            className="mt-2 px-8 py-3 bg-white text-black font-mono text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start"
+            className="mt-2 px-8 py-3 bg-white text-black font-mono text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start flex items-center gap-3"
           >
+            {status === "sending" && (
+              <span className="inline-block w-3 h-3 border border-black/30 border-t-black rounded-full animate-spin" />
+            )}
             {status === "sending" ? contact.form_sending : contact.form_send}
           </button>
         </form>

@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef } from "react";
 import Lenis from "lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import type { ReactNode } from "react";
 
 const LenisContext = createContext<Lenis | null>(null);
@@ -12,8 +11,6 @@ export function LenisProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -22,6 +19,8 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     });
 
     lenisRef.current = lenis;
+    // Expose for programmatic scrolling from child components
+    (window as unknown as { __lenis: Lenis }).__lenis = lenis;
 
     // Let GSAP's ticker drive Lenis — guarantees scroll and animations
     // are sampled in the same frame, eliminating drift between the two.
@@ -36,6 +35,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     return () => {
       gsap.ticker.remove(onTick);
       lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
   }, []);
 
