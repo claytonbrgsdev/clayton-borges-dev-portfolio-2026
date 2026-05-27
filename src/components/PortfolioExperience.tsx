@@ -8,15 +8,14 @@ import { gsap } from "@/lib/gsap";
 import { ScrollTrigger } from "@/lib/gsap";
 import { featuredProjects } from "@/lib/data/projects";
 import { stack } from "@/lib/data/stack";
-import { principles } from "@/lib/data/principles";
 import { featuredExperiments } from "@/lib/data/experiments";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
 import { HeroConstellation } from "@/components/sketches/HeroConstellation";
 import { CodeToComponent, CodeBlock, Syntax } from "@/components/effects/CodeToComponent";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
-import { PrincipleGeometry } from "@/components/sketches/PrincipleGeometry";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
+import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
 
 const SECTION_LABELS = ["Hero", "Projects", "About", "Approach", "Lab"];
 
@@ -152,28 +151,14 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         once: true,
         onEnter: () => {
           gsap.to(s2, { opacity: 1, duration: 0.4, ease: "power2.out" });
-          const cols = s2.querySelectorAll<HTMLElement>(":scope > div > div");
-          if (cols.length >= 2) {
-            gsap.from(cols[0], { x: -30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
-            gsap.from(cols[1], { x: 30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
-          }
-        },
-      }));
-    }
-
-    // ── Section 3: How I Work (Principles) ────────────────
-    const s3 = sectionsRef.current[3];
-    if (s3) {
-      triggers.push(ScrollTrigger.create({
-        trigger: s3,
-        start: "top 78%",
-        once: true,
-        onEnter: () => {
-          gsap.to(s3, { opacity: 1, duration: 0.4, ease: "power2.out" });
-          const cards = s3.querySelectorAll<HTMLElement>(":scope > div > div.grid > div");
-          if (cards.length) {
-            gsap.from(Array.from(cards), { y: 16, opacity: 0, duration: 0.5, stagger: 0.08, ease: "power3.out", delay: 0.2 });
-          }
+          // Row A: left tags col and right orbit col slide in from opposite sides
+          const tagsCol = s2.querySelector<HTMLElement>("[data-about-tags]");
+          const orbitCol = s2.querySelector<HTMLElement>("[data-about-orbit]");
+          if (tagsCol) gsap.from(tagsCol, { x: -30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
+          if (orbitCol) gsap.from(orbitCol, { x: 30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
+          // Row B: about text fades in after Row A
+          const aboutRow = s2.querySelector<HTMLElement>("[data-about-text]");
+          if (aboutRow) gsap.from(aboutRow, { opacity: 0, y: 12, duration: 0.5, ease: "power2.out", delay: 0.45 });
         },
       }));
     }
@@ -452,70 +437,57 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       <section ref={el => { sectionsRef.current[2] = el; }}
         className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
         style={{ opacity: 0 }}>
-        <div className="max-w-5xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-20">
-          {/* About */}
-          <div>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.35 }}>{home.about_preview.label}</span>
-            <h2 className="font-bold mb-6" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>{home.about_preview.heading}</h2>
-            <p className="text-sm leading-relaxed mb-6" style={{ opacity: 0.5 }}>{home.about_preview.body}</p>
+        <div className="max-w-5xl mx-auto w-full">
+
+          {/* Row A — visual row: tag categories (left) + orbit canvas (right) */}
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 mb-14">
+
+            {/* Left col: "What I Work With" heading + tag categories */}
+            <div data-about-tags>
+              <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.35 }}>{home.skills.label}</span>
+              <h2 className="font-bold mb-6" style={{ fontSize: "clamp(1.5rem,3.5vw,2.2rem)" }}>{home.skills.heading}</h2>
+              <div className="space-y-4">
+                {stack.map(cat => (
+                  <div key={cat.title}>
+                    <span className="font-mono text-xs tracking-widest uppercase block mb-2" style={{ opacity: 0.28 }}>{cat.title}</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {cat.items.map(item => (
+                        <span key={item.name} className="font-mono text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
+                          style={{ borderColor: "rgba(255,255,255,0.14)", opacity: 0.62, background: "rgba(0,0,0,0.4)" }}
+                          title={item.note}>
+                          {item.name}
+                          {item.note && <span style={{ opacity: 0.4 }}> ·</span>}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right col: StackOrbitField canvas */}
+            <div data-about-orbit className="flex items-center justify-center">
+              <StackOrbitField stack={stack} />
+            </div>
+          </div>
+
+          {/* Row B — about text row: full-width, more compact */}
+          <div data-about-text className="border-t pt-10 max-w-2xl" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>{home.about_preview.label}</span>
+            <h2 className="font-bold mb-4" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>{home.about_preview.heading}</h2>
+            <p className="text-sm leading-relaxed mb-5" style={{ opacity: 0.5 }}>{home.about_preview.body}</p>
             <Link href={`/${locale}/about`} className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>
               {home.about_preview.cta} →
             </Link>
           </div>
 
-          {/* Stack */}
-          <div>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.35 }}>{home.skills.label}</span>
-            <h2 className="font-bold mb-6" style={{ fontSize: "clamp(1.5rem,3.5vw,2.2rem)" }}>{home.skills.heading}</h2>
-            <div className="space-y-4">
-              {stack.map(cat => (
-                <div key={cat.title}>
-                  <span className="font-mono text-xs tracking-widest uppercase block mb-2" style={{ opacity: 0.28 }}>{cat.title}</span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.items.map(item => (
-                      <span key={item.name} className="font-mono text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
-                        style={{ borderColor: "rgba(255,255,255,0.14)", opacity: 0.62, background: "rgba(0,0,0,0.4)" }}
-                        title={item.note}>
-                        {item.name}
-                        {item.note && <span style={{ opacity: 0.4 }}> ·</span>}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-center mt-8">
-              <StackOrbitField stack={stack} />
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ── SECTION 3 — How I Work ────────────────────────────────────────── */}
       <section ref={el => { sectionsRef.current[3] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}>
-        <div className="max-w-5xl mx-auto w-full">
-          <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.35 }}>Approach</span>
-          <h2 className="font-bold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>{home.principles.heading}</h2>
-          <p className="text-sm mb-10 max-w-md" style={{ opacity: 0.38 }}>{home.principles.subheading}</p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {principles.map((principle, i) => (
-              <div key={principle.title} className="border p-6 hover:border-white/20 transition-colors group"
-                style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}>
-                <div className="mb-4 flex justify-start">
-                  <PrincipleGeometry variant={i} />
-                </div>
-                <div className="flex items-start justify-between mb-4">
-                  <span className="text-xl select-none" style={{ opacity: 0.32 }}>{principle.icon}</span>
-                  <span className="font-mono text-xs select-none" style={{ opacity: 0.16 }}>{String(i + 1).padStart(2, "0")}</span>
-                </div>
-                <h3 className="font-bold text-sm mb-2">{locale === "pt" ? principle.titlePt : principle.title}</h3>
-                <p className="text-xs leading-relaxed" style={{ opacity: 0.45 }}>{locale === "pt" ? principle.descriptionPt : principle.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        className="min-h-screen flex flex-col justify-center relative z-20">
+        <PrinciplesFullscreen dict={dict} locale={locale} />
       </section>
 
       {/* ── SECTION 4 — Lab + Hardware + Contact ─────────────────────────── */}

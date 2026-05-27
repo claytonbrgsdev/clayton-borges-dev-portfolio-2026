@@ -35,13 +35,17 @@ export function CodeToComponent({ children, codeBlock, className }: CodeToCompon
 
     const trigger = ScrollTrigger.create({
       trigger: container,
-      start: "top 80%",
-      end: "top 30%",
+      start: "top 85%",
+      end: "center 10%",
       scrub: 0.5,
       onUpdate: (self) => {
         const p = self.progress;
-        if (p < 0.5) {
-          const local = p / 0.5;
+        // Code layer: fully visible for first 30%, then fades out through 80%
+        if (p < 0.3) {
+          gsap.set(codeLayer, { opacity: 1, filter: "blur(0px)" });
+          gsap.set(renderedLayer, { opacity: 0, scale: 0.98 });
+        } else if (p < 0.8) {
+          const local = (p - 0.3) / 0.5;
           gsap.set(codeLayer, { opacity: 1 - local, filter: `blur(${local * 4}px)` });
           gsap.set(renderedLayer, { opacity: 0, scale: 0.98 });
         } else {
@@ -75,6 +79,9 @@ export function CodeToComponent({ children, codeBlock, className }: CodeToCompon
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
       >
+        <div className="font-mono text-xs text-white/40 mb-2 tracking-widest uppercase select-none">
+          ← source code
+        </div>
         {codeBlock}
       </div>
     </div>
@@ -91,7 +98,7 @@ export function CodeBlock({ lines, className }: CodeBlockProps) {
     <pre
       className={`font-mono text-xs md:text-sm leading-relaxed overflow-hidden rounded-sm backdrop-blur-sm ${className ?? ""}`}
       style={{
-        background: "rgba(0,0,0,0.7)",
+        background: "rgba(5, 8, 14, 0.92)",
         border: "1px solid rgba(255,255,255,0.08)",
         padding: "1.25rem 1.25rem 1.25rem 0",
         margin: 0,
@@ -120,9 +127,9 @@ export function CodeBlock({ lines, className }: CodeBlockProps) {
 }
 
 const SYNTAX_COLORS = {
-  tag: "#82aaff",
-  attr: "#c792ea",
-  string: "#c3e88d",
+  tag: "rgba(130, 170, 255, 0.85)",
+  attr: "rgba(199, 146, 234, 0.85)",
+  string: "rgba(195, 232, 141, 0.85)",
   expr: "#f78c6c",
   comment: "#546e7a",
   punct: "#cfd8dc",
