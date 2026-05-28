@@ -8,7 +8,6 @@ import { gsap } from "@/lib/gsap";
 import { ScrollTrigger } from "@/lib/gsap";
 import { featuredProjects } from "@/lib/data/projects";
 import { stack } from "@/lib/data/stack";
-import { featuredExperiments } from "@/lib/data/experiments";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
 import { HeroConstellation } from "@/components/sketches/HeroConstellation";
@@ -16,6 +15,7 @@ import { CodeToComponent, CodeBlock, Syntax } from "@/components/effects/CodeToC
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
+import { LabShowcase } from "@/components/sections/home/LabShowcase";
 
 const SECTION_LABELS = ["Hero", "Projects", "About", "Approach", "Lab"];
 
@@ -496,39 +496,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         style={{ opacity: 0 }}>
         <div className="max-w-5xl mx-auto w-full">
 
-          {/* Lab section */}
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>Creative Lab</span>
-              <h2 className="font-bold mb-2" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>{home.lab.heading}</h2>
-              <p className="text-sm max-w-md" style={{ opacity: 0.38 }}>{home.lab.subheading}</p>
-            </div>
-            <Link href="/lab" className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity whitespace-nowrap" style={{ opacity: 0.42 }}>
-              {home.lab.explore_all}
-            </Link>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-            {featuredExperiments.map(exp => (
-              <Link key={exp.phase} href={exp.route}
-                className="group relative block overflow-hidden border hover:border-white/25 transition-all duration-300"
-                style={{ background: `linear-gradient(135deg,${exp.gradient.from},${exp.gradient.to})`, minHeight: "160px", borderColor: "rgba(255,255,255,0.1)" }}>
-                <span className="absolute top-3 left-3 font-mono text-xs tracking-widest" style={{ opacity: 0.38 }}>{exp.phase}</span>
-                <span className="absolute top-3 right-3 font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.28, borderColor: "rgba(255,255,255,0.15)" }}>{exp.focus}</span>
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)" }} />
-                <div className="absolute bottom-0 left-0 right-0 p-4 relative z-10">
-                  <h3 className="font-bold text-sm mb-0.5 text-white">{exp.title}</h3>
-                  <p className="text-xs text-white line-clamp-1 leading-relaxed mb-1.5" style={{ opacity: 0.45 }}>{exp.description}</p>
-                  <div className="flex gap-1.5 flex-wrap">
-                    {exp.tech.slice(0, 2).map(t => (
-                      <span key={t} className="font-mono text-xs text-white" style={{ opacity: 0.28 }}>{t}</span>
-                    ))}
-                  </div>
-                  <span className="font-mono text-xs text-white opacity-0 group-hover:opacity-55 transition-opacity mt-2 block">Enter →</span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {/* Lab section — cinematic showcase */}
+          <LabShowcase locale={locale} />
 
           {/* Hardware callout */}
           {hardwareProjects.length > 0 && (
