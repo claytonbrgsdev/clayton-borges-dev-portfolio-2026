@@ -10,9 +10,10 @@
     "hero": {
       "greeting": "Olá, sou",
       "name": "Clayton Borges",
-      "title": "Desenvolvedor Criativo / Full-Stack",
-      "subtitle": "React · Next.js · Three.js · Python · Ruby",
-      "cta_projects": "Ver Projetos",
+      "title": "Desenvolvedor Full-Stack / Front End Criativo",
+      "hook": "Construo plataformas de produção, experiências 3D em tempo real e ferramentas generativas — do backend ao último pixel.",
+      "subtitle": "React · Next.js · Three.js · GSAP · Python",
+      "cta_projects": "Ver Trabalhos",
       "cta_contact": "Entrar em Contato"
     },
     "about_preview": {

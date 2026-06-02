@@ -212,10 +212,15 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             {home.hero.name.split(" ")[0]}<br />
             <span style={{ opacity: 0.72 }}>{home.hero.name.split(" ").slice(1).join(" ")}</span>
           </h1>
-          <p className="font-light mb-3" style={{ fontSize: "clamp(1rem,2vw,1.25rem)", opacity: 0.58 }}>
+          {/* Title */}
+          <p className="font-light mb-4" style={{ fontSize: "clamp(1rem,2vw,1.2rem)", opacity: 0.55 }}>
             {home.hero.title}
           </p>
-          <p className="font-mono text-sm mb-10" style={{ opacity: 0.32, letterSpacing: "0.1em" }}>
+          {/* Hook — the one-liner that sets up everything that follows */}
+          <p className="text-sm leading-relaxed mb-5 max-w-xl" style={{ opacity: 0.42 }}>
+            {home.hero.hook}
+          </p>
+          <p className="font-mono text-xs mb-10" style={{ opacity: 0.28, letterSpacing: "0.1em" }}>
             {home.hero.subtitle}
           </p>
           <div className="flex flex-wrap gap-4">
@@ -226,12 +231,12 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             </Link>
             <Link href={`/${locale}/contact`}
               className="font-mono text-xs tracking-widest uppercase px-6 py-3 hover:opacity-100 transition-opacity"
-              style={{ opacity: 0.45, border: "1px solid rgba(255,255,255,0.12)" }}>
+              style={{ opacity: 0.40, border: "1px solid rgba(255,255,255,0.12)" }}>
               {home.hero.cta_contact}
             </Link>
           </div>
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5" style={{ opacity: 0.32 }}>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5" style={{ opacity: 0.28 }}>
           <span className="font-mono text-[9px] tracking-widest uppercase">scroll</span>
           <span className="font-mono text-xs animate-bounce">↓</span>
         </div>
@@ -240,30 +245,36 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       {/* ── SECTION 1 — Featured Projects ─────────────────────────────────── */}
       <section ref={el => { sectionsRef.current[1] = el; }} className="relative z-20">
 
+        {/* Bridge label — context before the IDE sequence */}
+        <div className="px-8 md:px-20 pt-20 pb-8 relative" style={{ background: "#07090e" }}>
+          <div className="max-w-5xl mx-auto flex items-end justify-between">
+            <div>
+              <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>
+                {home.featured_projects.label}
+              </span>
+              <h2 className="font-bold" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+                {home.featured_projects.heading}
+              </h2>
+            </div>
+            <Link href={`/${locale}/projects`}
+              className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 transition-opacity mb-2"
+              style={{ opacity: 0.40 }}>
+              {home.featured_projects.cta} →
+            </Link>
+          </div>
+        </div>
+
         {/* IDE → Deploy → Browser cinematic sequence (Moveo Filmes) */}
         <IDEDeploySequence locale={locale} />
 
-        {/* Section header + other projects grid */}
+        {/* More projects grid — below the IDE showcase */}
         <div data-projects-grid
-          className="px-8 md:px-20 py-16 relative"
+          className="px-8 md:px-20 pt-4 pb-16 relative"
           style={{ background: "#07090e" }}>
           <div className="max-w-5xl mx-auto w-full">
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <span className="font-mono text-xs tracking-widest uppercase block mb-3"
-                  style={{ opacity: 0.35 }}>
-                  {home.featured_projects.label}
-                </span>
-                <h2 className="font-bold" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-                  {home.featured_projects.heading}
-                </h2>
-              </div>
-              <Link href={`/${locale}/projects`}
-                className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 transition-opacity"
-                style={{ opacity: 0.45 }}>
-                {home.featured_projects.cta} →
-              </Link>
-            </div>
+            <span className="font-mono text-xs tracking-widest uppercase block mb-8" style={{ opacity: 0.25 }}>
+              — {locale === "pt" ? "mais trabalhos" : "more work"}
+            </span>
 
             {/* 3-card grid — first card wide (2-col) on md+ */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -320,8 +331,18 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         style={{ opacity: 0 }}>
         <div className="max-w-5xl mx-auto w-full">
 
-          {/* Row A — visual row: tag categories (left) + orbit canvas (right) */}
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-14">
+          {/* Row A — about text: who I am, before anything else */}
+          <div data-about-text className="mb-14 max-w-2xl">
+            <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>{home.about_preview.label}</span>
+            <h2 className="font-bold mb-5" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>{home.about_preview.heading}</h2>
+            <p className="text-sm leading-relaxed mb-6" style={{ opacity: 0.52 }}>{home.about_preview.body}</p>
+            <Link href={`/${locale}/about`} className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>
+              {home.about_preview.cta} →
+            </Link>
+          </div>
+
+          {/* Row B — visual row: tag categories (left) + orbit canvas (right) */}
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 border-t pt-12" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
 
             {/* Left col: "What I Work With" heading + tag categories */}
             <div data-about-tags>
@@ -350,16 +371,6 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             <div data-about-orbit className="flex items-center justify-center overflow-hidden" style={{ maxHeight: "460px" }}>
               <StackOrbitField stack={stack} />
             </div>
-          </div>
-
-          {/* Row B — about text row: full-width, more compact */}
-          <div data-about-text className="border-t pt-10 max-w-2xl" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>{home.about_preview.label}</span>
-            <h2 className="font-bold mb-4" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>{home.about_preview.heading}</h2>
-            <p className="text-sm leading-relaxed mb-5" style={{ opacity: 0.5 }}>{home.about_preview.body}</p>
-            <Link href={`/${locale}/about`} className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>
-              {home.about_preview.cta} →
-            </Link>
           </div>
 
         </div>
@@ -407,8 +418,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           )}
 
           {/* Contact CTA */}
-          <div className="border-t pt-10" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.40 }}>Contact</span>
+          <div className="border-t pt-16" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.40 }}>{locale === "pt" ? "Contato" : "Contact"}</span>
             <h2 className="font-bold mb-4 leading-tight" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>
               {home.contact_cta.heading}
             </h2>
