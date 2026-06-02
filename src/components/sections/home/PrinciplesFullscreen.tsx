@@ -452,7 +452,7 @@ function PrincipleCard({ index, title, description, progressRef }: CardProps) {
     <div className="relative flex flex-col items-center justify-center w-full min-h-screen px-6 md:px-16">
       {/* Index label */}
       <span
-        className="absolute top-8 left-6 md:left-16 font-mono text-xs text-white/40 select-none"
+        className="absolute top-14 left-6 md:left-16 font-mono text-xs text-white/40 select-none"
         aria-hidden="true"
       >
         {idxLabel}
@@ -485,7 +485,7 @@ function PrincipleCard({ index, title, description, progressRef }: CardProps) {
           <h3 className="card-title font-bold text-3xl md:text-4xl mb-5 leading-tight">
             {title}
           </h3>
-          <p className="card-description text-sm md:text-base text-white/70 leading-relaxed max-w-md">
+          <p className="card-description text-sm md:text-base text-white/85 leading-relaxed max-w-md">
             {description}
           </p>
         </div>
@@ -536,8 +536,8 @@ export function PrinciplesFullscreen({ dict, locale }: Props) {
       tl.to(geomEl, { scale: 1, opacity: 1, ease: "power2.out", duration: 0.4 }, 0);
       // progress 0.4 → 0.6 : title slides up
       tl.to(titleEl, { y: 0, opacity: 1, ease: "power3.out", duration: 0.2 }, 0.4);
-      // progress 0.6 → 1.0 : description fades in
-      tl.to(descEl, { opacity: 1, ease: "power2.out", duration: 0.4 }, 0.6);
+      // progress 0.35 → 0.75 : description fades in (earlier, so it's readable mid-scroll)
+      tl.to(descEl, { opacity: 1, ease: "power2.out", duration: 0.4 }, 0.35);
 
       const st = ScrollTrigger.create({
         trigger: card,
@@ -571,9 +571,7 @@ export function PrinciplesFullscreen({ dict, locale }: Props) {
       {/* Section header */}
       <div className="px-6 md:px-16 pt-24 pb-4 max-w-6xl mx-auto">
         <span className="font-mono text-xs tracking-widest uppercase block mb-3 text-white/35">
-          {"approach_label" in dict.home
-            ? String((dict.home as unknown as Record<string, unknown>).approach_label)
-            : "Approach"}
+          {p?.approach_label ?? "Approach"}
         </span>
         <h2 className="font-bold text-2xl md:text-3xl mb-16">
           {p?.heading ?? "How I Work"}

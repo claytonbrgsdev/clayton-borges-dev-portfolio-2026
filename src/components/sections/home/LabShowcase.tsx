@@ -19,11 +19,18 @@ const FOCUS_CONFIG: Record<
   Physics:     { r: 160, g: 115, b: 255, noiseScale: 0.0045, speed: 2.4, trailAlpha: 0.048 },
 };
 
-const FOCUS_LABEL: Record<LabFocus, string> = {
+const FOCUS_LABEL_EN: Record<LabFocus, string> = {
   Generative:  "GENERATIVE",
   Mathematics: "MATHEMATICS",
   Simulation:  "SIMULATION",
   Physics:     "PHYSICS",
+};
+
+const FOCUS_LABEL_PT: Record<LabFocus, string> = {
+  Generative:  "GENERATIVO",
+  Mathematics: "MATEMÁTICA",
+  Simulation:  "SIMULAÇÃO",
+  Physics:     "FÍSICA",
 };
 
 const TOTAL = experiments.length;
@@ -45,6 +52,8 @@ export function LabShowcase({ locale }: Props) {
   const current = FEATURED[activeIdx];
   const focus   = current.focus as LabFocus;
   const cfg     = FOCUS_CONFIG[focus];
+  const isPt    = locale === "pt";
+  const FOCUS_LABEL = isPt ? FOCUS_LABEL_PT : FOCUS_LABEL_EN;
 
   // Sync focus ref + trigger transition on change
   useEffect(() => {
@@ -249,7 +258,7 @@ export function LabShowcase({ locale }: Props) {
             className="hidden md:block font-mono text-xs tracking-wide hover:opacity-100 transition-opacity"
             style={{ opacity: 0.4 }}
           >
-            Explore all {TOTAL} experiments →
+            {isPt ? `Explorar todos os ${TOTAL} experimentos →` : `Explore all ${TOTAL} experiments →`}
           </Link>
         </div>
 
@@ -266,7 +275,7 @@ export function LabShowcase({ locale }: Props) {
 
           {/* Phase + index */}
           <span className="font-mono text-xs mb-2" style={{ opacity: 0.28 }}>
-            Phase {current.phase} &nbsp;·&nbsp; {activeIdx + 1} / {FEATURED.length}
+            {`${isPt ? "Fase" : "Phase"} ${current.phase}  ·  ${activeIdx + 1} / ${FEATURED.length}`}
           </span>
 
           {/* Title */}
@@ -274,7 +283,7 @@ export function LabShowcase({ locale }: Props) {
             className="font-bold leading-none mb-4 transition-all duration-300"
             style={{ fontSize: "clamp(2.4rem,6vw,4.2rem)" }}
           >
-            {current.title}
+            {isPt ? current.titlePt : current.title}
           </h2>
 
           {/* Description */}
@@ -282,7 +291,7 @@ export function LabShowcase({ locale }: Props) {
             className="text-sm leading-relaxed mb-6 max-w-sm"
             style={{ opacity: 0.52 }}
           >
-            {current.description}
+            {isPt ? current.descriptionPt : current.description}
           </p>
 
           {/* Tech tags */}
@@ -304,7 +313,7 @@ export function LabShowcase({ locale }: Props) {
             className="font-mono text-xs tracking-widest uppercase border px-6 py-3 w-fit transition-colors duration-200 hover:bg-white hover:text-black"
             style={{ borderColor: "rgba(255,255,255,0.28)" }}
           >
-            Enter Experiment →
+            {isPt ? "Entrar →" : "Enter Experiment →"}
           </Link>
         </div>
 
@@ -360,7 +369,7 @@ export function LabShowcase({ locale }: Props) {
           className="md:hidden font-mono text-xs tracking-wide mt-4 block hover:opacity-100 transition-opacity"
           style={{ opacity: 0.38 }}
         >
-          Explore all {TOTAL} experiments →
+          {isPt ? `Explorar todos os ${TOTAL} experimentos →` : `Explore all ${TOTAL} experiments →`}
         </Link>
       </div>
     </div>

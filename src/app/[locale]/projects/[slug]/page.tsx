@@ -303,8 +303,23 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 style={{ aspectRatio: "16/9" }}
               >
                 <span className="font-mono text-xs text-white/30">
-                  Image coming soon
+                  {isPt ? "Imagem em breve" : "Image coming soon"}
                 </span>
+              </div>
+            )}
+
+            {/* Demo video — shown below hero when available */}
+            {caseStudy.demoVideo && (
+              <div className="w-full mt-4 border border-white/10 overflow-hidden">
+                <video
+                  src={caseStudy.demoVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto block"
+                  style={{ maxHeight: "520px", objectFit: "cover" }}
+                />
               </div>
             )}
           </div>
@@ -326,7 +341,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           {/* 4. Gallery */}
           <div className="border-t border-white/[0.08] pt-10 mb-16">
             <span className="font-mono text-xs tracking-widest uppercase text-white/30 block mb-6">
-              Gallery
+              {isPt ? "Galeria" : "Gallery"}
             </span>
             {caseStudy.galleryImages.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -350,7 +365,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     style={{ aspectRatio: "4/3" }}
                   >
                     <span className="font-mono text-xs text-white/30">
-                      Image coming soon
+                      {isPt ? "Imagem em breve" : "Image coming soon"}
                     </span>
                   </div>
                 ))}
@@ -456,7 +471,7 @@ function BottomNav({
           href={`/${locale}/projects/${next.id}`}
           className="font-mono text-xs opacity-30 hover:opacity-70 transition-opacity text-right"
         >
-          Next: {nextName} →
+          {locale === "pt" ? "Próximo" : "Next"}: {nextName} →
         </Link>
       )}
     </div>

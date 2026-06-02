@@ -16,6 +16,7 @@ export type CaseStudy = {
   techStack: string[];
   heroImage: string | null;
   galleryImages: string[];
+  demoVideo?: string | null;
   sections: CaseStudySection[];
   sectionsPt: CaseStudySection[];
   outcomes: string[];
@@ -49,8 +50,16 @@ export const caseStudies: CaseStudy[] = [
       "dnd-kit",
       "Tailwind CSS",
     ],
-    heroImage: null,
-    galleryImages: [],
+    heroImage: "/projects/MOVEO/moveo-hero.png",
+    galleryImages: [
+      "/projects/MOVEO/moveo-about.png",
+      "/projects/MOVEO/moveo-catalog-1.png",
+      "/projects/MOVEO/moveo-catalog-2.png",
+      "/projects/MOVEO/moveo-film-natureza.png",
+      "/projects/MOVEO/moveo-film-misterio.png",
+      "/projects/MOVEO/moveo-film-credits.png",
+    ],
+    demoVideo: "/videos/MOVEO/moveo_2.mp4",
     sections: [
       {
         heading: "Overview",
@@ -142,8 +151,8 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "mzprime-3d-showcase",
-    title: "MzPrime – 3D Car Cover Showroom",
-    titlePt: "MzPrime – Showroom 3D de Capas",
+    title: "Vitrine 3D – Car Cover Showroom",
+    titlePt: "Vitrine 3D – Showroom de Capas",
     tagline:
       "Interactive 3D showroom for a luxury custom vehicle cover brand with real-time color, stitching, and logo customization.",
     taglinePt:
@@ -159,8 +168,13 @@ export const caseStudies: CaseStudy[] = [
       "React Three Fiber",
       "Tailwind CSS",
     ],
-    heroImage: null,
-    galleryImages: [],
+    heroImage: "/projects/Vitrine_3D/vitrine3d-hero.png",
+    galleryImages: [
+      "/projects/Vitrine_3D/vitrine3d-suv.png",
+      "/projects/Vitrine_3D/vitrine3d-vintage.png",
+      "/projects/Vitrine_3D/vitrine3d-moto.png",
+    ],
+    demoVideo: "/videos/Vitrine_3D/vitrine3d-demo.mp4",
     sections: [
       {
         heading: "Overview",

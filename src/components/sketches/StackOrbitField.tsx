@@ -221,6 +221,8 @@ export function StackOrbitField({ stack, className }: Props) {
           let tx = lx;
           if (dx < 0) tx = lx - tw;
           else if (Math.abs(dx) < 4) tx = lx - tw / 2;
+          // Clamp so labels stay within canvas bounds (8px margin each side)
+          tx = Math.max(8, Math.min(size - tw - 8, tx));
           p.text(b.name, tx, ly + 3);
         }
       };

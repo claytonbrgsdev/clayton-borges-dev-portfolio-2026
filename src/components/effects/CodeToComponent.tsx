@@ -14,6 +14,7 @@ export function CodeToComponent({ children, codeBlock, className }: CodeToCompon
   const containerRef = useRef<HTMLDivElement>(null);
   const codeLayerRef = useRef<HTMLDivElement>(null);
   const renderedLayerRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const [skipEffect, setSkipEffect] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -28,29 +29,40 @@ export function CodeToComponent({ children, codeBlock, className }: CodeToCompon
     const container = containerRef.current;
     const codeLayer = codeLayerRef.current;
     const renderedLayer = renderedLayerRef.current;
-    if (!container || !codeLayer || !renderedLayer) return;
+    const hint = hintRef.current;
+    if (!container || !codeLayer || !renderedLayer || !hint) return;
 
     gsap.set(codeLayer, { opacity: 1, filter: "blur(0px)" });
     gsap.set(renderedLayer, { opacity: 0, scale: 0.98 });
+    gsap.set(hint, { opacity: 0 });
 
     const trigger = ScrollTrigger.create({
       trigger: container,
-      start: "top 85%",
-      end: "center 10%",
-      scrub: 0.5,
+      // Wider scroll window — gives the user ~3× more time to read the transition
+      start: "top 92%",
+      end: "bottom 20%",
+      scrub: 1.5,
       onUpdate: (self) => {
         const p = self.progress;
-        // Code layer: fully visible for first 30%, then fades out through 80%
-        if (p < 0.3) {
+
+        // 0.00 → 0.35  — code fully visible, hint hidden
+        if (p < 0.35) {
           gsap.set(codeLayer, { opacity: 1, filter: "blur(0px)" });
           gsap.set(renderedLayer, { opacity: 0, scale: 0.98 });
-        } else if (p < 0.8) {
-          const local = (p - 0.3) / 0.5;
-          gsap.set(codeLayer, { opacity: 1 - local, filter: `blur(${local * 4}px)` });
+          gsap.set(hint, { opacity: 0 });
+        }
+        // 0.35 → 0.65  — hint fades in, code starts blurring
+        else if (p < 0.65) {
+          const local = (p - 0.35) / 0.30;
+          gsap.set(codeLayer, { opacity: 1 - local * 0.9, filter: `blur(${local * 5}px)` });
+          gsap.set(hint, { opacity: Math.min(local * 2, 0.55) }); // peak at 0.55
           gsap.set(renderedLayer, { opacity: 0, scale: 0.98 });
-        } else {
-          const local = (p - 0.5) / 0.5;
-          gsap.set(codeLayer, { opacity: 0, filter: "blur(4px)" });
+        }
+        // 0.65 → 1.00  — hint fades out, rendered fades in
+        else {
+          const local = (p - 0.65) / 0.35;
+          gsap.set(codeLayer, { opacity: 0, filter: "blur(5px)" });
+          gsap.set(hint, { opacity: 0.55 * (1 - local) });
           gsap.set(renderedLayer, { opacity: local, scale: 0.98 + local * 0.02 });
         }
       },
@@ -71,18 +83,34 @@ export function CodeToComponent({ children, codeBlock, className }: CodeToCompon
 
   return (
     <div ref={containerRef} className={`relative ${className ?? ""}`}>
+      {/* Rendered layer — destination state */}
       <div ref={renderedLayerRef} style={{ opacity: 0 }}>
         {children}
       </div>
+
+      {/* Code layer — source state */}
       <div
         ref={codeLayerRef}
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
       >
-        <div className="font-mono text-xs text-white/40 mb-2 tracking-widest uppercase select-none">
-          ← source code
+        {/* Source label */}
+        <div className="font-mono text-xs mb-2 select-none" style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em" }}>
+          {"</ JSX Source >"}
         </div>
         {codeBlock}
+      </div>
+
+      {/* Mid-transition hint — appears only during the crossfade */}
+      <div
+        ref={hintRef}
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        aria-hidden="true"
+        style={{ opacity: 0 }}
+      >
+        <span className="font-mono text-xs select-none" style={{ color: "rgba(255,255,255,0.55)", letterSpacing: "0.12em" }}>
+          source → rendered
+        </span>
       </div>
     </div>
   );

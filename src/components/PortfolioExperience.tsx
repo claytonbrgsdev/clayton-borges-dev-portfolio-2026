@@ -11,7 +11,7 @@ import { stack } from "@/lib/data/stack";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
 import { HeroConstellation } from "@/components/sketches/HeroConstellation";
-import { CodeToComponent, CodeBlock, Syntax } from "@/components/effects/CodeToComponent";
+import { IDEDeploySequence } from "@/components/sections/home/IDEDeploySequence";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
@@ -29,10 +29,6 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const navDotsRef     = useRef<(HTMLButtonElement | null)[]>([]);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const blueprintRef = useRef<HTMLDivElement>(null);
-  const blueprintWireframeRef = useRef<HTMLDivElement>(null);
-  const blueprintOutcomeRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     // Hero assembly animation
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -41,30 +37,9 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       const heroEl = heroContentRef.current;
       const children = Array.from(heroEl.children);
 
-      // Set initial states
       gsap.set(children, { opacity: 0, y: 18 });
-
-      // Build timeline
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.to(children, { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 });
-
-      // Blueprint appears after hero content
-      if (blueprintRef.current) {
-        gsap.set(blueprintRef.current, { opacity: 0 });
-        tl.to(blueprintRef.current, { opacity: 1, duration: 0.5 }, "-=0.2");
-      }
-
-      // Blueprint wireframe → outcome transition on first scroll
-      let blueprintResolved = false;
-      const resolveBlueprintOnScroll = () => {
-        if (blueprintResolved || !blueprintWireframeRef.current || !blueprintOutcomeRef.current) return;
-        blueprintResolved = true;
-        window.removeEventListener("scroll", resolveBlueprintOnScroll);
-
-        gsap.to(blueprintWireframeRef.current, { opacity: 0, duration: 0.4, ease: "power2.in" });
-        gsap.to(blueprintOutcomeRef.current, { opacity: 1, duration: 0.5, delay: 0.15, ease: "power3.out" });
-      };
-      window.addEventListener("scroll", resolveBlueprintOnScroll, { passive: true, once: true });
     }
 
     let activeSection = 0;
@@ -113,33 +88,23 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
     const triggers: ReturnType<typeof ScrollTrigger.create>[] = [];
 
-    // ── Section 1: Featured Projects ──────────────────────
+    // ── Section 1: Featured Projects grid (below IDE sequence) ────────────
     const s1 = sectionsRef.current[1];
     if (s1) {
-      triggers.push(ScrollTrigger.create({
-        trigger: s1,
-        start: "top 78%",
-        once: true,
-        onEnter: () => {
-          gsap.to(s1, { opacity: 1, duration: 0.4, ease: "power2.out" });
-          const mainCard = s1.querySelector<HTMLElement>("[data-main-card]");
-          if (mainCard) {
-            gsap.from(mainCard, { scale: 0.97, y: 18, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.15 });
-            const highlights = mainCard.querySelectorAll<HTMLElement>("li");
-            if (highlights.length) {
-              gsap.from(Array.from(highlights), { opacity: 0, x: -8, duration: 0.4, stagger: 0.05, ease: "power3.out", delay: 0.35 });
+      const projectsGrid = s1.querySelector<HTMLElement>("[data-projects-grid]");
+      if (projectsGrid) {
+        triggers.push(ScrollTrigger.create({
+          trigger: projectsGrid,
+          start: "top 78%",
+          once: true,
+          onEnter: () => {
+            const gridCards = projectsGrid.querySelectorAll<HTMLElement>(".grid > div");
+            if (gridCards.length) {
+              gsap.from(Array.from(gridCards), { x: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" });
             }
-            const techTags = mainCard.querySelectorAll<HTMLElement>(".flex.flex-wrap > span");
-            if (techTags.length) {
-              gsap.from(Array.from(techTags), { opacity: 0, duration: 0.25, stagger: 0.04, ease: "power2.out", delay: 0.45 });
-            }
-          }
-          const gridCards = s1.querySelectorAll<HTMLElement>(":scope > div > div.grid > div");
-          if (gridCards.length) {
-            gsap.from(Array.from(gridCards), { x: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power3.out", delay: 0.3 });
-          }
-        },
-      }));
+          },
+        }));
+      }
     }
 
     // ── Section 2: About + Stack ───────────────────────────
@@ -199,8 +164,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
   };
 
   const { home, projects: pDict } = dict;
-  const mainProject  = featuredProjects[0];
-  const gridProjects = featuredProjects.slice(1, 4);
+  const gridProjects = featuredProjects.slice(0, 3);
   const contactLinks: ContactLink[] = [
     { label: "Email",    value: contactInfo.email,  href: `mailto:${contactInfo.email}` },
     { label: "GitHub",   value: "@claytonbrgsdev", href: contactInfo.github },
@@ -240,7 +204,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       <section ref={el => { sectionsRef.current[0] = el; }}
         className="min-h-screen flex flex-col justify-center px-8 md:px-20 relative z-20">
         <div className="max-w-3xl" ref={heroContentRef}>
-          <span className="font-mono text-xs tracking-widest uppercase mb-6 block" style={{ opacity: 0.35 }}>
+          <span className="font-mono text-xs tracking-widest uppercase mb-6 block" style={{ opacity: 0.45 }}>
             {home.hero.greeting}
           </span>
           <h1 className="font-bold leading-[0.95] tracking-tight mb-6"
@@ -267,168 +231,66 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             </Link>
           </div>
         </div>
-        {/* Blueprint to Outcome — visible lg+ only */}
-        <div
-          ref={blueprintRef}
-          className="hidden lg:block"
-          style={{
-            position: "absolute",
-            right: "5rem",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "260px",
-            opacity: 0,
-          }}
-        >
-          {/* Wireframe state */}
-          <div
-            ref={blueprintWireframeRef}
-            style={{
-              border: "1px dashed rgba(255,255,255,0.14)",
-              padding: "20px",
-              position: "relative",
-            }}
-          >
-            <div style={{ height: "6px", background: "rgba(255,255,255,0.07)", marginBottom: "10px", borderRadius: "1px", width: "55%" }} />
-            <div style={{ height: "4px", background: "rgba(255,255,255,0.05)", marginBottom: "8px", borderRadius: "1px", width: "75%" }} />
-            <div style={{ height: "4px", background: "rgba(255,255,255,0.05)", marginBottom: "8px", borderRadius: "1px", width: "40%" }} />
-            <div style={{ height: "32px", background: "rgba(255,255,255,0.03)", marginBottom: "10px", borderRadius: "1px" }} />
-            <div style={{ height: "4px", background: "rgba(255,255,255,0.04)", marginBottom: "5px", borderRadius: "1px", width: "90%" }} />
-            <div style={{ height: "4px", background: "rgba(255,255,255,0.04)", borderRadius: "1px", width: "65%" }} />
-          </div>
-
-          {/* Outcome state — overlaid, initially hidden */}
-          <div
-            ref={blueprintOutcomeRef}
-            style={{
-              position: "absolute",
-              inset: 0,
-              border: "1px solid rgba(255,255,255,0.14)",
-              padding: "20px",
-              opacity: 0,
-              background: "rgba(0,0,0,0.35)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <span className="font-mono text-xs block mb-2" style={{ opacity: 0.3, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              01 · Client Work
-            </span>
-            <h3 className="font-bold text-sm mb-1" style={{ opacity: 0.85 }}>Moveo Filmes</h3>
-            <span className="font-mono text-xs block mb-4" style={{ opacity: 0.35 }}>CMS Platform · 2024</span>
-            <p className="text-xs leading-relaxed" style={{ opacity: 0.48, fontSize: "11px" }}>
-              Database-driven CMS — each new film auto-generates its own page. Zero code changes per update.
-            </p>
-          </div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5" style={{ opacity: 0.32 }}>
+          <span className="font-mono text-[9px] tracking-widest uppercase">scroll</span>
+          <span className="font-mono text-xs animate-bounce">↓</span>
         </div>
-        <span className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-xs tracking-widest animate-bounce" style={{ opacity: 0.2 }}>
-          ↓
-        </span>
       </section>
 
       {/* ── SECTION 1 — Featured Projects ─────────────────────────────────── */}
-      <section ref={el => { sectionsRef.current[1] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}>
-        <div className="max-w-5xl mx-auto w-full">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <span className="font-mono text-xs tracking-widest uppercase block mb-3"
-                style={{ opacity: 0.35 }}>
-                {home.featured_projects.label}
-              </span>
-              <h2 className="font-bold" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-                {home.featured_projects.heading}
-              </h2>
+      <section ref={el => { sectionsRef.current[1] = el; }} className="relative z-20">
+
+        {/* IDE → Deploy → Browser cinematic sequence (Moveo Filmes) */}
+        <IDEDeploySequence locale={locale} />
+
+        {/* Section header + other projects grid */}
+        <div data-projects-grid
+          className="px-8 md:px-20 py-16 relative"
+          style={{ background: "#07090e" }}>
+          <div className="max-w-5xl mx-auto w-full">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <span className="font-mono text-xs tracking-widest uppercase block mb-3"
+                  style={{ opacity: 0.35 }}>
+                  {home.featured_projects.label}
+                </span>
+                <h2 className="font-bold" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+                  {home.featured_projects.heading}
+                </h2>
+              </div>
+              <Link href={`/${locale}/projects`}
+                className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 transition-opacity"
+                style={{ opacity: 0.45 }}>
+                {home.featured_projects.cta} →
+              </Link>
             </div>
-            <Link href={`/${locale}/projects`}
-              className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 transition-opacity"
-              style={{ opacity: 0.45 }}>
-              {home.featured_projects.cta} →
-            </Link>
-          </div>
 
-          {/* Main project */}
-          {mainProject && (() => {
-            const name = locale === "pt" ? mainProject.namePt : mainProject.nameEn;
-            const desc = locale === "pt" ? mainProject.descriptionPt : mainProject.descriptionEn;
-            const codeBlock = (
-              <CodeBlock
-                lines={[
-                  <><Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>article</Syntax.Tag>{" "}<Syntax.Attr>className</Syntax.Attr>=<Syntax.Str>{`"border border-white/18"`}</Syntax.Str><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"  "}<Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>header</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"    "}<Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>span</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct>01 · Client Work<Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>span</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"    "}<Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>h3</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct><Syntax.Expr>{`{name}`}</Syntax.Expr><Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>h3</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"  "}<Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>header</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"  "}<Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>p</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct><Syntax.Expr>{`{description}`}</Syntax.Expr><Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>p</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"  "}<Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>ul</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <>{"    "}<Syntax.Expr>{`{highlights.map(h => `}</Syntax.Expr><Syntax.Punct>{"<"}</Syntax.Punct><Syntax.Tag>li</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct><Syntax.Expr>{`{h}`}</Syntax.Expr><Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>li</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct><Syntax.Expr>{`)}`}</Syntax.Expr></>,
-                  <>{"  "}<Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>ul</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                  <><Syntax.Punct>{"</"}</Syntax.Punct><Syntax.Tag>article</Syntax.Tag><Syntax.Punct>{">"}</Syntax.Punct></>,
-                ]}
-              />
-            );
-            return (
-              <CodeToComponent codeBlock={codeBlock} className="mb-4">
-                <div data-main-card className="border p-7 md:p-9 hover:border-white/30 transition-colors"
-                  style={{ borderColor: "rgba(255,255,255,0.18)", background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)" }}>
-                  <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
+            {/* 3-card grid */}
+            <div className="grid md:grid-cols-3 gap-3">
+              {gridProjects.map(project => {
+                const name = locale === "pt" ? project.namePt : project.nameEn;
+                const desc = locale === "pt" ? project.descriptionPt : project.descriptionEn;
+                return (
+                  <div key={project.id} className="border p-5 flex flex-col gap-3 hover:border-white/22 transition-all duration-300 hover:-translate-y-0.5"
+                    style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}>
                     <div>
-                      {mainProject.client && <span className="font-mono text-xs block mb-1" style={{ opacity: 0.4 }}>{pDict.client_label}: {mainProject.client}</span>}
-                      <h3 className="font-bold text-xl md:text-2xl mb-1">{name}</h3>
-                      {mainProject.type && <span className="font-mono text-xs" style={{ opacity: 0.38 }}>{mainProject.type}</span>}
+                      <h3 className="font-bold text-sm mb-0.5">{name}</h3>
+                      {project.type && <span className="font-mono text-xs" style={{ opacity: 0.33 }}>{project.type}</span>}
                     </div>
-                    <span className="font-mono text-xs border px-2 py-1 shrink-0" style={{ opacity: 0.28, borderColor: "rgba(255,255,255,0.15)" }}>{mainProject.year}</span>
-                  </div>
-                  <p className="text-sm leading-relaxed mb-5 max-w-2xl" style={{ opacity: 0.52 }}>{desc}</p>
-                  {mainProject.highlights && (
-                    <ul className="space-y-2 mb-5">
-                      {mainProject.highlights.map(h => (
-                        <li key={h} className="flex items-start gap-2.5 text-xs" style={{ opacity: 0.52 }}>
-                          <span className="font-mono mt-0.5 shrink-0" style={{ opacity: 0.5 }}>●</span>{h}
-                        </li>
+                    <p className="text-xs leading-relaxed line-clamp-3 flex-1" style={{ opacity: 0.45 }}>{desc}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tech.slice(0, 3).map(t => (
+                        <span key={t} className="font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.3, borderColor: "rgba(255,255,255,0.1)" }}>{t}</span>
                       ))}
-                    </ul>
-                  )}
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {mainProject.tech.slice(0, 7).map(t => (
-                      <span key={t} className="font-mono text-xs border px-2 py-0.5" style={{ opacity: 0.38, borderColor: "rgba(255,255,255,0.12)" }}>{t}</span>
-                    ))}
-                    {mainProject.tech.length > 7 && <span className="font-mono text-xs" style={{ opacity: 0.22 }}>+{mainProject.tech.length - 7}</span>}
+                    </div>
+                    <div className="flex gap-4 mt-auto">
+                      {project.overview && <Link href={`/${locale}/projects/${project.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>{pDict.view_case_study} →</Link>}
+                      {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.32 }}>{pDict.view_live} ↗</a>}
+                    </div>
                   </div>
-                  <div className="flex gap-5">
-                    {mainProject.overview && <Link href={`/${locale}/projects/${mainProject.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.55 }}>{pDict.view_case_study} →</Link>}
-                    {mainProject.liveUrl && <a href={mainProject.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.38 }}>{pDict.view_live} ↗</a>}
-                  </div>
-                </div>
-              </CodeToComponent>
-            );
-          })()}
-
-          {/* 3-card grid */}
-          <div className="grid md:grid-cols-3 gap-3">
-            {gridProjects.map(project => {
-              const name = locale === "pt" ? project.namePt : project.nameEn;
-              const desc = locale === "pt" ? project.descriptionPt : project.descriptionEn;
-              return (
-                <div key={project.id} className="border p-5 flex flex-col gap-3 hover:border-white/22 transition-all duration-300 hover:-translate-y-0.5"
-                  style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}>
-                  <div>
-                    <h3 className="font-bold text-sm mb-0.5">{name}</h3>
-                    {project.type && <span className="font-mono text-xs" style={{ opacity: 0.33 }}>{project.type}</span>}
-                  </div>
-                  <p className="text-xs leading-relaxed line-clamp-3 flex-1" style={{ opacity: 0.45 }}>{desc}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tech.slice(0, 3).map(t => (
-                      <span key={t} className="font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.3, borderColor: "rgba(255,255,255,0.1)" }}>{t}</span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4 mt-auto">
-                    {project.overview && <Link href={`/${locale}/projects/${project.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>{pDict.view_case_study} →</Link>}
-                    {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.32 }}>{pDict.view_live} ↗</a>}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -440,7 +302,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         <div className="max-w-5xl mx-auto w-full">
 
           {/* Row A — visual row: tag categories (left) + orbit canvas (right) */}
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 mb-14">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 mb-14">
 
             {/* Left col: "What I Work With" heading + tag categories */}
             <div data-about-tags>
@@ -466,7 +328,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             </div>
 
             {/* Right col: StackOrbitField canvas */}
-            <div data-about-orbit className="flex items-center justify-center">
+            <div data-about-orbit className="flex items-center justify-center overflow-hidden" style={{ maxHeight: "460px" }}>
               <StackOrbitField stack={stack} />
             </div>
           </div>
@@ -527,11 +389,11 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
           {/* Contact CTA */}
           <div className="border-t pt-10" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.30 }}>Contact</span>
+            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.40 }}>Contact</span>
             <h2 className="font-bold mb-4 leading-tight" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>
               {home.contact_cta.heading}
             </h2>
-            <p className="text-sm mb-8 max-w-md" style={{ opacity: 0.38 }}>
+            <p className="text-sm mb-8 max-w-md" style={{ opacity: 0.55 }}>
               {home.contact_cta.body}
             </p>
             <div className="flex flex-wrap gap-4 items-center mb-8">

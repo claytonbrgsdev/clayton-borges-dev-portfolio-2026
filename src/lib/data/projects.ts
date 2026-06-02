@@ -111,9 +111,9 @@ export const projects: Project[] = [
   },
   {
     id: "mzprime-3d-showcase",
-    nameEn: "MzPrime – 3D Car Cover Showroom",
-    namePt: "MzPrime – Showroom 3D de Capas",
-    name: "MzPrime – 3D Car Cover Showroom",
+    nameEn: "Vitrine 3D – Car Cover Showroom",
+    namePt: "Vitrine 3D – Showroom de Capas",
+    name: "Vitrine 3D – Car Cover Showroom",
     type: "3D Interactive Showroom",
     descriptionEn:
       "Real-time 3D configurator for customizable luxury vehicle covers. Users change cover color, stitching color, vehicle category, and apply uploaded PNG logos to predefined placement spots on the model — all without reloading full model variations. Browser-optimized for a lightweight interactive showroom experience.",
@@ -370,6 +370,7 @@ export const projects: Project[] = [
       "Player de música retrô com analisador de espectro ASCII em tempo real construído com Web Audio API e Next.js.",
     tech: ["Next.js", "TypeScript", "Web Audio API"],
     categories: ["audio", "web-app"],
+    image: "/videos/ASA_PLAYER/asa-player-demo.mp4",
     githubUrl: "https://github.com/claytonbrgsdev/aacs-player",
     liveUrl: "https://claytonbrgsdev.github.io/aacs-player/",
     featured: true,
@@ -493,6 +494,7 @@ export const projects: Project[] = [
       "Ferramenta de visualização de áudio macOS em tempo real com exibição de forma de onda e espectrograma usando captura de áudio do sistema via BlackHole.",
     tech: ["Python", "PySide6", "PyQtGraph", "NumPy FFT", "sounddevice"],
     categories: ["audio"],
+    image: "/projects/SPECtations/project-spectogram.jpeg",
     githubUrl: "https://github.com/claytonbrgsdev/SPECtations",
     featured: false,
     year: 2025,

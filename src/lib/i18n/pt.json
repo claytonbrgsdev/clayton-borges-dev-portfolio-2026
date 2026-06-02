@@ -37,7 +37,8 @@
     },
     "principles": {
       "heading": "Como Trabalho",
-      "subheading": "Cinco princípios que moldam cada projeto."
+      "subheading": "Cinco princípios que moldam cada projeto.",
+      "approach_label": "Abordagem"
     },
     "lab": {
       "heading": "O Lab",
