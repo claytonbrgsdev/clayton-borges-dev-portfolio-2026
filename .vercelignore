@@ -1,0 +1,12 @@
+# Original .mov files (converted to .mp4 — don't upload to Vercel)
+**/*.mov
+
+# Untracked lab preview pages not ready for production
+src/app/lab-preview-transitions/
+
+# Build artifacts
+.next/
+node_modules/
+
+# System files
+.DS_Store
