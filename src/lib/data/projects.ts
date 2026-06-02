@@ -50,6 +50,7 @@ export const projects: Project[] = [
     namePt: "Moveo Filmes",
     name: "Moveo Filmes",
     type: "Full-Stack Client Platform / CMS",
+    image: "/projects/MOVEO/moveo-hero.png",
     descriptionEn:
       "Bilingual full-stack platform and CMS for an independent film production company in Brasília. Features a dynamic film catalog organized by production stage, automatically generated film pages, an admin dashboard for full content control, and a cinematic interface built around horizontal grids and monochromatic structure.",
     descriptionPt:
@@ -115,6 +116,7 @@ export const projects: Project[] = [
     namePt: "Vitrine 3D – Showroom de Capas",
     name: "Vitrine 3D – Car Cover Showroom",
     type: "3D Interactive Showroom",
+    image: "/projects/Vitrine_3D/vitrine3d-hero.png",
     descriptionEn:
       "Real-time 3D configurator for customizable luxury vehicle covers. Users change cover color, stitching color, vehicle category, and apply uploaded PNG logos to predefined placement spots on the model — all without reloading full model variations. Browser-optimized for a lightweight interactive showroom experience.",
     descriptionPt:
@@ -370,7 +372,6 @@ export const projects: Project[] = [
       "Player de música retrô com analisador de espectro ASCII em tempo real construído com Web Audio API e Next.js.",
     tech: ["Next.js", "TypeScript", "Web Audio API"],
     categories: ["audio", "web-app"],
-    image: "/videos/ASA_PLAYER/asa-player-demo.mp4",
     githubUrl: "https://github.com/claytonbrgsdev/aacs-player",
     liveUrl: "https://claytonbrgsdev.github.io/aacs-player/",
     featured: true,
@@ -411,6 +412,7 @@ export const projects: Project[] = [
   {
     id: "reacto",
     nameEn: "REACTO – Web Audio-Visual Experiments",
+    image: "/projects/reacto/project-reacto.png",
     namePt: "REACTO – Experimentos Audio-Visuais Web",
     name: "REACTO",
     descriptionEn:

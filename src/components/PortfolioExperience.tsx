@@ -265,27 +265,46 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
               </Link>
             </div>
 
-            {/* 3-card grid */}
-            <div className="grid md:grid-cols-3 gap-3">
-              {gridProjects.map(project => {
+            {/* 3-card grid — first card wide (2-col) on md+ */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {gridProjects.map((project, idx) => {
                 const name = locale === "pt" ? project.namePt : project.nameEn;
                 const desc = locale === "pt" ? project.descriptionPt : project.descriptionEn;
+                const isHero = idx === 0;
                 return (
-                  <div key={project.id} className="border p-5 flex flex-col gap-3 hover:border-white/22 transition-all duration-300 hover:-translate-y-0.5"
-                    style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}>
-                    <div>
-                      <h3 className="font-bold text-sm mb-0.5">{name}</h3>
-                      {project.type && <span className="font-mono text-xs" style={{ opacity: 0.33 }}>{project.type}</span>}
-                    </div>
-                    <p className="text-xs leading-relaxed line-clamp-3 flex-1" style={{ opacity: 0.45 }}>{desc}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.tech.slice(0, 3).map(t => (
-                        <span key={t} className="font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.3, borderColor: "rgba(255,255,255,0.1)" }}>{t}</span>
-                      ))}
-                    </div>
-                    <div className="flex gap-4 mt-auto">
-                      {project.overview && <Link href={`/${locale}/projects/${project.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>{pDict.view_case_study} →</Link>}
-                      {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.32 }}>{pDict.view_live} ↗</a>}
+                  <div
+                    key={project.id}
+                    className={`border flex flex-col group hover:border-white/30 transition-all duration-300 hover:-translate-y-0.5 ${isHero ? "md:col-span-2 lg:col-span-1" : ""}`}
+                    style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}
+                  >
+                    {/* Thumbnail */}
+                    {project.image && (
+                      <div className="overflow-hidden border-b" style={{ aspectRatio: isHero ? "16/9" : "4/3", borderColor: "rgba(255,255,255,0.07)" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={project.image}
+                          alt={name}
+                          className="w-full h-full object-cover transition-opacity duration-500"
+                          style={{ opacity: 0.72 }}
+                        />
+                      </div>
+                    )}
+                    <div className="p-5 flex flex-col gap-2.5 flex-1">
+                      <div>
+                        <h3 className="font-bold text-sm mb-0.5">{name}</h3>
+                        {project.type && <span className="font-mono text-xs" style={{ opacity: 0.33 }}>{project.type}</span>}
+                      </div>
+                      <p className="text-xs leading-relaxed line-clamp-2 flex-1" style={{ opacity: 0.45 }}>{desc}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tech.slice(0, 3).map(t => (
+                          <span key={t} className="font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.3, borderColor: "rgba(255,255,255,0.1)" }}>{t}</span>
+                        ))}
+                        {project.tech.length > 3 && <span className="font-mono text-xs" style={{ opacity: 0.2 }}>+{project.tech.length - 3}</span>}
+                      </div>
+                      <div className="flex gap-4 mt-auto pt-1">
+                        {project.overview && <Link href={`/${locale}/projects/${project.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.5 }}>{pDict.view_case_study} →</Link>}
+                        {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.32 }}>{pDict.view_live} ↗</a>}
+                      </div>
                     </div>
                   </div>
                 );
