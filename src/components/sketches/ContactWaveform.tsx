@@ -160,7 +160,10 @@ export function ContactWaveform({ links, className }: Props) {
           p.text(link.label, cx, h * 0.78 - 14);
           p.textStyle(p.NORMAL);
           p.fill(255, alpha * 0.8);
-          p.text(link.value, cx, h * 0.78 + 2);
+          // Clamp text center so it never overflows canvas edges
+          const valW = p.textWidth(link.value);
+          const safeX = Math.max(valW / 2 + 8, Math.min(w - valW / 2 - 8, cx));
+          p.text(link.value, safeX, h * 0.78 + 2);
 
           if (hoverAmp[i] > 0.5) {
             p.stroke(255, 178 * hoverAmp[i]);

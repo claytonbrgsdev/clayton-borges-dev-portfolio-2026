@@ -368,14 +368,14 @@ function IDEDeploySequence() {
           style={{
             position: "absolute", left: "50%", top: "50%",
             transform: "translate(-50%, -50%)",
-            width: "860px", height: "520px",
+            width: "min(1100px, calc(100vw - 60px))", height: "580px",
             pointerEvents: "none",
             zIndex: 15,
           }}
         >
           {/* Project name — above browser */}
           <div data-item style={{
-            position: "absolute", top: "20px", left: "50%",
+            position: "absolute", top: "30px", left: "50%",
             transform: "translateX(-50%)", textAlign: "center",
           }}>
             <span style={{ fontFamily: "monospace", fontSize: "10px", opacity: 0.3, display: "block", marginBottom: "4px", letterSpacing: "0.14em", textTransform: "uppercase" }}>
@@ -411,7 +411,7 @@ function IDEDeploySequence() {
 
           {/* Tech tags — below browser */}
           <div data-item style={{
-            position: "absolute", bottom: "20px", left: "50%",
+            position: "absolute", bottom: "30px", left: "50%",
             transform: "translateX(-50%)",
             display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center",
           }}>
