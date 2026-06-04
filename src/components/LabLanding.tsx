@@ -4,6 +4,14 @@ import Link from "next/link";
 import { LAB_PARTS } from "@/lib/data/lab-narrative";
 import type { LabPart } from "@/lib/data/lab-narrative";
 
+function useVisitedPhases(): string[] {
+  const [visited, setVisited] = useState<string[]>([]);
+  useEffect(() => {
+    try { setVisited(JSON.parse(localStorage.getItem("lab_visited") ?? "[]")); } catch {}
+  }, []);
+  return visited;
+}
+
 // ── Tiny SVG motifs per part ───────────────────────────────────────────────────
 function MotifForm({ color }: { color: string }) {
   const pts: string[] = [];
@@ -48,12 +56,14 @@ function PartCard({
   onHover,
   onLeave,
   lineReveal,
+  visitedCount,
 }: {
   part: LabPart;
   hovered: boolean;
   onHover: () => void;
   onLeave: () => void;
   lineReveal: number;
+  visitedCount: number;
 }) {
   const Motif =
     part.id === "form" ? MotifForm : part.id === "force" ? MotifForce : MotifMind;
@@ -190,7 +200,14 @@ function PartCard({
               textTransform: "uppercase",
             }}
           >
-            {part.phases.length} experiments
+            {visitedCount > 0 ? (
+              <span>
+                <span style={{ color: part.accent, opacity: 0.8 }}>{visitedCount}</span>
+                <span style={{ opacity: 0.4 }}> / {part.phases.length}</span>
+              </span>
+            ) : (
+              <span>{part.phases.length} experiments</span>
+            )}
           </span>
           <Link
             href={part.phases[0]}
@@ -303,6 +320,7 @@ function BackgroundField() {
 export function LabLanding() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [lineReveal, setLineReveal] = useState(0);
+  const visited = useVisitedPhases();
 
   useEffect(() => {
     let start: number | null = null;
@@ -439,6 +457,7 @@ export function LabLanding() {
               onHover={() => setHovered(part.number)}
               onLeave={() => setHovered(null)}
               lineReveal={lineReveal}
+              visitedCount={part.phases.filter((r) => visited.includes(r)).length}
             />
           ))}
         </div>

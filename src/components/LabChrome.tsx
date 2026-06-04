@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getLabNav, LAB_PARTS, ROMAN } from "@/lib/data/lab-narrative";
+import { getLabNav, LAB_PARTS, LAB_SEQUENCE, ROMAN } from "@/lib/data/lab-narrative";
 import type { LabPartNumber } from "@/lib/data/lab-narrative";
 
 interface Props {
@@ -54,6 +54,16 @@ export function LabChrome({ route }: Props) {
     return () => clearTimeout(t);
   }, [transition, router]);
 
+  // Mark current phase visited in localStorage
+  useEffect(() => {
+    try {
+      const prev: string[] = JSON.parse(localStorage.getItem("lab_visited") ?? "[]");
+      if (!prev.includes(route)) {
+        localStorage.setItem("lab_visited", JSON.stringify([...prev, route]));
+      }
+    } catch {}
+  }, [route]);
+
   const goNext = useCallback(() => {
     if (!nav?.nextRoute) return;
     if (nav.isLastInPart && nav.partNumber < 3) {
@@ -92,6 +102,10 @@ export function LabChrome({ route }: Props) {
 
   if (!nav) return null;
 
+  const globalIdx = LAB_SEQUENCE.findIndex((s) => s.route === route);
+  const globalTotal = LAB_SEQUENCE.length;
+  const globalProgress = globalTotal > 1 ? (globalIdx / (globalTotal - 1)) * 100 : 0;
+
   const roman = ROMAN[nav.partNumber];
   const phaseNum = nav.indexInPart + 1;
   const accent = nav.partAccent;
@@ -112,6 +126,24 @@ export function LabChrome({ route }: Props) {
 
   return (
     <>
+      {/* Global story progress bar — top of viewport */}
+      <div
+        aria-hidden
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 300,
+          height: 2,
+          width: `${globalProgress}%`,
+          background: accent,
+          opacity: visible ? 0.65 : 0,
+          transition: "width 1s ease, opacity 0.8s ease",
+          pointerEvents: "none",
+          boxShadow: `0 0 6px ${accent}`,
+        }}
+      />
+
       {/* Atmosphere overlay — subtle corner glow per act */}
       <div
         aria-hidden
