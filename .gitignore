@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large video files
+*.mov
+*.mp4
+
+# Claude worktrees
+.claude/worktrees/
