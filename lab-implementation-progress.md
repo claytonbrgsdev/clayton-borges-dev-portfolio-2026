@@ -1,6 +1,6 @@
 # LAB — Implementation Progress
 
-**Status:** Phase 1 complete — deployed and build-clean.
+**Status:** Phase 2 complete — deployed and build-clean. Commit `668f2e0`.
 
 ---
 
@@ -52,28 +52,32 @@ Phases updated: 17, 17b, 18b, 19, 19b, 19c, 20, 20b, 20c, 21b, 21c, 22b, 22c, 23
 
 ---
 
+---
+
+## Session 2026-06-03 — Phase 2 additions
+
+### Added
+- `src/components/LabLanding.tsx` — extracted all interactive content here
+- `src/app/lab/page.tsx` — now a thin server component with proper `export const metadata`
+- `src/components/LabChrome.tsx` — rewrote with:
+  - **Part transition interstitial** — when last phase of Part I/II is completed, full-screen cinematic overlay appears: part title in `clamp(4rem,12vw,8rem)`, staggered `lcFadeUp` keyframe animations, auto-advance at 3.5s, click-to-skip
+  - **Keyboard navigation** — `→` or `]` key advances phase (or skips interstitial), `Escape` returns to `/lab`
+  - **Atmosphere overlay** — `z-index: 2` fixed `div` with `radial-gradient` corner glow per act: Part I red bottom-right, Part II blue top-right, Part III purple top-left, all at ~7% opacity
+
+---
+
 ## What's Left / Next Steps
 
-### High priority
-1. **Landing page metadata** — `lab/page.tsx` is a client component so `export const metadata` has no effect. Fix: extract interactive content to `src/components/LabLandingClient.tsx`, make `page.tsx` a server component with metadata.
+### Medium priority
+1. **Progress persistence** — Use `localStorage` to remember which phases the user has visited. Landing page could show checkmarks or subtle visual progress on each part node.
 
-2. **Part transition reveal cards** — When user reaches the last phase of a part (e.g., Orbit at end of Part I), the "NEXT →" CTA should expand into a full-screen interstitial showing the next part's identity before navigating. Currently it just navigates directly.
-
-3. **Typography adaptation per act** — The request asked for each phase to be "adapted in typography and visuals for coherent storytelling." Currently the chrome adds part context but the lab components themselves still use their original typography. Possible approach:
+2. **Typography adaptation per act** — The request asked for each phase to be "adapted in typography and visuals for coherent storytelling." Currently the chrome adds part context but the lab components themselves still use their original typography. Deeper approach:
    - Inject a CSS custom property `--lab-accent` into `document.root` based on the part
    - Each lab component could optionally pick it up for its HUD/text elements
-   - Or: add a per-part overlay color tint (very subtle) to shift the visual atmosphere
 
-4. **Landing page scroll-based line animation** — The vertical connecting line between parts is currently opacity-based (fades in). A more precise drawn effect would use SVG `stroke-dashoffset` tied to the actual DOM positions of the three part nodes. This requires refs and `useLayoutEffect` to measure node positions.
+3. **Landing page scroll-based line animation** — The vertical connecting line between parts is currently opacity-based (fades in). A more precise drawn effect would use SVG `stroke-dashoffset` tied to the actual DOM positions of the three part nodes. This requires refs and `useLayoutEffect` to measure node positions.
 
-5. **Part "intro" cards** — When entering the first phase of a new part (after navigating from the last phase of the previous one), briefly show a full-screen title card: "PART II / FORCE / the cascade from order to complexity". This contextualizes the transition. Duration: 3s, then auto-advance.
-
-### Medium priority
-6. **"Jump to part" behavior** — From the landing, clicking `ENTER →` on Part II or III takes the user directly to that part's first phase. This works. But there's no mechanism to return to the landing's roadmap view showing all three parts. Currently `← LAB` always goes back to `/lab`. This is correct behavior — it IS the landing.
-
-7. **Keyboard navigation** — Add `→` (right arrow) to advance to next phase, `←` to go back, `Escape` to return to lab landing. Implement in `LabChrome.tsx` via `useEffect` with `keydown` listener.
-
-8. **Progress persistence** — Use `localStorage` to remember which phases the user has visited. Landing page could show checkmarks or visual progress on each part node.
+4. **Landing page "arc" as one sentence per part** — The `arc` field in each part card is currently a 2-sentence description. Consider reducing to one sentence for tighter rhythm.
 
 ### Low priority / cosmetic
 9. **Lab landing metadata** — Add `export const metadata` by extracting to client component (5-min fix).
