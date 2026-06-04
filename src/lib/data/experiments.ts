@@ -338,6 +338,18 @@ export const experiments: LabExperiment[] = [
     gradient: { from: "#110011", to: "#001111" },
     featured: false,
   },
+  {
+    phase: "26",
+    route: "/lab-phase-26",
+    title: "What Is a Simulation?",
+    titlePt: "O Que É uma Simulação?",
+    description: "The closing question of the lab series. A single morphing Lissajous curve and twelve headings that ask: what were you watching, all this time?",
+    descriptionPt: "A questão final da série do lab. Uma única curva de Lissajous que se transforma e doze títulos que perguntam: o que você estava vendo, todo esse tempo?",
+    focus: "Mathematics",
+    tech: ["p5.js", "TypeScript"],
+    gradient: { from: "#050508", to: "#0a0818" },
+    featured: true,
+  },
 ];
 
 export const featuredExperiments = experiments.filter((e) => e.featured);

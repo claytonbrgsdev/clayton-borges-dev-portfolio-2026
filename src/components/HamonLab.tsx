@@ -63,7 +63,7 @@ const SECTIONS = [
 const CH_NAMES = ["SEED", "BRANCH", "WEAVE", "STILL"];
 
 const HEADINGS: [string, string][] = [
-  ["SEED",        "crystals form without instruction"],
+  ["SEED",        "what the machine left behind"],
   ["THE FIELD",   "is not empty"],
   ["REACTION",    "precedes the pattern"],
   ["BRANCH",      "each path excludes the others"],

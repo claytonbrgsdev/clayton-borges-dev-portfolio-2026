@@ -1,0 +1,96 @@
+Fluxo Narrativo Interativo – Ekonsulta
+
+Este documento define a jornada completa do usuário durante sua experiência com o jogo Ekonsulta. A estrutura é apresentada em blocos de interação, organizados por etapas lógicas e narrativas. Cada etapa traz opções de falas da vidente, momentos de escolha do jogador e pontos de ramificação do roteiro.
+
+🌀 Etapa 1 – Abertura da Sessão
+
+Objetivo: Apresentar o tom do jogo, a personalidade da vidente e convidar o usuário a participar.
+
+Possíveis falas de abertura da vidente:
+
+“Você veio buscar respostas? Cuidado: aqui não tem filtro nem ilusão — só verdades malditas e cartas imprevisíveis.”
+
+“Bem-vindo à Ekonsulta. Não finja surpresa, sua consciência ambiental já estava pedindo socorro.”
+
+“Vamos tirar uma carta? Ou prefere encarar sua própria culpa climática? Spoiler: dá na mesma.”
+
+Ação:
+→ Usuário clica em “Iniciar Consulta”
+
+🌍 Etapa 2 – Escolha inicial: Si ou o Mundo?
+
+Pergunta da vidente:
+“Sobre quem quer saber: você mesmo ou o estado patético do planeta?”
+
+Opções do jogador:
+
+Carta sobre mim (egoísta)
+
+Carta sobre o mundo (altruísta)
+
+Comentário da vidente (dependendo da escolha):
+
+Egoísta: “Ah, claro. Você. Sempre você. Mas vamos ver se ao menos isso ajuda alguém.”
+
+Altruísta: “Que milagre! Um pouco de empatia entre cliques e likes. Vamos ver no que dá.”
+
+🔮 Etapa 3 – Tiragem simbólica
+
+Ação: Uma carta de tarô é sorteada e revelada (real ou fictícia).
+
+Falas da vidente (exemplo para carta fictícia):
+
+“Saiu A Planta Mutante. Cresce no asfalto e te julga enquanto respira CO2. Bela metáfora pra sua jornada.”
+
+“A carta da Chuva Ácida. Traz purificação e destruição — como seu feed de notícias.”
+
+→ Sem julgamento explícito ainda. Apenas ambientação simbólica.
+
+♻️ Etapa 4 – Mini-Jogo dos Dilemas Ambientais
+
+Objetivo: Apresentar 5 dilemas, um de cada tema (já definidos), com escolha binária e comentários da vidente.
+
+Para cada dilema:
+
+Apresentação da situação (ex: “Você precisa escolher entre…”)
+
+Duas opções (ex: Comprar hortifruti local OU pacote importado orgânico da Suíça)
+
+Comentário sarcástico da vidente após a escolha
+→ Peso oculto é atribuído ao escopo correspondente
+
+🧠 Etapa 5 – Geração do Prognóstico Final
+
+Processo:
+
+O sistema soma os pesos por arquétipo
+
+Aplica a lógica de desempate
+
+Seleciona um veredito final (comentário + carta simbólica)
+
+Fala introdutória da vidente:
+→ Escolhida aleatoriamente entre 3 variações (já criadas)
+
+Veredito:
+→ Exibição de um dos 3 textos disponíveis do arquétipo dominante (já definidos)
+
+Fala de encerramento da vidente:
+→ Escolhida aleatoriamente entre 3 variações (já criadas)
+
+🧩 Etapa 6 – Encerramento e Possíveis Recomeços
+
+Opção final ao usuário:
+
+Refazer consulta?
+
+Encerrar?
+
+Comentário final da vidente (se refazer):
+
+“Quer tentar enganar o destino de novo? Ele adora isso.”
+
+Comentário final da vidente (se encerrar):
+
+“Já sabe quem é. Agora só falta ser.”
+

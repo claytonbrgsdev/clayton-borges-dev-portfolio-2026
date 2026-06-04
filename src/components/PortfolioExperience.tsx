@@ -11,7 +11,8 @@ import { stack } from "@/lib/data/stack";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
 import { HeroConstellation } from "@/components/sketches/HeroConstellation";
-import { IDEDeploySequence } from "@/components/sections/home/IDEDeploySequence";
+import { ScrambleText } from "@/components/sketches/ScrambleText";
+import { FeaturedProjectCard } from "@/components/sections/home/FeaturedProjectCard";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
@@ -209,8 +210,10 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           </span>
           <h1 className="font-bold leading-[0.95] tracking-tight mb-6"
             style={{ fontSize: "clamp(3.5rem,10vw,7rem)", textShadow: "0 2px 40px rgba(0,0,0,0.5)" }}>
-            {home.hero.name.split(" ")[0]}<br />
-            <span style={{ opacity: 0.72 }}>{home.hero.name.split(" ").slice(1).join(" ")}</span>
+            <ScrambleText text={home.hero.name.split(" ")[0]} delay={80} duration={680} /><br />
+            <span style={{ opacity: 0.72 }}>
+              <ScrambleText text={home.hero.name.split(" ").slice(1).join(" ")} delay={200} duration={640} />
+            </span>
           </h1>
           {/* Title */}
           <p className="font-light mb-4" style={{ fontSize: "clamp(1rem,2vw,1.2rem)", opacity: 0.55 }}>
@@ -240,13 +243,20 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           <span className="font-mono text-[9px] tracking-widest uppercase">scroll</span>
           <span className="font-mono text-xs animate-bounce">↓</span>
         </div>
+
+        {/* Gradient bleed: hero → projects. Lets the constellation fade into the next section. */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{
+          height: "180px",
+          background: "linear-gradient(to bottom, transparent, rgba(7,9,14,0.72))",
+          zIndex: 1,
+        }} />
       </section>
 
       {/* ── SECTION 1 — Featured Projects ─────────────────────────────────── */}
       <section ref={el => { sectionsRef.current[1] = el; }} className="relative z-20">
 
-        {/* Bridge label — context before the IDE sequence */}
-        <div className="px-8 md:px-20 pt-20 pb-8 relative" style={{ background: "#07090e" }}>
+        {/* Bridge label — semi-transparent so constellation bleeds through on scroll */}
+        <div className="px-8 md:px-20 pt-20 pb-8 relative" style={{ background: "rgba(7,9,14,0.80)" }}>
           <div className="max-w-5xl mx-auto flex items-end justify-between">
             <div>
               <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>
@@ -264,8 +274,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           </div>
         </div>
 
-        {/* IDE → Deploy → Browser cinematic sequence (Moveo Filmes) */}
-        <IDEDeploySequence locale={locale} />
+        {/* Featured project — minimal clean card while a richer concept is designed */}
+        <FeaturedProjectCard locale={locale} />
 
         {/* More projects grid — below the IDE showcase */}
         <div data-projects-grid

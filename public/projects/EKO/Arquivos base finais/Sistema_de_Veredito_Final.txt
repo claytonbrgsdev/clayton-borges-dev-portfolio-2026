@@ -1,0 +1,156 @@
+Sistema de Veredito Final – Ekonsulta
+
+Este documento descreve o funcionamento completo da lógica de atribuição de vereditos finais no jogo "Ekonsulta". A partir das escolhas feitas pelo jogador nos dilemas ambientais, o sistema avalia o comportamento dominante e entrega um prognóstico sarcástico e simbólico por parte da vidente.
+
+🎯 Objetivo
+
+Converter os dados ocultos de cada escolha (escopos e pesos associados) em um veredito final narrativo, simbólico e provocativo, que reflita o comportamento ambiental e ideológico do jogador ao longo da experiência.
+
+🧩 Etapa 1: Acúmulo de Pontuação por Arquétipo
+
+Cada escolha feita nos dilemas ambientais está associada a um escopo, que pertence a um dos cinco arquétipos:
+
+🌿 O Coerente Invisível
+
+💅 O Ecológico Estético
+
+🎭 O Ativista de Vitrine
+
+🤹 O Malabarista da Contradição
+
+🧠 O Crítico Estrutural
+
+Ao longo do jogo, o sistema soma os escopos escolhidos e calcula quantos pontos foram atribuídos a cada arquétipo.
+
+⚖️ Etapa 2: Identificação do Arquétipo Dominante
+
+O arquétipo com maior pontuação será considerado dominante.
+
+Em caso de empate entre dois arquétipos:
+
+Se um dos empatados for o Crítico Estrutural, ele sempre prevalece.
+
+Caso contrário, a prioridade segue a seguinte hierarquia simbólica:
+🧠 Crítico Estrutural > 🌿 Coerente Invisível > 🤹 Malabarista da Contradição > 💅 Ecológico Estético > 🎭 Ativista de Vitrine
+
+🔮 Etapa 3: Geração do Veredito Final
+
+Cada arquétipo dominante possui de 2 a 3 variações de veredito final. A vidente escolhe uma delas aleatoriamente e entrega como prognóstico:
+
+Um comentário sarcástico e provocativo
+
+Uma carta simbólica final (real ou fictícia)
+
+Uma reflexão crítica sobre o impacto do jogador no mundo
+
+🌿 Vereditos Finais – O Coerente Invisível
+
+Carta Final: O Ermitão das Coisas Miúdas
+
+Variação 1
+
+“Você vive à margem dos holofotes, plantando coerência em vasos reciclados. Talvez ninguém veja, mas o mundo sente falta de gente assim — silenciosa, mas perigosa para o sistema.”
+
+Variação 2
+
+“Enquanto todos brigam por narrativas e curtidas, você segue consertando o que já devia ter sido descartado. Um tipo raro de loucura: a que ameaça sem ruído.”
+
+Variação 3
+
+“O planeta agradece sua existência sem alarde. Você é o tipo de pessoa que faz a diferença sem precisar de slogan, só de compostagem.”
+
+💅 Vereditos Finais – O Ecológico Estético
+
+Carta Final: A Rosa com Espinhos de Ouro
+
+Variação 1
+
+“Você plantou consciência no jardim do luxo. E mesmo que o adubo venha da vaidade, alguma flor nasceu — com filtro e legenda, claro.”
+
+Variação 2
+
+“Você escolheu salvar o planeta com estilo. Que bom que os colapsos ambientais agora combinam com seu look.”
+
+Variação 3
+
+“O planeta segue quente, mas você segue fresco. Continue assim: sustentabilidade nunca esteve tão na moda.”
+
+🎭 Vereditos Finais – O Ativista de Vitrine
+
+Carta Final: O Espelho de Duas Faces
+
+Variação 1
+
+“Você defende causas como quem troca de roupa: com intenção, mas sem aprofundar. O planeta pode até te seguir, mas não te escuta.”
+
+Variação 2
+
+“Sua luta é estética, sua consciência tem briefing. A natureza te vê, mas não se sente representada.”
+
+Variação 3
+
+“Você parece engajado. Mas como toda vitrine, reflete mais do que transforma. Bonito por fora, neutro por dentro.”
+
+🤹 Vereditos Finais – O Malabarista da Contradição
+
+Carta Final: O Equilibrista do Abismo
+
+Variação 1
+
+“Você calcula, pondera, hesita — e no fim tropeça sobre sua própria lucidez. O planeta agradece… com dúvidas.”
+
+Variação 2
+
+“Cada escolha sua é um malabarismo entre culpa, status e boleto. Um espetáculo silencioso de paradoxos.”
+
+Variação 3
+
+“Você tenta fazer o certo sem abrir mão do conforto. Resultado: um equilíbrio instável sobre a linha tênue da contradição moderna.”
+
+🧠 Vereditos Finais – O Crítico Estrutural
+
+Carta Final: A Torre do Inaceitável Silêncio
+
+Variação 1
+
+“Você olha para as estruturas e vê rachaduras. Não porque é pessimista, mas porque aprendeu a não ser cúmplice do concreto.”
+
+Variação 2
+
+“Enquanto o mundo pinta fachadas, você insiste em demolir os alicerces da injustiça. Uma postura nada confortável, mas necessária.”
+
+Variação 3
+
+“Você incomoda. Porque exige mudança real. Porque não se contenta com a estética da consciência, e sim com sua aplicação.”
+
+🎙️ Falas da Vidente para o Prognóstico Final
+
+Introduções possíveis
+
+“Muito bem, criatura consciente (ou quase). Vamos ver com qual arquétipo você dançou essa valsa climática.”
+
+“As cartas falam. Os dilemas também. Mas o que grita mesmo é o seu padrão... Vamos ouvir o diagnóstico.”
+
+“Prepare-se para receber seu reflexo ambiental. E não adianta desviar o olhar agora.”
+
+Encerramentos possíveis
+
+“Agora vá, carregando essa pequena verdade nas costas — como se fosse leve.”
+
+“A sessão acabou. Mas a crise segue. Cuide-se... e do mundo, se ainda der tempo.”
+
+“Você sabe quem é. E agora sabe o que isso causa. A vidente se retira. A consciência, não.”
+
+⚙️ Proximidade com implementação técnica
+Este sistema pode ser facilmente automatizado. A estrutura é feita para funcionar em JSON ou lógica de back-end, com cada escopo mapeado a um peso e vínculo de arquétipo. O sistema final recebe a sequência de escopos escolhidos e retorna o veredito com base nesta lógica.
+
+✅ Etapas concluídas:
+
+Redigir 2–3 vereditos finais para cada arquétipo
+
+Associar uma carta simbólica a cada um
+
+Escrever as falas da vidente para cada desfecho
+
+✔ Documento pronto para integração com o sistema de lógica narrativa.
+

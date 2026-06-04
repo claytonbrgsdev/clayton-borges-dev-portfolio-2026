@@ -40,21 +40,21 @@ const SECTIONS=[
   [4,"III",0.917,0.935,0.982,1.000],
 ] as const;
 
-const CH_NAMES=["POTENTIAL","GRADIENT","TOPOLOGY","MANIFOLD"];
+const CH_NAMES=["LANDSCAPE","DESCENT","DECISION","INEVITABILITY"];
 
 const HEADINGS:[string,string][]=[
   ["POTENTIAL",  "everywhere before anything moves"],
-  ["GRADIENT",   "the direction of maximum change"],
+  ["GRADIENT",   "the slope that decides the motion"],
   ["BASIN",      "where everything eventually falls"],
-  ["ISOBAR",     "all places equally pressed"],
+  ["ISOBAR",     "the line of equal height — the line of indifference"],
   ["RIDGE",      "the line that separates fates"],
-  ["FLOW",       "always perpendicular to itself"],
+  ["DESCENT",    "the particle moves without choosing"],
   ["TOPOLOGY",   "what cannot be deformed away"],
   ["ATTRACTOR",  "the geometry around the minimum"],
   ["CONTOUR",    "the signature of height without height"],
-  ["SADDLE",     "where descent meets ascent"],
+  ["SADDLE",     "the boundary between two inevitable fates"],
   ["THE MAP",    "and the territory are the same"],
-  ["FIELD",      "the medium through which nothing passes"],
+  ["FIELD",      "geometry as destiny"],
 ];
 
 // [bg_r,bg_g,bg_b, accent_r,accent_g,accent_b]

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { ProjectsAmbient } from "@/components/sketches/ProjectsAmbient";
 
 // ── Content ────────────────────────────────────────────────────────────────
 const CODE_LINES = [
@@ -192,6 +193,9 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
         position: "relative",
       }}
     >
+      {/* Ambient orbs — very faint, gives depth behind the IDE windows */}
+      <ProjectsAmbient />
+
       {/* Subtle dot grid */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",

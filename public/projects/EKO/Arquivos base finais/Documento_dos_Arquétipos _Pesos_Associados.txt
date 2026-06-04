@@ -1,0 +1,109 @@
+ocumento dos Arquétipos + Pesos Associados
+
+Este documento lista os seis arquétipos finais possíveis que o jogador pode receber ao final do jogo, bem como os pesos lógicos (escopos) que ativam cada um deles. Serve como mapa de referência para o cálculo do veredito e geração de falas da vidente.
+
+🌿 O Coerente Invisível
+Escopos associados:
+
+reaproveitamento autêntico
+
+expressão artesanal consciente
+
+autonomia sustentável
+
+integridade sem glamour
+
+abstenção com consciência
+
+manutenção do impacto já causado
+
+rejeição simbólica ao desperdício
+
+subversão pragmática do lixo
+
+💅 O Ecológico Estético
+Escopos associados:
+
+luxo ecológico
+
+selo de classe
+
+estética sustentável superficial
+
+aparência ecológica superficial
+
+consumo consciente cosmético
+
+tecnossoluções regenerativas
+
+🎭 O Ativista de Vitrine
+Escopos associados:
+
+performance de engajamento ecológico
+
+engajamento superficial sustentável
+
+assinatura ecológica corporativa
+
+green influencer
+
+curtidas verdes
+
+🤹 O Malabarista da Contradição
+Escopos associados:
+
+dilema ético de reputação
+
+consumo ecológico elitista
+
+escolha econômica de alto impacto
+
+pragmatismo digital energético
+
+risco ecológico financeiro
+
+consumo rotineiro invisível
+
+tecnossolução moralizada
+
+compensação consciente elitista
+
+🧠 O Crítico Estrutural
+Escopos associados:
+
+ação coletiva com impacto estrutural
+
+conscientização política ativa
+
+enfrentamento estrutural coletivo
+
+pressão institucional local
+
+denúncia do grande consumidor invisível
+
+ativismo educacional coletivo
+
+ação política regenerativa
+
+🔄 O Contraditório Revoltado
+Escopos associados:
+
+comodidade poluente
+
+consumo impulsivo acessível
+
+dependência social contínua
+
+automação de experiências mentais
+
+consumo de aparência
+
+deslocamento ecológico privilegiado
+
+distração digital passiva
+
+hiperatividade dispersa
+
+regressão nostálgica conectada
+
+Cada vez que o jogador escolhe uma opção em um dilema, um desses escopos é ativado e acumula pontos no perfil correspondente. O arquétipo com maior pontuação determina o veredito final.

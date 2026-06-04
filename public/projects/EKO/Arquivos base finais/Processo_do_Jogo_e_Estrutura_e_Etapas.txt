@@ -1,0 +1,76 @@
+Processo do Jogo: Estrutura e Etapas
+
+1. Introdução da Experiência
+
+O usuário é recebido pela vidente em um ambiente simbólico virtual.
+
+A vidente oferece duas opções: tirar uma carta para si ou para o mundo.
+
+Essa escolha inicial já influencia o tom da jornada e a primeira crítica da vidente.
+
+2. Tiragens e Interações Iniciais
+
+A carta sorteada é interpretada pela vidente com sarcasmo e crítica.
+
+O tom varia de acordo com o tipo de escolha feita (egóica vs. coletiva).
+
+Essa parte visa introduzir o clima do jogo e criar conexão com a personagem.
+
+3. Acesso ao Mini-jogo de Dilemas Ambientais
+
+O jogador é guiado a uma nova etapa onde irá enfrentar dilemas.
+
+Os cinco temas centrais são:
+
+Alimentos locais vs. importados
+
+Fast fashion vs. moda sustentável
+
+Carro elétrico vs. carro a combustão com status
+
+Consumo consciente de água vs. responsabilidade estrutural
+
+Uso de IA generativa vs. redes sociais
+
+4. Dinâmica dos Dilemas
+
+Para cada tema, o jogador é apresentado a dilemas realistas com duas opções A/B.
+
+Cada escolha está associada a um peso oculto (ligado a escopos comportamentais).
+
+A vidente comenta cada escolha com uma fala sarcástica gerada a partir de escopos.
+
+Em cada sessão de jogo, de 1 a 3 dilemas são sorteados por tema.
+
+5. Registro Oculto das Escolhas
+
+Cada escolha feita soma internamente um peso lógico.
+
+Todos os pesos são associados previamente a um dos seis arquétipos finais.
+
+Não há pontuação visível para o jogador, apenas feedback da vidente.
+
+6. Encerramento de Tema
+
+Após os dilemas de um tema, a vidente faz uma síntese provocativa.
+
+Essa síntese já antecipa tendências no comportamento do jogador.
+
+7. Veredito Final
+
+Ao final da experiência, com base nos pesos acumulados, o jogo calcula o arquétipo predominante.
+
+A vidente anuncia o veredito com uma fala provocativa específica para o perfil revelado.
+
+Se houver empate entre dois arquétipos, uma frase alternativa é acionada.
+
+8. Possibilidades Técnicas Futuras
+
+Comentários da vidente poderão ser gerados por IA com base nos escopos.
+
+Sistema de voz sintética pode dramatizar a experiência.
+
+Interface retro-tech com mesa, cartas e leves animações.
+
+Reaproveitamento de falas e estrutura para diferentes contextos de jogo (ex: novos temas).
+

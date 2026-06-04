@@ -36,7 +36,7 @@ const CH_NAMES = ["MYCELIA","VESSEL","MEMBRANE","DISSOLUTION"];
 
 const HEADINGS: [string,string][] = [
   ["SPORE",       "the first agent has no plan"],
-  ["FILAMENT",    "grows where the path rewards itself"],
+  ["GRADIENT",    "the chemical field that guides without touching"],
   ["NETWORK",     "emerges without a center"],
   ["VESSEL",      "routes become arteries"],
   ["THE MACHINE", "is distributed and mindless"],

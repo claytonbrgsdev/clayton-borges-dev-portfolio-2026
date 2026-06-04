@@ -210,7 +210,7 @@ function PartCard({
             )}
           </span>
           <Link
-            href={part.phases[0]}
+            href={`/lab-part-${part.number}`}
             style={{
               fontFamily: "'Courier New', monospace",
               fontSize: "0.6rem",
@@ -465,7 +465,7 @@ export function LabLanding() {
         {/* Primary CTA */}
         <div style={{ padding: "64px 0 96px", display: "flex", alignItems: "center", gap: 24 }}>
           <Link
-            href="/lab-phase-17"
+            href="/lab-part-1"
             style={{
               display: "inline-block",
               fontFamily: "'Courier New', monospace",

@@ -1,0 +1,55 @@
+Sistema de Veredito: Lógica de Atribuição de Perfil
+
+Este documento descreve a mecânica interna usada para determinar o perfil ambiental do jogador ao final do jogo, com base nas escolhas feitas durante os dilemas.
+
+1. Estrutura Lógica de Pontuação
+
+Cada dilema oferece duas opções (A/B), cada uma associada a um peso oculto.
+
+Cada peso representa um escopo lógico, que por sua vez está vinculado a um arquétipo final.
+
+O jogador não vê essa pontuação durante o jogo, apenas recebe comentários da vidente e o veredito final.
+
+2. Acúmulo de Pesos ao Longo do Jogo
+
+A cada escolha, o jogo registra internamente o escopo selecionado.
+
+Cada escopo tem um vínculo direto com um dos seis arquétipos definidos.
+
+O jogo conta quantas vezes cada arquétipo foi “ativado” pelas escolhas do jogador.
+
+3. Cálculo do Veredito Final
+
+Ao final da jornada, o arquétipo com o maior número de ativações define o perfil do jogador.
+
+Em caso de empate, o sistema pode:
+a) Desempatar por ordem de prioridade narrativa (pré-definida);
+b) Gerar um veredito irônico da vidente para múltiplas identidades contraditórias.
+
+4. Possibilidades Avançadas (para versões futuras)
+
+Vereditos híbridos (ex: 60% Ativista de Vitrine + 40% Malabarista da Contradição)
+
+Diagrama de afinidades ambientais (visualização tipo radar ou bússola)
+
+Recomendações personalizadas com base no perfil
+
+5. Arquétipos Existentes (resumo)
+
+O Coerente Invisível
+
+O Ecológico Estético
+
+O Ativista de Vitrine
+
+O Malabarista da Contradição
+
+O Crítico Estrutural
+
+O Contraditório Revoltado
+
+6. Frases Finais da Vidente
+Cada arquétipo tem uma ou mais frases finais específicas ditas pela vidente, com sarcasmo e crítica, revelando o tipo de “ecoconsciência” do jogador.
+
+Este sistema permite que o jogo produza um encerramento simbólico, provocador e altamente personalizado, mantendo a simplicidade estrutural e evitando gamificação tradicional.
+

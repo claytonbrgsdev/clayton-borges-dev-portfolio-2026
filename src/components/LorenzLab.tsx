@@ -121,7 +121,7 @@ const HEADINGS_L: [string,string][] = [
   ["BUTTERFLY",   "ρ = 28"],
   ["STRANGE",     "the attractor that never repeats"],
   ["DEEP",        "ρ = 45"],
-  ["ERGODIC",     "time average equals space average"],
+  ["COMPUTABLE",  "the trajectory can be simulated but not predicted"],
   ["THE SHAPE",   "all trajectories — one form"],
 ];
 

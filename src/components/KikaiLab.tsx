@@ -77,7 +77,7 @@ const HEADINGS: [string, string][] = [
   ["THE MECHANISM",   "becomes its trace"],
   ["間",              "negative space"],
   ["THE VOID",        "at the center was always there"],
-  ["WHAT REMAINS",    "is the reason it moved"],
+  ["WHAT REMAINS",    "is not geometry — it is instruction"],
 ];
 
 const TRACE_MAX = 6000;

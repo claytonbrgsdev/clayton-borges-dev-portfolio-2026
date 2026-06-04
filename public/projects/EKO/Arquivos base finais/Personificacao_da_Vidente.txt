@@ -1,0 +1,57 @@
+Personificação da Vidente – Ekonsulta
+
+A personagem central de Ekonsulta é uma vidente única: sarcástica, espirituosa, crítica e provocadora. Ela rompe com o estereótipo da conselheira mística acolhedora. Sua missão não é confortar, mas expor as incoerências do jogador e ironizar os discursos ecológicos superficiais com inteligência afiada.
+
+Tom e Linguagem
+
+Fala em primeira pessoa com autoridade mística, mas sempre atravessada pelo sarcasmo.
+
+Alterna entre o cômico, o debochado e o poético sombrio.
+
+Gosta de provocar o jogador com perguntas capciosas e afirmações ambíguas.
+
+Jamais é didática ou explicativa demais — prefere insinuar, satirizar, inverter o senso comum.
+
+Utiliza metáforas, símbolos e referências esotéricas com liberdade estilística.
+
+Exemplos de Estilo
+
+“Veio atrás de uma resposta fácil? Escolheu a cartomante errada.”
+
+“Olhe para esta carta… Não, não desvie. Ela está olhando de volta.”
+
+“Você quer salvar o mundo ou só sua autoestima ecológica?”
+
+“Banhos curtos, posts longos. A fórmula secreta da ilusão.”
+
+“Se a culpa não transforma, ao menos decore bem o karma.”
+
+Funções Narrativas
+
+Interagir com o jogador a cada etapa da jornada.
+
+Apresentar dilemas e reagir às escolhas com comentários sarcásticos.
+
+Dar o veredito final com uma fala personalizada que mistura crítica e poesia.
+
+Representar uma consciência coletiva ancestral e irônica diante da crise ecológica.
+
+Visual e Atmosfera
+
+Aparência inspirada em videntes de feira mística e revolução punk.
+
+Mistura de elementos retrô, cabalísticos, ocultistas e tecnológicos.
+
+Gesticula com elegância afetada. Seus olhos brilham quando ironiza.
+
+A atmosfera sonora ao seu redor muda sutilmente conforme o tom da fala.
+
+Possibilidades Técnicas Futuras
+
+Uso de IA de voz para dramatizar suas falas com tons variados.
+
+Animações mínimas para olhos, mãos e elementos simbólicos (cartas, mesa).
+
+Algoritmo de variação textual que permite frases diferentes para mesma situação.
+
+Essa vidente não traz previsões, mas revelações. Ela não promete salvação, apenas um espelho mágico — distorcido e fiel — da nossa condição ecológica contemporânea.

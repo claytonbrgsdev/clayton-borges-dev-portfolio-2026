@@ -119,8 +119,8 @@ const HEADINGS_IFS: [string,string][] = [
   ["FRACTAL DUST","the boundary of a curve is a set"],
   ["RECURSION",   "T applied to itself, forever"],
   ["DRAGON",      "fold a strip of paper in half, repeat"],
-  ["TILING",      "two copies of the dragon tile the plane"],
-  ["THE RULE",    "two transforms — one infinite curve"],
+  ["EVERY LAB",   "was two transforms — one infinite form"],
+  ["ARRIVING",    "at the shape the rule already was"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
