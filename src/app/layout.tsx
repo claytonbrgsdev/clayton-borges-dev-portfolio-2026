@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { IBM_Plex_Mono } from "next/font/google";
+import { Syne, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { CursorCanvas } from "@/components/CursorCanvas";
 
-const otrType = localFont({
-  src: [
-    { path: "./fonts/OTRtype-Regular.woff2" },
-    { path: "./fonts/OTRtype-Regular.woff"  },
-  ],
+const syne = Syne({
   variable: "--font-geist-sans",
-  display: "swap",
-  adjustFontFallback: false,
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "800"],
 });
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-geist-mono",
@@ -33,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${otrType.variable} ${ibmPlexMono.variable} h-full antialiased bg-black`}
+      className={`${syne.variable} ${ibmPlexMono.variable} h-full antialiased bg-black`}
     >
       {/* bg-black lives on <html> so fixed canvases at z-index:-1 are visible above it */}
       <body className="min-h-full flex flex-col text-white">

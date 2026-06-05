@@ -8,13 +8,13 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { stack } from "@/lib/data/stack";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
-import { HeroConstellation } from "@/components/sketches/HeroConstellation";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
 import { LabShowcase } from "@/components/sections/home/LabShowcase";
 import { StatsStrip } from "@/components/StatsStrip";
 import { WorkHorizontal } from "@/components/sections/home/WorkHorizontal";
+import { AboutBackground } from "@/components/AboutBackground";
 
 const SECTION_LABELS = ["Hero", "Work", "About", "Approach", "Lab"];
 
@@ -256,7 +256,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
   return (
     <div className="portfolio-bg-grid" style={{ background: "#0A0909", color: "#fff" }}>
-      <HeroConstellation />
+
+      <AboutBackground />
 
       {/* Scroll progress bar */}
       <div className="fixed top-0 left-0 right-0 z-50 h-px" style={{ background: "rgba(255,255,255,0.08)" }}>
@@ -312,13 +313,14 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           </span>
           <h1
             className="font-bold leading-[0.9] tracking-tight mb-6"
-            style={{ textShadow: "0 2px 60px rgba(0,0,0,0.6)" }}
+            style={{ fontFamily: "var(--font-geist-sans)", textShadow: "0 2px 60px rgba(0,0,0,0.6)" }}
           >
             <span
               className="block hero-name-line"
               style={{
                 fontSize: "clamp(4.2rem,11vw,9rem)",
                 letterSpacing: "-0.03em",
+                textTransform: "uppercase",
                 clipPath: "inset(0 100% 0 0)",
                 animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards",
               }}
@@ -330,6 +332,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
               style={{
                 fontSize: "clamp(2.8rem,7.5vw,6rem)",
                 letterSpacing: "-0.02em",
+                textTransform: "uppercase",
                 opacity: 0.35,
                 clipPath: "inset(0 100% 0 0)",
                 animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.22s forwards",

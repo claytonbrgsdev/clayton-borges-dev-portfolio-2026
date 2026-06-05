@@ -30,61 +30,255 @@ export function Header({ dict }: HeaderProps) {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12"
-      style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 100%)", backdropFilter: "none" }}>
-      {/* Logo */}
-      <Link href={`/${locale}`} className="text-sm font-mono font-bold tracking-widest uppercase">
-        CB<span className="text-blue-500">.</span>dev
-      </Link>
-
-      {/* Desktop Nav */}
-      <nav className="hidden md:flex items-center gap-8">
-        {navLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="text-sm font-mono tracking-wide opacity-70 hover:opacity-100 transition-opacity"
-          >
-            {link.label}
-          </Link>
-        ))}
-        {/* Locale switcher */}
+    <header
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background:
+          "linear-gradient(to bottom, rgba(10,9,9,0.95) 0%, transparent 100%)",
+      }}
+    >
+      {/* ── Desktop layout ── */}
+      <div className="hidden md:grid md:grid-cols-[auto_1fr_auto] items-center px-6 md:px-10 h-16">
+        {/* Left: CLAYTON display text */}
         <Link
-          href={altLocalePath}
-          className="text-xs font-mono tracking-widest uppercase border border-current px-2 py-1 opacity-50 hover:opacity-100 transition-opacity"
+          href={`/${locale}`}
+          aria-label="Home"
+          style={{
+            fontFamily: "var(--font-geist-sans)",
+            fontSize: "clamp(1.4rem, 3.5vw, 3rem)",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+            color: "var(--text)",
+            textDecoration: "none",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}
         >
-          {otherLocale.toUpperCase()}
+          CLAYTON
         </Link>
-      </nav>
 
-      {/* Mobile hamburger */}
-      <button
-        className="md:hidden flex flex-col gap-1.5 p-2"
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label="Toggle menu"
-      >
-        <span className={`block h-px w-6 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-        <span className={`block h-px w-6 bg-current transition-opacity ${menuOpen ? "opacity-0" : ""}`} />
-        <span className={`block h-px w-6 bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
-      </button>
+        {/* Center: nav strip */}
+        <nav
+          className="flex items-center justify-center gap-0"
+          style={{ minWidth: 0 }}
+        >
+          {navLinks.map((link, i) => {
+            const isActive = pathname === link.href;
+            return (
+              <span key={link.href} className="flex items-center">
+                {i > 0 && (
+                  <span
+                    style={{
+                      fontFamily: "var(--font-geist-mono)",
+                      fontSize: "9px",
+                      letterSpacing: "0.1em",
+                      color: "var(--text-muted)",
+                      padding: "0 6px",
+                      userSelect: "none",
+                    }}
+                  >
+                    ·
+                  </span>
+                )}
+                <Link
+                  href={link.href}
+                  style={{
+                    fontFamily: "var(--font-geist-mono)",
+                    fontSize: "9px",
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    color: isActive
+                      ? "var(--accent-orange)"
+                      : "var(--text-muted)",
+                    opacity: isActive ? 1 : 0.7,
+                    transition: "color 0.2s, opacity 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLAnchorElement).style.color =
+                        "var(--text)";
+                      (e.currentTarget as HTMLAnchorElement).style.opacity =
+                        "1";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLAnchorElement).style.color =
+                        "var(--text-muted)";
+                      (e.currentTarget as HTMLAnchorElement).style.opacity =
+                        "0.7";
+                    }
+                  }}
+                >
+                  {link.label}
+                </Link>
+              </span>
+            );
+          })}
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="absolute top-full left-0 right-0 flex flex-col items-center gap-6 py-8 bg-black/90 backdrop-blur-sm md:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-mono tracking-wide"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {/* rule separator before locale switcher */}
+          <span
+            style={{
+              display: "inline-block",
+              width: "1px",
+              height: "10px",
+              background: "var(--rule)",
+              margin: "0 12px",
+              flexShrink: 0,
+            }}
+          />
+
+          {/* Locale switcher */}
           <Link
             href={altLocalePath}
-            className="text-xs font-mono tracking-widest uppercase border border-current px-2 py-1"
+            style={{
+              fontFamily: "var(--font-geist-mono)",
+              fontSize: "9px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              color: "var(--text-muted)",
+              opacity: 0.5,
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.opacity = "1";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.opacity = "0.5";
+            }}
+          >
+            {otherLocale.toUpperCase()}
+          </Link>
+        </nav>
+
+        {/* Right: BORGES display text */}
+        <span
+          style={{
+            fontFamily: "var(--font-geist-sans)",
+            fontSize: "clamp(1.4rem, 3.5vw, 3rem)",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+            color: "var(--text)",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}
+        >
+          BORGES
+        </span>
+      </div>
+
+      {/* ── Mobile layout ── */}
+      <div className="flex md:hidden items-center justify-between px-5 h-14">
+        {/* Mobile logo (compact) */}
+        <Link
+          href={`/${locale}`}
+          style={{
+            fontFamily: "var(--font-geist-sans)",
+            fontSize: "1rem",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            textTransform: "uppercase",
+            color: "var(--text)",
+            textDecoration: "none",
+          }}
+        >
+          CB
+        </Link>
+
+        {/* Mobile hamburger */}
+        <button
+          className="flex flex-col gap-1.5 p-2"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Toggle menu"
+          style={{ color: "var(--text)" }}
+        >
+          <span
+            className="block"
+            style={{
+              height: "1px",
+              width: "24px",
+              background: "currentColor",
+              transition: "transform 0.2s",
+              transform: menuOpen ? "rotate(45deg) translateY(8px)" : "none",
+            }}
+          />
+          <span
+            className="block"
+            style={{
+              height: "1px",
+              width: "24px",
+              background: "currentColor",
+              transition: "opacity 0.2s",
+              opacity: menuOpen ? 0 : 1,
+            }}
+          />
+          <span
+            className="block"
+            style={{
+              height: "1px",
+              width: "24px",
+              background: "currentColor",
+              transition: "transform 0.2s",
+              transform: menuOpen ? "rotate(-45deg) translateY(-8px)" : "none",
+            }}
+          />
+        </button>
+      </div>
+
+      {/* ── Mobile menu ── */}
+      {menuOpen && (
+        <div
+          className="absolute top-full left-0 right-0 flex flex-col items-start gap-5 px-5 py-8 md:hidden"
+          style={{
+            background: "rgba(10,9,9,0.97)",
+            borderTop: "1px solid var(--rule)",
+          }}
+        >
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  fontFamily: "var(--font-geist-mono)",
+                  fontSize: "11px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  color: isActive ? "var(--accent-orange)" : "var(--text)",
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          {/* Mobile locale switcher */}
+          <span
+            style={{
+              display: "block",
+              width: "24px",
+              height: "1px",
+              background: "var(--rule)",
+              marginTop: "4px",
+            }}
+          />
+          <Link
+            href={altLocalePath}
             onClick={() => setMenuOpen(false)}
+            style={{
+              fontFamily: "var(--font-geist-mono)",
+              fontSize: "11px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              color: "var(--text-muted)",
+            }}
           >
             {otherLocale.toUpperCase()}
           </Link>
