@@ -4,25 +4,108 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
-import { gsap } from "@/lib/gsap";
-import { ScrollTrigger } from "@/lib/gsap";
-import { featuredProjects } from "@/lib/data/projects";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { stack } from "@/lib/data/stack";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
 import { HeroConstellation } from "@/components/sketches/HeroConstellation";
-import { ScrambleText } from "@/components/sketches/ScrambleText";
-import { FeaturedProjectCard } from "@/components/sections/home/FeaturedProjectCard";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
 import { LabShowcase } from "@/components/sections/home/LabShowcase";
+import { StatsStrip } from "@/components/StatsStrip";
+import { WorkHorizontal } from "@/components/sections/home/WorkHorizontal";
 
-const SECTION_LABELS = ["Hero", "Projects", "About", "Approach", "Lab"];
+const SECTION_LABELS = ["Hero", "Work", "About", "Approach", "Lab"];
 
 interface PortfolioExperienceProps {
   dict: Dictionary;
   locale: Locale;
+}
+
+// ── Line-by-line reveal ──────────────────────────────────────────────────────
+function LineReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        (el.firstChild as HTMLElement).style.transform = "translateY(0)";
+        io.disconnect();
+      }
+    }, { threshold: 0.1 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} style={{ overflow: "hidden" }}>
+      <div style={{
+        transform: "translateY(110%)",
+        transition: `transform 700ms cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+        display: "block",
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ── Word-split reveal ────────────────────────────────────────────────────────
+function WordSplitReveal({ text, style }: { text: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        el.querySelectorAll<HTMLElement>(".w-inner").forEach((inner, i) => {
+          setTimeout(() => { inner.style.transform = "translateY(0)"; }, i * 90);
+        });
+        io.disconnect();
+      }
+    }, { threshold: 0.15 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const words = text.split(" ");
+  return (
+    <div ref={ref} style={style}>
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom", marginRight: "0.18em" }}
+        >
+          <span
+            className="w-inner"
+            style={{
+              display: "inline-block",
+              transform: "translateY(105%)",
+              transition: "transform 700ms cubic-bezier(0.16,1,0.3,1)",
+            }}
+          >
+            {word}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+// ── Section label ─────────────────────────────────────────────────────────────
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div style={{
+      fontFamily: "var(--font-geist-mono)", fontSize: 9,
+      letterSpacing: "0.16em", textTransform: "uppercase",
+      color: "var(--accent-orange)", display: "flex", alignItems: "center", gap: 16,
+      marginBottom: 32,
+    }}>
+      {label}
+      <span style={{ flex: 1, height: 1, background: "var(--rule)" }} />
+    </div>
+  );
 }
 
 export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) {
@@ -30,19 +113,9 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
   const progressBarRef = useRef<HTMLDivElement>(null);
   const navDotsRef     = useRef<(HTMLButtonElement | null)[]>([]);
   const heroContentRef = useRef<HTMLDivElement>(null);
+
+  // ── Scroll progress bar + nav dots ──────────────────────────────────────
   useEffect(() => {
-    // Hero assembly animation
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!prefersReducedMotion && heroContentRef.current) {
-      const heroEl = heroContentRef.current;
-      const children = Array.from(heroEl.children);
-
-      gsap.set(children, { opacity: 0, y: 18 });
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(children, { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 });
-    }
-
     let activeSection = 0;
 
     const updateDots = (active: number) => {
@@ -55,9 +128,11 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
     updateDots(0);
 
     const onScroll = () => {
+      const totalH = document.body.scrollHeight - window.innerHeight;
       if (progressBarRef.current) {
-        const totalH = document.body.scrollHeight - window.innerHeight;
         progressBarRef.current.style.transform = `scaleX(${totalH > 0 ? window.scrollY / totalH : 0})`;
+        const vel = ((window as unknown as Record<string, unknown>).__scrollVel as number) ?? 0;
+        progressBarRef.current.style.background = vel > 15 ? "var(--accent-blue)" : "var(--accent-orange)";
       }
       let cumY = 0;
       for (let i = 0; i < sectionsRef.current.length; i++) {
@@ -72,10 +147,25 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    // LenisProvider effect runs after this component's effect (parent after child).
+    // Defer to ensure __lenis is available when we subscribe.
+    let lenisCleanup: (() => void) | null = null;
+    const timer = setTimeout(() => {
+      const lenis = (window as unknown as Record<string, unknown>).__lenis as
+        { on: (e: string, fn: () => void) => void; off: (e: string, fn: () => void) => void } | undefined;
+      if (lenis) {
+        lenis.on("scroll", onScroll);
+        lenisCleanup = () => lenis.off("scroll", onScroll);
+      } else {
+        window.addEventListener("scroll", onScroll, { passive: true });
+        lenisCleanup = () => window.removeEventListener("scroll", onScroll);
+      }
+      onScroll();
+    }, 0);
+    return () => { clearTimeout(timer); lenisCleanup?.(); };
   }, []);
 
+  // ── GSAP ScrollTrigger animations ────────────────────────────────────────
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isMobile = window.innerWidth < 768;
@@ -89,26 +179,30 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
     const triggers: ReturnType<typeof ScrollTrigger.create>[] = [];
 
-    // ── Section 1: Featured Projects grid (below IDE sequence) ────────────
-    const s1 = sectionsRef.current[1];
-    if (s1) {
-      const projectsGrid = s1.querySelector<HTMLElement>("[data-projects-grid]");
-      if (projectsGrid) {
-        triggers.push(ScrollTrigger.create({
-          trigger: projectsGrid,
-          start: "top 78%",
-          once: true,
-          onEnter: () => {
-            const gridCards = projectsGrid.querySelectorAll<HTMLElement>(".grid > div");
-            if (gridCards.length) {
-              gsap.from(Array.from(gridCards), { x: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" });
-            }
-          },
-        }));
-      }
+    // Hero pin: content fades + lifts as user scrolls into Work
+    const heroEl = sectionsRef.current[0];
+    if (heroEl && heroContentRef.current) {
+      const heroContent = heroContentRef.current;
+      triggers.push(ScrollTrigger.create({
+        trigger: heroEl,
+        pin: true,
+        start: "top top",
+        end: "+=45%",
+        scrub: 1.8,
+        onUpdate: (self) => {
+          const p = self.progress;
+          gsap.set(heroContent, {
+            opacity: Math.max(0, 1 - p * 2.2),
+            y: -p * 80,
+          });
+        },
+        onLeaveBack: () => {
+          gsap.set(heroContent, { opacity: 1, y: 0 });
+        },
+      }));
     }
 
-    // ── Section 2: About + Stack ───────────────────────────
+    // About section fade-in
     const s2 = sectionsRef.current[2];
     if (s2) {
       triggers.push(ScrollTrigger.create({
@@ -117,19 +211,11 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         once: true,
         onEnter: () => {
           gsap.to(s2, { opacity: 1, duration: 0.4, ease: "power2.out" });
-          // Row A: left tags col and right orbit col slide in from opposite sides
-          const tagsCol = s2.querySelector<HTMLElement>("[data-about-tags]");
-          const orbitCol = s2.querySelector<HTMLElement>("[data-about-orbit]");
-          if (tagsCol) gsap.from(tagsCol, { x: -30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
-          if (orbitCol) gsap.from(orbitCol, { x: 30, opacity: 0, duration: 0.6, ease: "power3.out", delay: 0.2 });
-          // Row B: about text fades in after Row A
-          const aboutRow = s2.querySelector<HTMLElement>("[data-about-text]");
-          if (aboutRow) gsap.from(aboutRow, { opacity: 0, y: 12, duration: 0.5, ease: "power2.out", delay: 0.45 });
         },
       }));
     }
 
-    // ── Section 4: Lab + Contact ───────────────────────────
+    // Lab + Contact section
     const s4 = sectionsRef.current[4];
     if (s4) {
       triggers.push(ScrollTrigger.create({
@@ -141,12 +227,9 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           const labCards = s4.querySelectorAll<HTMLElement>('a[href*="lab"]');
           if (labCards.length) {
             gsap.from(Array.from(labCards), {
-              y: 20,
-              opacity: 0,
-              duration: 0.45,
+              y: 20, opacity: 0, duration: 0.45,
               stagger: { amount: 0.35, from: "start" },
-              ease: "power3.out",
-              delay: 0.15,
+              ease: "power3.out", delay: 0.15,
             });
           }
         },
@@ -164,8 +247,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
     else window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
   };
 
-  const { home, projects: pDict } = dict;
-  const gridProjects = featuredProjects.slice(0, 3);
+  const { home } = dict;
   const contactLinks: ContactLink[] = [
     { label: "Email",    value: contactInfo.email,  href: `mailto:${contactInfo.email}` },
     { label: "GitHub",   value: "@claytonbrgsdev", href: contactInfo.github },
@@ -173,19 +255,30 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
   ];
 
   return (
-    <div className="portfolio-bg-grid" style={{ background: "#07090e", color: "#fff" }}>
+    <div className="portfolio-bg-grid" style={{ background: "#0A0909", color: "#fff" }}>
       <HeroConstellation />
+
       {/* Scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-px bg-white/8">
-        <div ref={progressBarRef} className="h-full bg-white/35" style={{ width: "100%", transformOrigin: "left", transform: "scaleX(0)" }} />
+      <div className="fixed top-0 left-0 right-0 z-50 h-px" style={{ background: "rgba(255,255,255,0.08)" }}>
+        <div
+          ref={progressBarRef}
+          style={{
+            height: "100%",
+            width: "100%",
+            background: "var(--accent-orange)",
+            transformOrigin: "left",
+            transform: "scaleX(0)",
+            transition: "background 300ms",
+          }}
+        />
       </div>
 
       {/* Edge vignette */}
       <div className="fixed inset-0 pointer-events-none z-10" style={{
-        background: "linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, transparent 18%, transparent 78%, rgba(0,0,0,0.45) 100%)"
+        background: "linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, transparent 18%, transparent 78%, rgba(0,0,0,0.45) 100%)",
       }} />
 
-      {/* Section nav dots — right side */}
+      {/* Section nav dots */}
       <div className="fixed right-5 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-3 items-center">
         {SECTION_LABELS.map((label, i) => (
           <button
@@ -194,7 +287,11 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             onClick={() => scrollToSection(i)}
             aria-label={`Go to ${label} section`}
             title={label}
-            style={{ width: "4px", borderRadius: "99px", background: "#fff", transition: "height 0.35s ease, opacity 0.35s ease, width 0.25s ease", border: "none", cursor: "pointer", padding: 0 }}
+            style={{
+              width: "4px", borderRadius: "99px", background: "#fff",
+              transition: "height 0.35s ease, opacity 0.35s ease, width 0.25s ease",
+              border: "none", cursor: "pointer", padding: 0,
+            }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.width = "6px"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.width = "4px"; }}
           />
@@ -202,39 +299,79 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       </div>
 
       {/* ── SECTION 0 — Hero ──────────────────────────────────────────────── */}
-      <section ref={el => { sectionsRef.current[0] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 relative z-20">
+      <section
+        ref={el => { sectionsRef.current[0] = el; }}
+        className="min-h-screen flex flex-col justify-center px-8 md:px-20 relative z-20"
+      >
         <div className="max-w-3xl" ref={heroContentRef}>
-          <span className="font-mono text-xs tracking-widest uppercase mb-6 block" style={{ opacity: 0.45 }}>
+          <span
+            className="font-mono text-xs tracking-widest uppercase mb-6 block"
+            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 0.9s forwards" }}
+          >
             {home.hero.greeting}
           </span>
-          <h1 className="font-bold leading-[0.95] tracking-tight mb-6"
-            style={{ fontSize: "clamp(3.5rem,10vw,7rem)", textShadow: "0 2px 40px rgba(0,0,0,0.5)" }}>
-            <ScrambleText text={home.hero.name.split(" ")[0]} delay={80} duration={680} /><br />
-            <span style={{ opacity: 0.72 }}>
-              <ScrambleText text={home.hero.name.split(" ").slice(1).join(" ")} delay={200} duration={640} />
+          <h1
+            className="font-bold leading-[0.9] tracking-tight mb-6"
+            style={{ textShadow: "0 2px 60px rgba(0,0,0,0.6)" }}
+          >
+            <span
+              className="block hero-name-line"
+              style={{
+                fontSize: "clamp(4.2rem,11vw,9rem)",
+                letterSpacing: "-0.03em",
+                clipPath: "inset(0 100% 0 0)",
+                animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards",
+              }}
+            >
+              {home.hero.name.split(" ")[0]}
+            </span>
+            <span
+              className="block hero-name-line"
+              style={{
+                fontSize: "clamp(2.8rem,7.5vw,6rem)",
+                letterSpacing: "-0.02em",
+                opacity: 0.35,
+                clipPath: "inset(0 100% 0 0)",
+                animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.22s forwards",
+              }}
+            >
+              {home.hero.name.split(" ").slice(1).join(" ")}
             </span>
           </h1>
-          {/* Title */}
-          <p className="font-light mb-4" style={{ fontSize: "clamp(1rem,2vw,1.2rem)", opacity: 0.55 }}>
+          <p
+            className="font-light mb-4"
+            style={{ fontSize: "clamp(1rem,2vw,1.2rem)", opacity: 0, animation: "fadeIn 0.6s ease-out 0.95s forwards" }}
+          >
             {home.hero.title}
           </p>
-          {/* Hook — the one-liner that sets up everything that follows */}
-          <p className="text-sm leading-relaxed mb-5 max-w-xl" style={{ opacity: 0.42 }}>
+          <p
+            className="text-sm leading-relaxed mb-5 max-w-xl"
+            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 1.05s forwards" }}
+          >
             {home.hero.hook}
           </p>
-          <p className="font-mono text-xs mb-10" style={{ opacity: 0.28, letterSpacing: "0.1em" }}>
+          <p
+            className="font-mono text-xs mb-10"
+            style={{ opacity: 0, letterSpacing: "0.1em", animation: "fadeIn 0.6s ease-out 1.15s forwards" }}
+          >
             {home.hero.subtitle}
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href={`/${locale}/projects`}
+          <div
+            className="flex flex-wrap gap-4"
+            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 1.25s forwards" }}
+          >
+            <Link
+              href={`/${locale}/projects`}
               className="font-mono text-xs tracking-widest uppercase border px-6 py-3 hover:bg-white hover:text-black transition-colors"
-              style={{ borderColor: "rgba(255,255,255,0.3)" }}>
+              style={{ borderColor: "rgba(255,255,255,0.3)" }}
+            >
               {home.hero.cta_projects}
             </Link>
-            <Link href={`/${locale}/contact`}
+            <Link
+              href={`/${locale}/contact`}
               className="font-mono text-xs tracking-widest uppercase px-6 py-3 hover:opacity-100 transition-opacity"
-              style={{ opacity: 0.40, border: "1px solid rgba(255,255,255,0.12)" }}>
+              style={{ opacity: 0.40, border: "1px solid rgba(255,255,255,0.12)" }}
+            >
               {home.hero.cta_contact}
             </Link>
           </div>
@@ -243,130 +380,86 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           <span className="font-mono text-[9px] tracking-widest uppercase">scroll</span>
           <span className="font-mono text-xs animate-bounce">↓</span>
         </div>
-
-        {/* Gradient bleed: hero → projects. Lets the constellation fade into the next section. */}
         <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{
           height: "180px",
-          background: "linear-gradient(to bottom, transparent, rgba(7,9,14,0.72))",
+          background: "linear-gradient(to bottom, transparent, rgba(10,9,9,0.72))",
           zIndex: 1,
         }} />
       </section>
 
-      {/* ── SECTION 1 — Featured Projects ─────────────────────────────────── */}
+      {/* ── Stats strip ───────────────────────────────────────────────────── */}
+      <div className="relative z-20">
+        <StatsStrip />
+      </div>
+
+      {/* ── SECTION 1 — Work (horizontal scroll) ─────────────────────────── */}
       <section ref={el => { sectionsRef.current[1] = el; }} className="relative z-20">
-
-        {/* Bridge label — semi-transparent so constellation bleeds through on scroll */}
-        <div className="px-8 md:px-20 pt-20 pb-8 relative" style={{ background: "rgba(7,9,14,0.80)" }}>
-          <div className="max-w-5xl mx-auto flex items-end justify-between">
-            <div>
-              <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>
-                {home.featured_projects.label}
-              </span>
-              <h2 className="font-bold" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-                {home.featured_projects.heading}
-              </h2>
-            </div>
-            <Link href={`/${locale}/projects`}
-              className="hidden md:block font-mono text-xs tracking-wide underline underline-offset-4 transition-opacity mb-2"
-              style={{ opacity: 0.40 }}>
-              {home.featured_projects.cta} →
-            </Link>
-          </div>
-        </div>
-
-        {/* Featured project — minimal clean card while a richer concept is designed */}
-        <FeaturedProjectCard locale={locale} />
-
-        {/* More projects grid — below the IDE showcase */}
-        <div data-projects-grid
-          className="px-8 md:px-20 pt-4 pb-16 relative"
-          style={{ background: "#07090e" }}>
-          <div className="max-w-5xl mx-auto w-full">
-            <span className="font-mono text-xs tracking-widest uppercase block mb-8" style={{ opacity: 0.25 }}>
-              — {locale === "pt" ? "mais trabalhos" : "more work"}
-            </span>
-
-            {/* 3-card grid — first card wide (2-col) on md+ */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {gridProjects.map((project, idx) => {
-                const name = locale === "pt" ? project.namePt : project.nameEn;
-                const desc = locale === "pt" ? project.descriptionPt : project.descriptionEn;
-                const isHero = idx === 0;
-                return (
-                  <div
-                    key={project.id}
-                    className={`border flex flex-col group hover:border-white/30 transition-all duration-300 hover:-translate-y-0.5 ${isHero ? "md:col-span-2 lg:col-span-1" : ""}`}
-                    style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)" }}
-                  >
-                    {/* Thumbnail */}
-                    {project.image && (
-                      <div className="overflow-hidden border-b" style={{ aspectRatio: isHero ? "16/9" : "4/3", borderColor: "rgba(255,255,255,0.07)" }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={project.image}
-                          alt={name}
-                          className="w-full h-full object-cover transition-opacity duration-500"
-                          style={{ opacity: 0.72 }}
-                        />
-                      </div>
-                    )}
-                    <div className="p-5 flex flex-col gap-2.5 flex-1">
-                      <div>
-                        <h3 className="font-bold text-sm mb-0.5">{name}</h3>
-                        {project.type && <span className="font-mono text-xs" style={{ opacity: 0.33 }}>{project.type}</span>}
-                      </div>
-                      <p className="text-xs leading-relaxed line-clamp-2 flex-1" style={{ opacity: 0.45 }}>{desc}</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tech.slice(0, 3).map(t => (
-                          <span key={t} className="font-mono text-xs border px-1.5 py-0.5" style={{ opacity: 0.3, borderColor: "rgba(255,255,255,0.1)" }}>{t}</span>
-                        ))}
-                        {project.tech.length > 3 && <span className="font-mono text-xs" style={{ opacity: 0.2 }}>+{project.tech.length - 3}</span>}
-                      </div>
-                      <div className="flex gap-4 mt-auto pt-1">
-                        {project.overview && <Link href={`/${locale}/projects/${project.id}`} className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.5 }}>{pDict.view_case_study} →</Link>}
-                        {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-xs hover:opacity-100 transition-opacity" style={{ opacity: 0.32 }}>{pDict.view_live} ↗</a>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <WorkHorizontal locale={locale} />
       </section>
 
       {/* ── SECTION 2 — About + Stack ─────────────────────────────────────── */}
-      <section ref={el => { sectionsRef.current[2] = el; }}
+      <section
+        ref={el => { sectionsRef.current[2] = el; }}
         className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}>
+        style={{ opacity: 0 }}
+      >
         <div className="max-w-5xl mx-auto w-full">
 
-          {/* Row A — about text: who I am, before anything else */}
+          <SectionLabel label="03 — About" />
+
+          {/* Heading — line reveal */}
+          <div className="mb-6 font-bold" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>
+            <LineReveal delay={0}>
+              <span style={{ display: "block" }}>{home.about_preview.heading}</span>
+            </LineReveal>
+          </div>
+
+          {/* Bio */}
           <div data-about-text className="mb-14 max-w-2xl">
-            <span className="font-mono text-xs tracking-widest uppercase block mb-3" style={{ opacity: 0.35 }}>{home.about_preview.label}</span>
-            <h2 className="font-bold mb-5" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>{home.about_preview.heading}</h2>
-            <p className="text-sm leading-relaxed mb-6" style={{ opacity: 0.52 }}>{home.about_preview.body}</p>
-            <Link href={`/${locale}/about`} className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity" style={{ opacity: 0.45 }}>
+            <LineReveal delay={80}>
+              <p className="text-sm leading-relaxed mb-6" style={{ opacity: 0.52 }}>
+                {home.about_preview.body}
+              </p>
+            </LineReveal>
+            <Link
+              href={`/${locale}/about`}
+              className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity"
+              style={{ opacity: 0.45 }}
+            >
               {home.about_preview.cta} →
             </Link>
           </div>
 
-          {/* Row B — visual row: tag categories (left) + orbit canvas (right) */}
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 border-t pt-12" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-
-            {/* Left col: "What I Work With" heading + tag categories */}
+          {/* Skills + orbit */}
+          <div
+            className="grid md:grid-cols-2 gap-10 lg:gap-16 border-t pt-12"
+            style={{ borderColor: "rgba(255,255,255,0.08)" }}
+          >
             <div data-about-tags>
-              <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.35 }}>{home.skills.label}</span>
-              <h2 className="font-bold mb-6" style={{ fontSize: "clamp(1.5rem,3.5vw,2.2rem)" }}>{home.skills.heading}</h2>
+              <div style={{
+                fontFamily: "var(--font-geist-mono)", fontSize: 9,
+                letterSpacing: "0.16em", textTransform: "uppercase",
+                color: "var(--accent-orange)", marginBottom: 16,
+              }}>
+                {home.skills.label}
+              </div>
+              <LineReveal delay={0}>
+                <h2 className="font-bold mb-6" style={{ fontSize: "clamp(1.5rem,3.5vw,2.2rem)" }}>
+                  {home.skills.heading}
+                </h2>
+              </LineReveal>
               <div className="space-y-4">
                 {stack.map(cat => (
                   <div key={cat.title}>
                     <span className="font-mono text-xs tracking-widest uppercase block mb-2" style={{ opacity: 0.28 }}>{cat.title}</span>
                     <div className="flex flex-wrap gap-1.5">
                       {cat.items.map(item => (
-                        <span key={item.name} className="font-mono text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
+                        <span
+                          key={item.name}
+                          className="font-mono text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
                           style={{ borderColor: "rgba(255,255,255,0.14)", opacity: 0.62, background: "rgba(0,0,0,0.4)" }}
-                          title={item.note}>
+                          title={item.note}
+                        >
                           {item.name}
                           {item.note && <span style={{ opacity: 0.4 }}> ·</span>}
                         </span>
@@ -377,7 +470,6 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
               </div>
             </div>
 
-            {/* Right col: StackOrbitField canvas */}
             <div data-about-orbit className="flex items-center justify-center overflow-hidden" style={{ maxHeight: "460px" }}>
               <StackOrbitField stack={stack} />
             </div>
@@ -387,40 +479,54 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       </section>
 
       {/* ── SECTION 3 — How I Work ────────────────────────────────────────── */}
-      <section ref={el => { sectionsRef.current[3] = el; }}
-        className="min-h-screen flex flex-col justify-center relative z-20">
+      <section
+        ref={el => { sectionsRef.current[3] = el; }}
+        className="min-h-screen flex flex-col justify-center relative z-20"
+      >
         <PrinciplesFullscreen dict={dict} locale={locale} />
       </section>
 
       {/* ── SECTION 4 — Lab + Hardware + Contact ─────────────────────────── */}
-      <section ref={el => { sectionsRef.current[4] = el; }}
+      <section
+        ref={el => { sectionsRef.current[4] = el; }}
         className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}>
+        style={{ opacity: 0 }}
+      >
         <div className="max-w-5xl mx-auto w-full">
 
-          {/* Lab section — cinematic showcase */}
+          <SectionLabel label="04 — Lab" />
+
           <LabShowcase locale={locale} />
 
           {/* Hardware callout */}
           {hardwareProjects.length > 0 && (
-            <div className="border p-5 backdrop-blur-sm mb-10"
-              style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)" }}>
+            <div
+              className="border p-5 backdrop-blur-sm mb-10"
+              style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.35)" }}
+            >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <span className="font-mono text-xs tracking-widest uppercase block mb-1" style={{ opacity: 0.35 }}>{home.hardware_callout.heading}</span>
+                  <span className="font-mono text-xs tracking-widest uppercase block mb-1" style={{ opacity: 0.35 }}>
+                    {home.hardware_callout.heading}
+                  </span>
                   <p className="text-sm mb-3" style={{ opacity: 0.48 }}>{home.hardware_callout.subheading}</p>
                   <div className="flex flex-wrap gap-2">
                     {hardwareProjects.map(hw => (
-                      <span key={hw.id} className="font-mono text-xs border px-2 py-0.5"
-                        style={{ borderColor: "rgba(255,255,255,0.12)", opacity: 0.42 }}>
+                      <span
+                        key={hw.id}
+                        className="font-mono text-xs border px-2 py-0.5"
+                        style={{ borderColor: "rgba(255,255,255,0.12)", opacity: 0.42 }}
+                      >
                         {locale === "pt" ? hw.namePt : hw.nameEn}
                       </span>
                     ))}
                   </div>
                 </div>
-                <Link href={`/${locale}/hardware`}
+                <Link
+                  href={`/${locale}/hardware`}
                   className="font-mono text-xs tracking-wide border px-5 py-2.5 hover:border-white/50 transition-colors whitespace-nowrap shrink-0"
-                  style={{ borderColor: "rgba(255,255,255,0.2)" }}>
+                  style={{ borderColor: "rgba(255,255,255,0.2)" }}
+                >
                   {home.hardware_callout.cta} →
                 </Link>
               </div>
@@ -429,22 +535,34 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
           {/* Contact CTA */}
           <div className="border-t pt-16" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            <span className="font-mono text-xs tracking-widest uppercase block mb-4" style={{ opacity: 0.40 }}>{locale === "pt" ? "Contato" : "Contact"}</span>
-            <h2 className="font-bold mb-4 leading-tight" style={{ fontSize: "clamp(2rem,6vw,4rem)" }}>
-              {home.contact_cta.heading}
-            </h2>
+            <SectionLabel label="05 — Contact" />
+            <WordSplitReveal
+              text={home.contact_cta.heading}
+              style={{
+                fontFamily: "var(--font-geist-sans)",
+                fontSize: "clamp(42px,7.5vw,116px)",
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+                marginBottom: 80,
+              }}
+            />
             <p className="text-sm mb-8 max-w-md" style={{ opacity: 0.55 }}>
               {home.contact_cta.body}
             </p>
             <div className="flex flex-wrap gap-4 items-center mb-8">
-              <a href={`mailto:${contactInfo.email}`}
+              <a
+                href={`mailto:${contactInfo.email}`}
                 className="font-mono text-sm border px-6 py-3 hover:bg-white hover:text-black transition-colors"
-                style={{ borderColor: "rgba(255,255,255,0.28)" }}>
+                style={{ borderColor: "rgba(255,255,255,0.28)" }}
+              >
                 {contactInfo.email}
               </a>
-              <Link href={`/${locale}/contact`}
+              <Link
+                href={`/${locale}/contact`}
                 className="font-mono text-sm px-6 py-3 border hover:border-white/30 transition-colors hover:opacity-100"
-                style={{ opacity: 0.45, borderColor: "rgba(255,255,255,0.12)" }}>
+                style={{ opacity: 0.45, borderColor: "rgba(255,255,255,0.12)" }}
+              >
                 {home.contact_cta.cta} →
               </Link>
             </div>
