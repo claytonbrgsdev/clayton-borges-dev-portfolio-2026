@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Syne, IBM_Plex_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import { IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { CursorCanvas } from "@/components/CursorCanvas";
 
-const syne = Syne({
+const orbit = localFont({
+  src: [
+    { path: "./fonts/Orbit-Regular.woff2" },
+  ],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
+  weight: "400",
 });
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-geist-mono",
@@ -28,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${ibmPlexMono.variable} h-full antialiased bg-black`}
+      className={`${orbit.variable} ${ibmPlexMono.variable} h-full antialiased bg-black`}
     >
       {/* bg-black lives on <html> so fixed canvases at z-index:-1 are visible above it */}
       <body className="min-h-full flex flex-col text-white">
