@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const secAlpha = (sp: number, i0: number, i1: number, o0: number, o1: number) =>
@@ -144,6 +145,7 @@ const CH_PALS_WW: [[number,number,number],[number,number,number],[number,number,
   [[8,2,10], [220,80,255], [80,20,210], [50,20,70]],
 ];
 const CH_NAMES_WW = ["ORBITAL","LISSAJOUS","ROSE","ASTROID"];
+const CH_NAMES_WW_PT = ["ORBITAL","LISSAJOUS","ROSA","ASTRÓIDE"];
 
 function renderWW(chIdx: number) {
   const [bg,hd,tl,wr] = CH_PALS_WW[chIdx];
@@ -184,11 +186,27 @@ const HEADINGS_WW: [string,string][] = [
   ["THE RULE",   "1 or 2 heads → become head — otherwise wait"],
 ];
 
+const HEADINGS_WW_PT: [string,string][] = [
+  ["FIO",        "três estados — uma regra"],
+  ["ELÉTRON",    "cabeça vira cauda vira fio"],
+  ["ORBITAL",    "sinal circula em laços fechados"],
+  ["LISSAJOUS",  "duas frequências — uma curva fechada"],
+  ["FREQUÊNCIA", "razão 2:3 — nunca uma linha reta"],
+  ["SINAL",      "elétrons perseguindo uns aos outros"],
+  ["ROSA",       "r = cos(4θ) — oito pétalas"],
+  ["PÉTALA",     "cada ponta emite, cada base recebe"],
+  ["SIMETRIA",   "quádrupla, óctupla — codificada na regra"],
+  ["ASTRÓIDE",   "epicicloide — círculos rolantes traçam a curva"],
+  ["CIRCUITO",   "uma fórmula — uma forma — um caminho de sinal"],
+  ["A REGRA",    "1 ou 2 cabeças → virar cabeça — caso contrário, esperar"],
+];
+
 // ── buildSketch ────────────────────────────────────────────────────────────────
 function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement|null>,
+  localeRef: { current: "pt"|"en" },
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     lastChWW = -1; stepCount = 0;
@@ -263,7 +281,7 @@ function buildSketch(
           p.textAlign(p.RIGHT, p.TOP);
           p.text(`sp ${sp.toFixed(4)}`, W*0.982, H*0.018);
           p.textAlign(p.LEFT, p.BOTTOM);
-          p.text(`CH${chIdx+1} · ${CH_NAMES_WW[chIdx]}`, W*0.018, H*0.982);
+          p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_WW_PT : CH_NAMES_WW)[chIdx]}`, W*0.018, H*0.982);
           p.textAlign(p.RIGHT, p.BOTTOM);
           p.text(`${GW}×${GH}`, W*0.982, H*0.982);
         }
@@ -288,12 +306,17 @@ export function WireWorldLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
+  const activeChNames = locale === "pt" ? CH_NAMES_WW_PT : CH_NAMES_WW;
+  const activeHeadings = locale === "pt" ? HEADINGS_WW_PT : HEADINGS_WW;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type|null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
@@ -329,13 +352,13 @@ export function WireWorldLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_WW.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_WW[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_WW[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

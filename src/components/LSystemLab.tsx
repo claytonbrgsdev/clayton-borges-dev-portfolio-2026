@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const secAlpha = (sp: number, i0: number, i1: number, o0: number, o1: number) =>
@@ -78,6 +79,7 @@ const CH_GRADIENTS: [[string,string],[string,string]][] = [
 
 const CH_LINE_W = [0.55, 0.45, 0.50, 0.65];
 const CH_NAMES_L = ["KOCH","DRAGON","HILBERT","PLANT"];
+const CH_NAMES_L_PT = ["KOCH","DRAGÃO","HILBERT","PLANTA"];
 const CH_DARK = ["#06080e","#040e06","#08040e","#040a04"];
 
 const SECTIONS_L = [
@@ -110,11 +112,27 @@ const HEADINGS_L: [string,string][] = [
   ["INFINITE TREE","bounded height — unbounded complexity"],
 ];
 
+const HEADINGS_L_PT: [string,string][] = [
+  ["AXIOMA",        "a string inicial, uma vez escrita"],
+  ["REGRA",         "substitua cada segmento por um padrão"],
+  ["ITERAÇÃO",      "quatro cópias, escaladas e giradas"],
+  ["DOBRAR",        "dobre uma tira de papel em ângulos retos"],
+  ["DESDOBRAR",     "o padrão de dobras em profundidade infinita"],
+  ["AUTO-EVITANTE", "a curva dragão nunca se cruza"],
+  ["HILBERT",       "uma curva que preenche o plano"],
+  ["LOCALIDADE",    "pontos próximos permanecem próximos"],
+  ["LIMITE",        "um objeto unidimensional com área"],
+  ["RAMIFICAÇÃO",   "uma gramática para crescer para cima"],
+  ["AUTO-SIMILAR",  "cada galho é a planta inteira"],
+  ["ÁRVORE INFINITA","altura limitada — complexidade ilimitada"],
+];
+
 // ── buildSketch ────────────────────────────────────────────────────────────────
 function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement|null>,
+  localeRef: { current: "pt"|"en" },
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     lastChL = -1;
@@ -239,7 +257,7 @@ function buildSketch(
           p.textAlign(p.RIGHT, p.TOP);
           p.text(`sp ${sp.toFixed(4)}`, W*0.982, H*0.018);
           p.textAlign(p.LEFT, p.BOTTOM);
-          p.text(`CH${chIdx+1} · ${CH_NAMES_L[chIdx]}`, W*0.018, H*0.982);
+          p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_L_PT : CH_NAMES_L)[chIdx]}`, W*0.018, H*0.982);
           p.textAlign(p.RIGHT, p.BOTTOM);
           p.text(`${(revealFrac*100).toFixed(0)}% drawn`, W*0.982, H*0.982);
         }
@@ -265,12 +283,17 @@ export function LSystemLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
+  const activeChNames = locale === "pt" ? CH_NAMES_L_PT : CH_NAMES_L;
+  const activeHeadings = locale === "pt" ? HEADINGS_L_PT : HEADINGS_L;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type|null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
@@ -306,13 +329,13 @@ export function LSystemLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_L.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_L[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_L[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

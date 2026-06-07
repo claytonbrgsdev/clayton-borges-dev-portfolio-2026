@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -44,6 +45,7 @@ const VORT_CFGS: VortCfg[] = [
 ];
 
 const CH_NAMES_V = ["IRROTATIONAL","CAROUSEL","TURBULENCE","DISSOLUTION"];
+const CH_NAMES_V_PT = ["IRROTACIONAL","CARROSSEL","TURBULÊNCIA","DISSOLUÇÃO"];
 
 // [bgR,bgG,bgB, fgR,fgG,fgB]
 const CH_PALS_V: [number,number,number,number,number,number][] = [
@@ -81,6 +83,21 @@ const HEADINGS_V: [string,string][] = [
   ["VISCOSITY",   "every motion eventually stilled"],
   ["DECAY",       "the last vortex unwinds alone"],
   ["EQUILIBRIUM", "the field that was always there"],
+];
+
+const HEADINGS_V_PT: [string,string][] = [
+  ["DIPOLO",          "dois vórtices — uma máquina"],
+  ["LINHA DE FLUXO",  "o fluido lembra onde esteve"],
+  ["POTENCIAL",       "irrotacional em todo lugar exceto no núcleo"],
+  ["CARROSSEL",       "quatro vórtices — uma órbita eterna"],
+  ["VORTICIDADE",     "o rotacional do campo de velocidade"],
+  ["HAMILTONIANO",    "energia conservada, trajetória imprevisível"],
+  ["TURBULÊNCIA",     "a cascata da ordem à complexidade"],
+  ["MISTURA",         "duas parcelas de fluido que nunca se reunirão"],
+  ["INÉRCIA",         "o fluido que esquece sua origem"],
+  ["VISCOSIDADE",     "todo movimento eventualmente silenciado"],
+  ["DECAIMENTO",      "o último vórtice se desfaz sozinho"],
+  ["EQUILÍBRIO",      "o campo que sempre esteve lá"],
 ];
 
 // ── Physics ────────────────────────────────────────────────────────────────────
@@ -150,6 +167,7 @@ function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement|null>,
+  localeRef: { current: "pt"|"en" },
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     let lastChapter = -1;
@@ -291,7 +309,7 @@ function buildSketch(
           p.textAlign(p.RIGHT, p.TOP);
           p.text(`sp ${sp.toFixed(4)}`, W*0.982, H*0.018);
           p.textAlign(p.LEFT, p.BOTTOM);
-          p.text(`CH${chIdx+1} · POINT VORTEX`, W*0.018, H*0.982);
+          p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_V_PT : CH_NAMES_V)[chIdx]}`, W*0.018, H*0.982);
           p.textAlign(p.RIGHT, p.BOTTOM);
           p.text(`TRACERS ${N_TRACERS}`, W*0.982, H*0.982);
         }
@@ -317,12 +335,15 @@ export function VortexLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type|null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
@@ -344,6 +365,9 @@ export function VortexLab() {
     {top:"50%",   left:"50%", textAlign:"center", transform:"translate(-50%,-50%)"},
   ];
 
+  const activeChNamesV = locale === "pt" ? CH_NAMES_V_PT : CH_NAMES_V;
+  const activeHeadingsV = locale === "pt" ? HEADINGS_V_PT : HEADINGS_V;
+
   const chips = ["#1e2e46","#4e2e0e","#2e0e4e","#2e2e36"];
   const texts = ["#82a8d2","#d4a045","#c070e0","#c8c6d8"];
 
@@ -358,13 +382,13 @@ export function VortexLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_V.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_V[i];
+        const [headline, sub] = activeHeadingsV[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_V[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNamesV[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -68,6 +69,7 @@ const SECTIONS=[
 ] as const;
 
 const CH_NAMES=["MONOPOLE","DIPOLE","QUADRUPOLE","COMPLEX"];
+const CH_NAMES_PT=["MONOPOLO","DIPOLO","QUADRUPOLO","COMPLEXO"];
 
 const HEADINGS: [string,string][] = [
   ["THE FORCE",    "was never touching anything"],
@@ -82,6 +84,21 @@ const HEADINGS: [string,string][] = [
   ["CURRENT",      "the lines were here before anything moved"],
   ["INFINITY",     "at every source, the field shouts"],
   ["SILENCE",      "at the boundaries, it whispers"],
+];
+
+const HEADINGS_PT: [string,string][] = [
+  ["A FORÇA",         "nunca tocou nada"],
+  ["LEITURA",          "a forma conta tudo sobre a fonte"],
+  ["ESTRUTURA",        "invisível antes de ser cruzada"],
+  ["PONTO DE SELA",   "onde dois campos concordam em discordar"],
+  ["SEM CRUZAMENTO",   "linhas de campo do mesmo tipo nunca se intersectam"],
+  ["FLUXO",           "a quantidade total que cruza qualquer superfície"],
+  ["RECONEXÃO",       "quando linhas de campo quebram e se unem em outro lugar"],
+  ["LEGÍVEL",          "o invisível, lido pelo que faz"],
+  ["RETRATO",          "cada linha de campo é uma pergunta sobre a fonte"],
+  ["CORRENTE",        "as linhas estavam aqui antes de qualquer coisa se mover"],
+  ["INFINITO",        "em cada fonte, o campo grita"],
+  ["SILÊNCIO",        "nas fronteiras, sussurra"],
 ];
 
 // line accent colors per chapter [r,g,b,a]
@@ -137,6 +154,7 @@ function buildSketch(
   el:HTMLElement,
   scrollEl:HTMLElement,
   sectionEls:Array<HTMLDivElement|null>,
+  localeRef: { current: "pt"|"en" },
 ):Promise<p5Type> {
   return import("p5").then(({default:P5})=>{
     const ptsF=new Float32Array(N_SEEDS*FLOATS_PER_SEED);
@@ -265,7 +283,7 @@ function buildSketch(
           p.textAlign(p.RIGHT,p.TOP);
           p.text(`sp ${sp.toFixed(4)}`,W*0.982,H*0.018);
           p.textAlign(p.LEFT,p.BOTTOM);
-          p.text(`CH${chIdx+1} · ${CH_NAMES[chIdx]}`,W*0.018,H*0.982);
+          p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_PT : CH_NAMES)[chIdx]}`,W*0.018,H*0.982);
           const activeN=activeDipoles.filter(d=>d.s>0.1).length;
           p.textAlign(p.RIGHT,p.BOTTOM);
           p.text(`${activeN} DIPOLES`,W*0.982,H*0.982);
@@ -290,12 +308,15 @@ export function FluxLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
 
   useEffect(()=>{
     const container=containerRef.current, scroll=scrollRef.current;
     if (!container||!scroll) return;
     let inst: p5Type|null=null, alive=true;
-    buildSketch(container,scroll,sectionEls.current).then(p5inst=>{
+    buildSketch(container,scroll,sectionEls.current,localeRef).then(p5inst=>{
       if (!alive){ p5inst.remove(); return; }
       inst=p5inst;
     });
@@ -326,18 +347,21 @@ export function FluxLab() {
     zIndex:10,maxWidth:"28rem",
   };
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   return (
     <div ref={scrollRef} style={{height:"1200vh",background:"#06050c"}}>
       <div ref={containerRef} style={{position:"fixed",inset:0,zIndex:1}}/>
       {SECTIONS.map((sec,i)=>{
         const chIdx=(sec[0] as number)-1;
-        const [headline,sub]=HEADINGS[i];
+        const [headline,sub]=activeHeadings[i];
         return (
           <div key={i} ref={el=>{sectionEls.current[i]=el;}} style={{...base,...positions[i]}}>
             <span style={{
               display:"block",fontSize:"0.55rem",letterSpacing:"0.38em",
               color:chips[chIdx],textTransform:"uppercase",marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0,fontSize:"clamp(1.7rem,3.8vw,3.2rem)",fontWeight:700,
               lineHeight:1.05,letterSpacing:"-0.01em",

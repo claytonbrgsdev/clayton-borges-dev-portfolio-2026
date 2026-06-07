@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x = Math.max(0, Math.min(1, (t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -47,6 +48,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["SURFACE", "REFRACTION", "INTERFERENCE", "DISSOLUTION"];
+const CH_NAMES_PT = ["SUPERFÍCIE", "REFRAÇÃO", "INTERFERÊNCIA", "DISSOLUÇÃO"];
 
 const HEADINGS: [string, string][] = [
   ["THE SURFACE",  "does not show itself"],
@@ -61,6 +63,21 @@ const HEADINGS: [string, string][] = [
   ["WHAT REMAINS", "when the wave has passed"],
   ["DISSOLUTION",  "the machine forgets its form"],
   ["LIGHT",        "outlasts the wave that made it"],
+];
+
+const HEADINGS_PT: [string, string][] = [
+  ["A SUPERFÍCIE",  "não se revela"],
+  ["SÓ A LUZ",      "prova que a água se move"],
+  ["REFRAÇÃO",      "a máquina do desvio"],
+  ["FOCO",          "onde as ondas convergem acima"],
+  ["O FUNDO",       "lê o que a superfície escreveu"],
+  ["SOMBRA",        "mais brilhante que o objeto"],
+  ["CÁUSTICA",      "geometria da intenção dispersa"],
+  ["INTERFERÊNCIA", "duas fontes, um mesmo fundo"],
+  ["O PADRÃO",      "nunca esteve na água"],
+  ["O QUE RESTA",   "quando a onda passou"],
+  ["DISSOLUÇÃO",    "a máquina esquece sua forma"],
+  ["LUZ",           "sobrevive à onda que a criou"],
 ];
 
 // ── Chapter floor/caustic palettes ───────────────────────────────────────────
@@ -385,6 +402,7 @@ export function CausticLab() {
   const scrollRef  = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -430,7 +448,9 @@ export function CausticLab() {
 
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+        const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+        const [headline, sub] = activeHeadings[i];
         return (
           <div
             key={i}
@@ -441,7 +461,7 @@ export function CausticLab() {
               display: "block", fontSize: "0.55rem", letterSpacing: "0.38em",
               color: chips[chIdx], textTransform: "uppercase", marginBottom: 10,
             }}>
-              {`CH${chIdx + 1} · ${CH_NAMES[chIdx]}`}
+              {`CH${chIdx + 1} · ${activeChNames[chIdx]}`}
             </span>
             <h2 style={{
               margin: 0, fontSize: "clamp(1.7rem,3.8vw,3.2rem)", fontWeight: 700,

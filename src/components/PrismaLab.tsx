@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -41,6 +42,7 @@ const SECTIONS=[
 ] as const;
 
 const CH_NAMES=["LANDSCAPE","DESCENT","DECISION","INEVITABILITY"];
+const CH_NAMES_PT=["PAISAGEM","DESCIDA","DECISÃO","INEVITABILIDADE"];
 
 const HEADINGS:[string,string][]=[
   ["POTENTIAL",  "everywhere before anything moves"],
@@ -55,6 +57,21 @@ const HEADINGS:[string,string][]=[
   ["SADDLE",     "the boundary between two inevitable fates"],
   ["THE MAP",    "and the territory are the same"],
   ["FIELD",      "geometry as destiny"],
+];
+
+const HEADINGS_PT:[string,string][]=[
+  ["POTENCIAL",       "em todo lugar antes de qualquer movimento"],
+  ["GRADIENTE",       "a inclinação que decide o movimento"],
+  ["BACIA",           "onde tudo eventualmente cai"],
+  ["ISOBARA",         "a linha de igual altura — a linha da indiferença"],
+  ["CRISTA",          "a linha que separa destinos"],
+  ["DESCIDA",         "a partícula se move sem escolher"],
+  ["TOPOLOGIA",       "o que não pode ser deformado"],
+  ["ATRATOR",         "a geometria ao redor do mínimo"],
+  ["CONTORNO",        "a assinatura da altura sem altura"],
+  ["SELA",            "a fronteira entre dois destinos inevitáveis"],
+  ["O MAPA",          "e o território são o mesmo"],
+  ["CAMPO",           "geometria como destino"],
 ];
 
 // [bg_r,bg_g,bg_b, accent_r,accent_g,accent_b]
@@ -208,6 +225,7 @@ export function PrismaLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(()=>{
     const container=containerRef.current, scroll=scrollRef.current;
@@ -244,18 +262,21 @@ export function PrismaLab() {
     zIndex:10,maxWidth:"28rem",
   };
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   return (
     <div ref={scrollRef} style={{height:"1200vh",background:"#06050e"}}>
       <div ref={containerRef} style={{position:"fixed",inset:0,zIndex:1}}/>
       {SECTIONS.map((sec,i)=>{
         const chIdx=(sec[0] as number)-1;
-        const [headline,sub]=HEADINGS[i];
+        const [headline,sub]=activeHeadings[i];
         return (
           <div key={i} ref={el=>{sectionEls.current[i]=el;}} style={{...base,...positions[i]}}>
             <span style={{
               display:"block",fontSize:"0.55rem",letterSpacing:"0.38em",
               color:chips[chIdx],textTransform:"uppercase",marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0,fontSize:"clamp(1.7rem,3.8vw,3.2rem)",fontWeight:700,
               lineHeight:1.05,letterSpacing:"-0.01em",

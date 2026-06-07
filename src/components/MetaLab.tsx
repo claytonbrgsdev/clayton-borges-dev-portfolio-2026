@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 /*
  * MetaLab — Phase 26 · EPILOGUE
@@ -36,6 +37,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["REPRESENTATION", "SIMULATION", "RECOGNITION", "QUESTION"];
+const CH_NAMES_PT = ["REPRESENTAÇÃO", "SIMULAÇÃO", "RECONHECIMENTO", "QUESTÃO"];
 
 const HEADINGS: [string, string][] = [
   // CH1 · REPRESENTATION
@@ -54,6 +56,21 @@ const HEADINGS: [string, string][] = [
   ["WHAT IS",        "a simulation?"],
   ["EVERY SYSTEM",   "in this lab was already running"],
   ["YOU",            "were watching yourself think"],
+];
+
+const HEADINGS_PT: [string, string][] = [
+  ["O MODELO",        "não é o fenômeno"],
+  ["O MAPA",          "nunca foi o território"],
+  ["A MATEMÁTICA",    "não explica — comprime"],
+  ["SIMULAR",         "é executar uma regra no tempo"],
+  ["CADA FRAME",      "é uma consequência do último"],
+  ["O PROGRAMA",      "e o fenômeno — mesma gramática"],
+  ["VOCÊ JÁ",         "conhecia essas formas"],
+  ["O PADRÃO",        "também está em você"],
+  ["INTUIÇÃO",        "é a própria simulação do corpo"],
+  ["O QUE É",         "uma simulação?"],
+  ["CADA SISTEMA",    "neste lab já estava em execução"],
+  ["VOCÊ",            "estava se observando pensar"],
 ];
 
 // ── Lissajous configurations per chapter ──────────────────────────────────────
@@ -76,6 +93,7 @@ function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement | null>,
+  localeRef: { current: "pt"|"en" },
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     const sketch = (p: p5Type) => {
@@ -170,9 +188,9 @@ function buildSketch(
           p.noStroke();
           p.fill(210, 222, 255, Math.round(hudA * 55));
           p.textSize(7);
-          p.textAlign(p.LEFT,  p.TOP);    p.text("PHASE 26 · EPILOGUE", W * 0.018, H * 0.018);
+          p.textAlign(p.LEFT,  p.TOP);    p.text(localeRef.current === "pt" ? "FASE 26 · EPÍLOGO" : "PHASE 26 · EPILOGUE", W * 0.018, H * 0.018);
           p.textAlign(p.RIGHT, p.TOP);    p.text(`sp ${sp.toFixed(4)}`,  W * 0.982, H * 0.018);
-          p.textAlign(p.LEFT,  p.BOTTOM); p.text(`CH${chIdx+1} · ${CH_NAMES[chIdx]}`, W * 0.018, H * 0.982);
+          p.textAlign(p.LEFT,  p.BOTTOM); p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_PT : CH_NAMES)[chIdx]}`, W * 0.018, H * 0.982);
           p.textAlign(p.RIGHT, p.BOTTOM); p.text(`a=${a.toFixed(2)} b=${b.toFixed(2)} δ=${d.toFixed(2)}`, W * 0.982, H * 0.982);
         }
 
@@ -197,6 +215,11 @@ export function MetaLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -204,7 +227,7 @@ export function MetaLab() {
     if (!container || !scroll) return;
     let inst: p5Type | null = null;
     let alive = true;
-    buildSketch(container, scroll, sectionEls.current).then((p5inst) => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then((p5inst) => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
@@ -243,7 +266,7 @@ export function MetaLab() {
 
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const [headline, sub] = activeHeadings[i];
         // Last section gets special large treatment
         const isLast = i === 11;
         return (
@@ -256,7 +279,7 @@ export function MetaLab() {
               display: "block", fontSize: "0.55rem", letterSpacing: "0.38em",
               color: chips[chIdx], textTransform: "uppercase", marginBottom: 10,
             }}>
-              {`CH${chIdx + 1} · ${CH_NAMES[chIdx]}`}
+              {`CH${chIdx + 1} · ${activeChNames[chIdx]}`}
             </span>
             <h2 style={{
               margin: 0,

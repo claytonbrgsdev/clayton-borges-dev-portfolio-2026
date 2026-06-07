@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 type P5 = InstanceType<typeof import("p5")["default"]>;
 const TAU = Math.PI * 2;
@@ -147,8 +148,20 @@ const SECTION_DATA = [
   [0.86, 0.94, 0.98, 1.00, "Gielis, 2003",  "from starfish to snowflake"],
 ] as const;
 
+// PT text for SECTION_DATA: [label, subtitle]
+const SECTION_DATA_PT: [string, string][] = [
+  ["ROSA",          "a pétala se desdobra de uma equação"],
+  ["r = cos(kθ)",   "três parâmetros, simetria infinita"],
+  ["LISSAJOUS",     "a razão de frequência é a impressão digital"],
+  ["duas ondas senoidais", "perpendiculares no tempo"],
+  ["HIPOTROCOIDE",  "a engrenagem interna traça a eternidade"],
+  ["R, r, d",       "três números contêm todos os espirógrafos"],
+  ["SUPERFÓRMULA",  "uma equação, todas as formas da natureza"],
+  ["Gielis, 2003",  "da estrela-do-mar ao floco de neve"],
+];
+
 // ── buildSketch ──────────────────────────────────────────────────────────────
-function buildSketch_S(el: HTMLElement, scrollEl: HTMLElement): Promise<P5> {
+function buildSketch_S(el: HTMLElement, scrollEl: HTMLElement, localeRef: { current: "pt"|"en" }): Promise<P5> {
   lastTArr_S = [0, 0, 0, 0];
   lastCh_S = -1;
   off_S = null;
@@ -266,7 +279,9 @@ function buildSketch_S(el: HTMLElement, scrollEl: HTMLElement): Promise<P5> {
         }
 
         // HUD
-        const names = ["ROSE", "LISSAJOUS", "HYPOTROCHOID", "SUPERFORMULA"];
+        const names = localeRef.current === "pt"
+          ? ["ROSA", "LISSAJOUS", "HIPOTROCOIDE", "SUPERFÓRMULA"]
+          : ["ROSE", "LISSAJOUS", "HYPOTROCHOID", "SUPERFORMULA"];
         const eqs   = ["r = cos(kθ)", "x=sin(at+δ), y=sin(bt)", "hypotrochoid R,r,d", "Gielis superformula"];
         const prog = Math.min(1, lastTArr_S[chIdx] / TOTAL_T_S[chIdx]);
         dc.save();
@@ -307,12 +322,15 @@ export function SpiroLab() {
   const wrapRef   = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const sRefs     = useRef<(HTMLDivElement | null)[]>([]);
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
 
   useEffect(() => {
     const wrap   = wrapRef.current!;
     const canvas = canvasRef.current!;
     let p5i: P5 | null = null;
-    buildSketch_S(canvas, wrap).then(p => { p5i = p; });
+    buildSketch_S(canvas, wrap, localeRef).then(p => { p5i = p; });
 
     const applyOverlay = (el: HTMLElement | null, a: number) => {
       if (!el) return;
@@ -358,28 +376,31 @@ export function SpiroLab() {
           ref={canvasRef}
           style={{ position: "sticky", top: 0, width: "100%", height: "100vh" }}
         />
-        {SECTION_DATA.map(([, , , , l1, l2], idx) => (
-          <div
-            key={idx}
-            ref={el => { sRefs.current[idx] = el; }}
-            style={{
-              position: "fixed",
-              ...positions[idx],
-              opacity: 0,
-              pointerEvents: "none",
-              color: "#e8eaf2",
-              maxWidth: "42ch",
-              textAlign: idx % 2 === 1 ? "right" : "left",
-            }}
-          >
-            <p style={{ margin: 0, fontSize: "clamp(1.1rem,2vw,1.55rem)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-              {l1}
-            </p>
-            <p style={{ margin: "0.3em 0 0", fontSize: "clamp(0.68rem,1.1vw,0.92rem)", fontWeight: 400, opacity: 0.62, letterSpacing: "0.04em" }}>
-              {l2}
-            </p>
-          </div>
-        ))}
+        {SECTION_DATA.map(([, , , , l1_en, l2_en], idx) => {
+          const [l1, l2] = locale === "pt" ? SECTION_DATA_PT[idx] : [l1_en, l2_en];
+          return (
+            <div
+              key={idx}
+              ref={el => { sRefs.current[idx] = el; }}
+              style={{
+                position: "fixed",
+                ...positions[idx],
+                opacity: 0,
+                pointerEvents: "none",
+                color: "#e8eaf2",
+                maxWidth: "42ch",
+                textAlign: idx % 2 === 1 ? "right" : "left",
+              }}
+            >
+              <p style={{ margin: 0, fontSize: "clamp(1.1rem,2vw,1.55rem)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                {l1}
+              </p>
+              <p style={{ margin: "0.3em 0 0", fontSize: "clamp(0.68rem,1.1vw,0.92rem)", fontWeight: 400, opacity: 0.62, letterSpacing: "0.04em" }}>
+                {l2}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

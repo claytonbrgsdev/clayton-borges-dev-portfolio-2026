@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const TAU  = Math.PI * 2;
 const ss   = (a: number, b: number, t: number) => { const x = Math.max(0, Math.min(1, (t-a)/(b-a))); return x*x*(3-2*x); };
@@ -120,6 +121,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["FUNDAMENTAL", "OVERTONE", "HARMONIC", "COMPOSITE"];
+const CH_NAMES_PT = ["FUNDAMENTAL", "HARMÔNICO SUPERIOR", "HARMÔNICO", "COMPOSTO"];
 
 const HEADINGS: [string, string][] = [
   ["FREQUENCY",   "the plate knows one shape"],
@@ -134,6 +136,21 @@ const HEADINGS: [string, string][] = [
   ["COMPOSITE",   "the sum of all resonances"],
   ["CHLADNI",     "drew what we couldn't hear"],
   ["THE PLATE",   "remembers every frequency"],
+];
+
+const HEADINGS_PT: [string, string][] = [
+  ["FREQUÊNCIA",         "a placa conhece uma única forma"],
+  ["SILÊNCIO",           "acumula-se nos nós"],
+  ["A AREIA",            "encontra onde o movimento para"],
+  ["HARMÔNICO SUPERIOR", "uma segunda voz entra"],
+  ["INTERFERÊNCIA",      "nenhuma cancela a outra"],
+  ["FORMA",              "negociada entre frequências"],
+  ["HARMÔNICO",          "razões mais antigas que a música"],
+  ["O CAMPO",            "são três vozes agora"],
+  ["SUPERPOR",           "complexidade sem contradição"],
+  ["COMPOSTO",           "a soma de todas as ressonâncias"],
+  ["CHLADNI",            "desenhou o que não conseguíamos ouvir"],
+  ["A PLACA",            "lembra de cada frequência"],
 ];
 
 // ── buildSketch ───────────────────────────────────────────────────────────────
@@ -392,6 +409,7 @@ export function ChladniLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -436,14 +454,16 @@ export function ChladniLab() {
 
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+        const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={(el) => { sectionEls.current[i] = el; }} style={{ ...base, ...positions[i] }}>
             <span style={{
               display: "block", fontSize: "0.56rem", letterSpacing: "0.35em",
               color: chips[chIdx], textTransform: "uppercase", marginBottom: 10,
             }}>
-              {`CH${chIdx + 1} · ${CH_NAMES[chIdx]}`}
+              {`CH${chIdx + 1} · ${activeChNames[chIdx]}`}
             </span>
             <h2 style={{
               margin: 0, fontSize: "clamp(1.7rem,3.8vw,3.2rem)", fontWeight: 700,

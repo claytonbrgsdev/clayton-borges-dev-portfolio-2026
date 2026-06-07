@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLabLocale } from "@/hooks/useLabLocale";
+import { LabLangSwitch } from "@/components/LabLangSwitch";
 
 const ACCENTS: Record<1 | 2 | 3, string> = {
   1: "#C84030",
   2: "#3060D0",
   3: "#8040C0",
 };
+
+const PART_ROMANS = ["II", "III"];
 
 interface Props {
   partNumber: 1 | 2 | 3;
@@ -16,6 +20,8 @@ interface Props {
 export function LabPartChrome({ partNumber, nextRoute }: Props) {
   const [visible, setVisible] = useState(false);
   const [nearEnd, setNearEnd] = useState(false);
+  const [locale, setLocale] = useLabLocale();
+  const toggleLocale = () => setLocale(locale === "pt" ? "en" : "pt");
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 700);
@@ -47,6 +53,13 @@ export function LabPartChrome({ partNumber, nextRoute }: Props) {
     WebkitBackdropFilter: "blur(6px)",
   };
 
+  const nextPartRoman = PART_ROMANS[partNumber - 1];
+  const nextPartLabel = nextRoute
+    ? locale === "pt"
+      ? `PARTE ${nextPartRoman} →`
+      : `PART ${nextPartRoman} →`
+    : "← LAB";
+
   return (
     <>
       {/* ← LAB — top left */}
@@ -72,6 +85,20 @@ export function LabPartChrome({ partNumber, nextRoute }: Props) {
       >
         ← LAB
       </Link>
+
+      {/* Lang switch — top right */}
+      <div
+        style={{
+          position: "fixed",
+          top: 18,
+          right: 18,
+          zIndex: 200,
+          opacity: visible ? 1 : 0,
+          transition: "opacity 0.8s ease",
+        }}
+      >
+        <LabLangSwitch locale={locale} onToggle={toggleLocale} />
+      </div>
 
       {/* Bottom CTA — appears when near end of scroll */}
       <div
@@ -108,7 +135,7 @@ export function LabPartChrome({ partNumber, nextRoute }: Props) {
               (e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.7)";
             }}
           >
-            PART {["II", "III"][partNumber - 1]} →
+            {nextPartLabel}
           </Link>
         ) : (
           <Link

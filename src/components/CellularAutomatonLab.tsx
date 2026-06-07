@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -61,6 +62,7 @@ const CH_PALS_CA: [number,number,number,number,number,number][] = [
 ];
 
 const CH_NAMES_CA = ["CHAOS","SIERPINSKI","UNIVERSAL","TRAFFIC"];
+const CH_NAMES_CA_PT = ["CAOS","SIERPINSKI","UNIVERSAL","TRÁFEGO"];
 
 const SECTIONS_CA = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -90,6 +92,21 @@ const HEADINGS_CA: [string,string][] = [
   ["RULE 184",      "cars on an infinite road"],
   ["FLOW",          "particles that cannot pass through each other"],
   ["JAM",           "density determines whether traffic moves"],
+];
+
+const HEADINGS_CA_PT: [string,string][] = [
+  ["REGRA 30",       "três células geram aleatoriedade infinita"],
+  ["ASSIMÉTRICO",    "simetria quebrada pela própria regra"],
+  ["IMPREVISÍVEL",   "o passado não pode nos dizer o futuro"],
+  ["REGRA 90",       "XOR — cada célula difere de seus vizinhos"],
+  ["SIERPINSKI",     "o triângulo que nunca termina"],
+  ["AUTO-SIMILAR",   "o mesmo em toda escala"],
+  ["REGRA 110",      "capaz de computação universal"],
+  ["COMPLEXO",       "regra simples — comportamento imprevisível"],
+  ["TURING",         "pode computar tudo que é computável"],
+  ["REGRA 184",      "carros em uma estrada infinita"],
+  ["FLUXO",          "partículas que não podem se atravessar"],
+  ["CONGESTIONAMENTO","a densidade determina se o tráfego flui"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -214,6 +231,7 @@ export function CellularAutomatonLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -241,6 +259,9 @@ export function CellularAutomatonLab() {
     {top:"50%",   left:"50%", textAlign:"center", transform:"translate(-50%,-50%)"},
   ];
 
+  const activeChNames = locale === "pt" ? CH_NAMES_CA_PT : CH_NAMES_CA;
+  const activeHeadings = locale === "pt" ? HEADINGS_CA_PT : HEADINGS_CA;
+
   const chips = ["#1e1808","#081820","#101010","#081808"];
   const texts = ["#d09040","#4080d8","#d0d0e0","#40d060"];
 
@@ -255,13 +276,13 @@ export function CellularAutomatonLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_CA.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_CA[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_CA[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

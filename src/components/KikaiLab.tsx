@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const TAU  = Math.PI * 2;
 const ss   = (a: number, b: number, t: number) => {
@@ -78,6 +79,21 @@ const HEADINGS: [string, string][] = [
   ["間",              "negative space"],
   ["THE VOID",        "at the center was always there"],
   ["WHAT REMAINS",    "is not geometry — it is instruction"],
+];
+
+const HEADINGS_PT: [string, string][] = [
+  ["設計",             "projeto"],
+  ["PROPORÇÃO",       "é a primeira máquina"],
+  ["ANTES DA FORÇA",  "há medida"],
+  ["回転",             "a primeira rotação"],
+  ["CINCO EM TRÊS",   "a máquina decide"],
+  ["A CANETA SEGUE",  "nenhuma mão desenharia sozinha"],
+  ["重ね",             "sobreposição"],
+  ["TRÊS FREQUÊNCIAS","uma composição"],
+  ["O MECANISMO",     "torna-se seu traço"],
+  ["間",              "espaço negativo"],
+  ["O VAZIO",         "no centro sempre esteve lá"],
+  ["O QUE RESTA",     "não é geometria — é instrução"],
 ];
 
 const TRACE_MAX = 6000;
@@ -396,6 +412,7 @@ export function KikaiLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -440,7 +457,8 @@ export function KikaiLab() {
 
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+        const [headline, sub] = activeHeadings[i];
         return (
           <div
             key={i}

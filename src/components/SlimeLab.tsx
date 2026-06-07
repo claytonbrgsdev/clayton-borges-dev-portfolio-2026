@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x = Math.max(0, Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a + (b-a)*t;
@@ -33,6 +34,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["MYCELIA","VESSEL","MEMBRANE","DISSOLUTION"];
+const CH_NAMES_PT = ["MICÉLIO","VASO","MEMBRANA","DISSOLUÇÃO"];
 
 const HEADINGS: [string,string][] = [
   ["SPORE",       "the first agent has no plan"],
@@ -47,6 +49,21 @@ const HEADINGS: [string,string][] = [
   ["DISSOLUTION", "the organism withdraws"],
   ["TRACE",       "of what connected everything"],
   ["ABSENCE",     "remembers the shape of presence"],
+];
+
+const HEADINGS_PT: [string,string][] = [
+  ["ESPORO",             "o primeiro agente não tem plano"],
+  ["GRADIENTE",          "o campo químico que guia sem tocar"],
+  ["REDE",               "emerge sem um centro"],
+  ["VASO",               "rotas tornam-se artérias"],
+  ["A MÁQUINA",          "é distribuída e desprovida de mente"],
+  ["OTIMIZAÇÃO",         "sem intenção"],
+  ["MEMBRANA",           "uma superfície definida pelo uso"],
+  ["FRONTEIRA",          "onde dois trilhos pararam de se encontrar"],
+  ["MÍNIMO",             "a rede esquece seu excesso"],
+  ["DISSOLUÇÃO",         "o organismo se retira"],
+  ["TRAÇO",              "do que conectava tudo"],
+  ["AUSÊNCIA",           "lembra a forma da presença"],
 ];
 
 // [bg_r,bg_g,bg_b, trail_r,trail_g,trail_b]
@@ -226,6 +243,7 @@ export function SlimeLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(()=>{
     const container=containerRef.current, scroll=scrollRef.current;
@@ -262,18 +280,21 @@ export function SlimeLab() {
     zIndex:10,maxWidth:"28rem",
   };
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   return (
     <div ref={scrollRef} style={{height:"1200vh",background:"#08060a"}}>
       <div ref={containerRef} style={{position:"fixed",inset:0,zIndex:1}}/>
       {SECTIONS.map((sec,i)=>{
         const chIdx=(sec[0] as number)-1;
-        const [headline,sub]=HEADINGS[i];
+        const [headline,sub]=activeHeadings[i];
         return (
           <div key={i} ref={el=>{sectionEls.current[i]=el;}} style={{...base,...positions[i]}}>
             <span style={{
               display:"block",fontSize:"0.55rem",letterSpacing:"0.38em",
               color:chips[chIdx],textTransform:"uppercase",marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0,fontSize:"clamp(1.7rem,3.8vw,3.2rem)",fontWeight:700,
               lineHeight:1.05,letterSpacing:"-0.01em",

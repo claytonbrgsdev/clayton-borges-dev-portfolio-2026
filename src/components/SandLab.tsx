@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -131,6 +132,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["FORMATION","AVALANCHE","FRACTAL","BOUNDARY"];
+const CH_NAMES_PT = ["FORMAÇÃO","AVALANCHE","FRACTAL","FRONTEIRA"];
 
 const HEADINGS: [string,string][] = [
   ["GRAIN",         "the indivisible unit"],
@@ -145,6 +147,21 @@ const HEADINGS: [string,string][] = [
   ["BOUNDARY",      "the last cell to be claimed"],
   ["DETERMINISTIC", "no randomness was ever needed"],
   ["THE SHAPE",     "from one rule, one billion times"],
+];
+
+const HEADINGS_PT: [string,string][] = [
+  ["GRÃO",              "a unidade indivisível"],
+  ["ESTABILIDADE",      "três abaixo do limite"],
+  ["TOMBAR",            "o quarto grão muda tudo"],
+  ["AVALANCHE",         "cascatas sem memória"],
+  ["AUTO-ORGANIZADA",   "criticidade sem ajuste"],
+  ["FRACTAL",           "a fronteira da pilha"],
+  ["LIVRE DE ESCALA",   "o mesmo em toda magnificação"],
+  ["DOMÍNIO",           "duas pilhas que não podem se fundir"],
+  ["COLISÃO",           "onde duas fronteiras se encontraram e pararam"],
+  ["FRONTEIRA",         "a última célula a ser conquistada"],
+  ["DETERMINÍSTICO",    "nenhuma aleatoriedade foi necessária"],
+  ["A FORMA",           "de uma regra, um bilhão de vezes"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -320,6 +337,7 @@ export function SandLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -347,6 +365,9 @@ export function SandLab() {
     {top:"50%",   left:"50%", textAlign:"center", transform:"translate(-50%,-50%)"},
   ];
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   const chips = ["#385878","#786228","#582870","#525252"];
   const texts = ["#82a5d2","#e4af5f","#d27fec","#d8d5de"];
 
@@ -361,13 +382,13 @@ export function SandLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

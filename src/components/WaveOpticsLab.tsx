@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -43,6 +44,7 @@ const CH_PALS_W: [number,number,number,number,number,number][] = [
 ];
 
 const CH_NAMES_W = ["COHERENCE","INTERFERENCE","DIFFRACTION","APERTURE"];
+const CH_NAMES_W_PT = ["COERÊNCIA","INTERFERÊNCIA","DIFRAÇÃO","ABERTURA"];
 
 const SECTIONS_W = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -72,6 +74,21 @@ const HEADINGS_W: [string,string][] = [
   ["CIRCULAR",     "eight sources — ring aperture"],
   ["AIRY",         "the disk that limits every telescope"],
   ["THE LIMIT",    "no lens escapes diffraction"],
+];
+
+const HEADINGS_W_PT: [string,string][] = [
+  ["ONDA",          "amplitude distribuída no espaço"],
+  ["COERENTE",      "duas fontes travadas em fase"],
+  ["HUYGENS",       "cada frente de onda é uma nova fonte"],
+  ["CONSTRUTIVA",   "crista encontra crista — amplificada"],
+  ["DESTRUTIVA",    "crista encontra vale — cancelada"],
+  ["PADRÃO",        "a geometria dos comprimentos de onda"],
+  ["GRADE",         "quatro fendas — quatro ondas combinadas"],
+  ["PRINCIPAL",     "os máximos que sobrevivem"],
+  ["RESOLUÇÃO",     "o limite de qualquer sistema óptico"],
+  ["CIRCULAR",      "oito fontes — abertura anelar"],
+  ["AIRY",          "o disco que limita todo telescópio"],
+  ["O LIMITE",      "nenhuma lente escapa da difração"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -208,6 +225,9 @@ export function WaveOpticsLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const activeChNames = locale === "pt" ? CH_NAMES_W_PT : CH_NAMES_W;
+  const activeHeadings = locale === "pt" ? HEADINGS_W_PT : HEADINGS_W;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -249,13 +269,13 @@ export function WaveOpticsLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_W.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_W[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_W[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

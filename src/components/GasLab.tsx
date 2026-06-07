@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -119,6 +120,7 @@ function stepMD(T_target: number) {
 // Hue base per chapter — slow=cool, fast=warm, but each chapter has an offset
 const CH_HUE_G = [0.58, 0.45, 0.25, 0.05];  // shifts blue→green→orange→red
 const CH_NAMES_G = ["SOLID","MELTING","LIQUID","GAS"];
+const CH_NAMES_G_PT = ["SÓLIDO","FUSÃO","LÍQUIDO","GÁS"];
 
 const SECTIONS_G = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -150,11 +152,27 @@ const HEADINGS_G: [string,string][] = [
   ["THE BOX",    "N particles — one periodic boundary"],
 ];
 
+const HEADINGS_G_PT: [string,string][] = [
+  ["REDE",        "partículas ordenadas em repouso"],
+  ["HARMONIA",    "movimento térmico dentro de um cristal"],
+  ["SÓLIDO",      "rígido — a estrutura resiste ao cisalhamento"],
+  ["FUSÃO",       "a rede perde seu domínio"],
+  ["TRANSIÇÃO",   "sólido e líquido coexistem"],
+  ["FLUXO",       "sem ordem de longo alcance — curto alcance persiste"],
+  ["MAXWELL",     "v distribuído como v·exp(−mv²/2kT)"],
+  ["BOLTZMANN",   "ordem emerge da aleatoriedade"],
+  ["GÁS",         "partículas livres — livre caminho médio cresce"],
+  ["PRESSÃO",     "força por unidade de área — PV = NkT"],
+  ["CAOS",        "determinístico — mas imprevisível"],
+  ["A CAIXA",     "N partículas — uma fronteira periódica"],
+];
+
 // ── buildSketch ────────────────────────────────────────────────────────────────
 function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement|null>,
+  localeRef: { current: "pt"|"en" },
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     initParticles_G(T_RANGES_G[0][0]);
@@ -254,7 +272,7 @@ function buildSketch(
           p.textAlign(p.RIGHT, p.TOP);
           p.text(`sp ${sp.toFixed(4)}`, W*0.982, H*0.018);
           p.textAlign(p.LEFT, p.BOTTOM);
-          p.text(`CH${chIdx+1} · ${CH_NAMES_G[chIdx]}`, W*0.018, H*0.982);
+          p.text(`CH${chIdx+1} · ${(localeRef.current === "pt" ? CH_NAMES_G_PT : CH_NAMES_G)[chIdx]}`, W*0.018, H*0.982);
           p.textAlign(p.RIGHT, p.BOTTOM);
           p.text(`N=${N_PART_G} r=${R_G}`, W*0.982, H*0.982);
         }
@@ -280,12 +298,17 @@ export function GasLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const localeRef = useRef<"pt"|"en">(locale);
+  localeRef.current = locale;
+  const activeChNames = locale === "pt" ? CH_NAMES_G_PT : CH_NAMES_G;
+  const activeHeadings = locale === "pt" ? HEADINGS_G_PT : HEADINGS_G;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type|null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
@@ -321,13 +344,13 @@ export function GasLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_G.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_G[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_G[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

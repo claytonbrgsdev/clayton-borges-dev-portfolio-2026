@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -67,6 +68,7 @@ const CH_PALS_L: [number,number,number,number,number,number,number,number,number
 ];
 
 const CH_NAMES_L = ["FORMATION","CHAOS","HIGHWAY","INFINITE"];
+const CH_NAMES_L_PT = ["FORMAÇÃO","CAOS","RODOVIA","INFINITO"];
 
 const SECTIONS_LA = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -96,6 +98,21 @@ const HEADINGS_LA: [string,string][] = [
   ["INFINITE",      "the highway continues forever"],
   ["DETERMINISM",   "from a single cell — an infinite road"],
   ["THE MACHINE",   "still running"],
+];
+
+const HEADINGS_LA_PT: [string,string][] = [
+  ["LANGTON",         "uma formiga em uma grade infinita"],
+  ["SIMPLES",         "dois estados, quatro direções, duas regras"],
+  ["SIMÉTRICO",       "os primeiros 500 passos são ordenados"],
+  ["CAOS",            "a formiga vagueia sem propósito"],
+  ["PSEUDOALEATÓRIO", "mas é totalmente determinado"],
+  ["BAGUNÇADO",       "10.000 passos de ruído aparente"],
+  ["RODOVIA",         "a máquina diagonal que se constrói"],
+  ["EMERGENTE",       "ninguém projetou a rodovia"],
+  ["PERIÓDICO",       "104 passos para estender 2 células"],
+  ["INFINITO",        "a rodovia continua para sempre"],
+  ["DETERMINISMO",    "de uma única célula — uma estrada infinita"],
+  ["A MÁQUINA",       "ainda em execução"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -222,6 +239,7 @@ export function LangtonLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -249,6 +267,9 @@ export function LangtonLab() {
     {top:"50%",   left:"50%", textAlign:"center", transform:"translate(-50%,-50%)"},
   ];
 
+  const activeChNames = locale === "pt" ? CH_NAMES_L_PT : CH_NAMES_L;
+  const activeHeadings = locale === "pt" ? HEADINGS_LA_PT : HEADINGS_LA;
+
   const chips = ["#18181e","#0e2020","#181406","#0e0e18"];
   const texts = ["#8888c8","#28c8b0","#c8b840","#c880a0"];
 
@@ -263,13 +284,13 @@ export function LangtonLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_LA.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_LA[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_L[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

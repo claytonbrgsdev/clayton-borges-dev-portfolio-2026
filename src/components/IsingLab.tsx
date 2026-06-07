@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -64,6 +65,7 @@ const CH_PALS_IS: [number,number,number,number,number,number][] = [
 ];
 
 const CH_NAMES_IS = ["PARAMAGNETIC","CRITICAL","FERROMAGNETIC","ORDERED"];
+const CH_NAMES_IS_PT = ["PARAMAGNÉTICO","CRÍTICO","FERROMAGNÉTICO","ORDENADO"];
 
 const SECTIONS_IS = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -93,6 +95,21 @@ const HEADINGS_IS: [string,string][] = [
   ["FROZEN",      "T << T_c — near-perfect alignment"],
   ["GROUND STATE","the minimum energy configuration"],
   ["THE SHAPE",   "one macro-state — countless micro-states"],
+];
+
+const HEADINGS_IS_PT: [string,string][] = [
+  ["SPIN",              "cada momento magnético ao acaso"],
+  ["DESORDEM",          "T > T_c — a energia térmica vence"],
+  ["DESCORRELACIONADO", "cada átomo ignora seus vizinhos"],
+  ["TRANSIÇÃO",         "T → T_c = 2,269 J/k_B"],
+  ["LIVRE DE ESCALA",   "flutuações em todo comprimento de escala"],
+  ["CRÍTICO",           "a fronteira entre duas fases"],
+  ["DOMÍNIOS",          "ilhas de spins alinhados se formam"],
+  ["MAGNETIZADO",       "a maioria escolheu"],
+  ["ORDEM",             "comportamento coletivo de interações pares"],
+  ["CONGELADO",         "T << T_c — alinhamento quase perfeito"],
+  ["ESTADO FUNDAMENTAL","a configuração de mínima energia"],
+  ["A FORMA",           "um macroestado — incontáveis microestados"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -219,6 +236,7 @@ export function IsingLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -246,6 +264,9 @@ export function IsingLab() {
     {top:"50%",   left:"50%", textAlign:"center", transform:"translate(-50%,-50%)"},
   ];
 
+  const activeChNames = locale === "pt" ? CH_NAMES_IS_PT : CH_NAMES_IS;
+  const activeHeadings = locale === "pt" ? HEADINGS_IS_PT : HEADINGS_IS;
+
   const chips = ["#30281a","#30180a","#0a1830","#181818"];
   const texts = ["#c0a060","#e87030","#60b0e8","#e8e8f8"];
 
@@ -260,13 +281,13 @@ export function IsingLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_IS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_IS[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_IS[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

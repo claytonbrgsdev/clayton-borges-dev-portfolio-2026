@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -92,6 +93,7 @@ const CH_PALS_IFS: [number,number,number,number,number,number][] = [
 ];
 
 const CH_NAMES_IFS = ["FERN","SIERPINSKI","LÉVY","DRAGON"];
+const CH_NAMES_IFS_PT = ["SAMAMBAIA","SIERPINSKI","LÉVY","DRAGÃO"];
 
 const SECTIONS_IFS = [
   [1,"I",  0.000,0.018,0.065,0.083],
@@ -121,6 +123,21 @@ const HEADINGS_IFS: [string,string][] = [
   ["DRAGON",      "fold a strip of paper in half, repeat"],
   ["EVERY LAB",   "was two transforms — one infinite form"],
   ["ARRIVING",    "at the shape the rule already was"],
+];
+
+const HEADINGS_IFS_PT: [string,string][] = [
+  ["SEMENTE",       "quatro transformações — uma planta"],
+  ["JOGO DO CAOS",  "aplique uma regra aleatória, para sempre"],
+  ["ATRATOR",       "a forma que nenhuma regra desenha diretamente"],
+  ["TRIÂNGULO",     "o triângulo que contém apenas triângulos"],
+  ["AUTO-SIMILAR",  "cada sub-triângulo é o todo"],
+  ["CANTOR",        "remova o meio — repita"],
+  ["CURVA DE LÉVY", "dobrada em toda escala"],
+  ["PÓ FRACTAL",    "a fronteira de uma curva é um conjunto"],
+  ["RECURSÃO",      "T aplicado a si mesmo, para sempre"],
+  ["DRAGÃO",        "dobre um papel ao meio, repita"],
+  ["CADA LAB",      "eram duas transformações — uma forma infinita"],
+  ["CHEGANDO",      "à forma que a regra já era"],
 ];
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
@@ -246,6 +263,9 @@ export function IFSLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
+  const activeChNames = locale === "pt" ? CH_NAMES_IFS_PT : CH_NAMES_IFS;
+  const activeHeadings = locale === "pt" ? HEADINGS_IFS_PT : HEADINGS_IFS;
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -287,13 +307,13 @@ export function IFSLab() {
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS_IFS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS_IFS[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES_IFS[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

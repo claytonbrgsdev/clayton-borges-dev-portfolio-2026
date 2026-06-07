@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const TAU = Math.PI * 2;
 const ss = (a: number, b: number, t: number) => {
@@ -33,6 +34,22 @@ const SECTIONS = [
   [4, "INVERT",      "complement · flip",  0.833, 0.851, 0.899, 0.917],
   [4, "OPEN",        "release · end",      0.917, 0.935, 0.982, 1.000],
 ] as const;
+
+// PT text for SECTIONS: [name, subtitle]
+const SECTIONS_PT: [string, string][] = [
+  ["SUBSTRATO",            "terra · alimentação"],
+  ["BARRAMENTO",           "regular · filtrar"],
+  ["ENTRADA",              "fonte · sinal"],
+  ["BARRAMENTO DE DADOS",  "paralelo · canal"],
+  ["MEMÓRIA",              "buffer · endereço"],
+  ["TRANSCEPTOR",          "transmitir · receber"],
+  ["LÓGICA",               "porta · estado"],
+  ["PROCESSADOR",          "executar · computar"],
+  ["ROTEAMENTO",           "sinal · caminho"],
+  ["SAÍDA",                "conduzir · amplificar"],
+  ["INVERTER",             "complementar · inverter"],
+  ["ABERTO",               "liberar · fim"],
+];
 
 interface Trace {
   x1: number; y1: number; x2: number; y2: number;
@@ -730,6 +747,7 @@ export function CircuitLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -772,27 +790,28 @@ export function CircuitLab() {
     <div ref={scrollRef} style={{ height: "1200vh", background: "#000000" }}>
       <div ref={containerRef} style={{ position: "fixed", inset: 0, zIndex: 1 }} />
 
-      {SECTIONS.map((sec, i) => (
-        <div
-          key={i}
-          ref={(el) => { sectionEls.current[i] = el; }}
-          style={{ ...base, ...positions[i] }}
-        >
-          <span style={{
-            fontSize: "0.55rem", letterSpacing: "0.32em", display: "block",
-            marginBottom: 8, textTransform: "uppercase", opacity: 0.50,
-          }}>
-            {`ch${sec[0]} · ${String(sec[1]).toLowerCase()}`}
-          </span>
-          <h2 style={{ fontSize: "clamp(1.8rem, 4.2vw, 3.4rem)", fontWeight: 700, lineHeight: 1.08, margin: 0 }}>
-            {String(sec[1])}
-            <br />
-            <span style={{ fontSize: "0.44em", fontWeight: 300, opacity: 0.65, letterSpacing: "0.07em" }}>
-              {String(sec[2])}
+      {SECTIONS.map((sec, i) => {
+        const ptPair = SECTIONS_PT[i];
+        const name = locale === "pt" ? ptPair[0] : String(sec[1]);
+        const sub  = locale === "pt" ? ptPair[1] : String(sec[2]);
+        return (
+          <div key={i} ref={(el) => { sectionEls.current[i] = el; }} style={{ ...base, ...positions[i] }}>
+            <span style={{
+              fontSize: "0.55rem", letterSpacing: "0.32em", display: "block",
+              marginBottom: 8, textTransform: "uppercase", opacity: 0.50,
+            }}>
+              {`ch${sec[0]} · ${name.toLowerCase()}`}
             </span>
-          </h2>
-        </div>
-      ))}
+            <h2 style={{ fontSize: "clamp(1.8rem, 4.2vw, 3.4rem)", fontWeight: 700, lineHeight: 1.08, margin: 0 }}>
+              {name}
+              <br />
+              <span style={{ fontSize: "0.44em", fontWeight: 300, opacity: 0.65, letterSpacing: "0.07em" }}>
+                {sub}
+              </span>
+            </h2>
+          </div>
+        );
+      })}
     </div>
   );
 }

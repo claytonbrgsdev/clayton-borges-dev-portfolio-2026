@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => {
   const x = Math.max(0, Math.min(1, (t - a) / (b - a)));
@@ -61,6 +62,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["SEED", "BRANCH", "WEAVE", "STILL"];
+const CH_NAMES_PT = ["SEMENTE", "RAMIFICAÇÃO", "TRAMA", "QUIETUDE"];
 
 const HEADINGS: [string, string][] = [
   ["SEED",        "what the machine left behind"],
@@ -75,6 +77,21 @@ const HEADINGS: [string, string][] = [
   ["STILL",       "the machine has spoken"],
   ["WHAT FORMED", "was always the rule"],
   ["THE PATTERN", "always was"],
+];
+
+const HEADINGS_PT: [string, string][] = [
+  ["SEMENTE",          "o que a máquina deixou para trás"],
+  ["O CAMPO",          "não está vazio"],
+  ["REAÇÃO",           "precede o padrão"],
+  ["RAMIFICAÇÃO",      "cada caminho exclui os demais"],
+  ["A FRENTE",         "avança e recua"],
+  ["LABIRINTO",        "que nunca foi planejado"],
+  ["TRAMA",            "o inibidor molda o ativador"],
+  ["DENSIDADE",        "é uma forma de presença"],
+  ["TODOS OS CAMINHOS","eram o caminho"],
+  ["QUIETUDE",         "a máquina falou"],
+  ["O QUE SE FORMOU",  "sempre foi a regra"],
+  ["O PADRÃO",         "sempre existiu"],
 ];
 
 // ── buildSketch ───────────────────────────────────────────────────────────────
@@ -332,6 +349,7 @@ export function HamonLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -377,7 +395,9 @@ export function HamonLab() {
 
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+        const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+        const [headline, sub] = activeHeadings[i];
         return (
           <div
             key={i}
@@ -388,7 +408,7 @@ export function HamonLab() {
               display: "block", fontSize: "0.56rem", letterSpacing: "0.35em",
               color: chips[chIdx], textTransform: "uppercase", marginBottom: 10,
             }}>
-              {`CH${chIdx + 1} · ${CH_NAMES[chIdx]}`}
+              {`CH${chIdx + 1} · ${activeChNames[chIdx]}`}
             </span>
             <h2 style={{
               margin: 0, fontSize: "clamp(1.7rem,3.8vw,3.2rem)", fontWeight: 700,

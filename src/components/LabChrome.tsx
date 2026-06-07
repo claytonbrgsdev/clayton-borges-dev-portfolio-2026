@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getLabNav, LAB_PARTS, LAB_SEQUENCE, ROMAN } from "@/lib/data/lab-narrative";
 import type { LabPartNumber } from "@/lib/data/lab-narrative";
+import { useLabLocale } from "@/hooks/useLabLocale";
+import { LabLangSwitch } from "@/components/LabLangSwitch";
 
 interface Props {
   route: string;
@@ -20,6 +22,7 @@ interface Transition {
   partNumber: LabPartNumber;
   title: string;
   tagline: string;
+  taglinePt?: string;
   accent: string;
   nextRoute: string;
 }
@@ -30,6 +33,8 @@ export function LabChrome({ route }: Props) {
   const [visible, setVisible] = useState(false);
   const [atBottom, setAtBottom] = useState(false);
   const [transition, setTransition] = useState<Transition | null>(null);
+  const [locale, setLocale] = useLabLocale();
+  const toggleLocale = () => setLocale(locale === "pt" ? "en" : "pt");
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 700);
@@ -74,6 +79,7 @@ export function LabChrome({ route }: Props) {
           partNumber: nextPart.number,
           title: nextPart.title,
           tagline: nextPart.tagline,
+          taglinePt: nextPart.taglinePt,
           accent: nextPart.accent,
           nextRoute: nav.nextRoute,
         });
@@ -113,11 +119,28 @@ export function LabChrome({ route }: Props) {
     nav.isLastInPart && nav.partNumber < 3
       ? ROMAN[(nav.partNumber + 1) as LabPartNumber]
       : null;
+
+  const t = {
+    back: "← LAB",
+    next: locale === "pt" ? "PRÓXIMO →" : "NEXT →",
+    nextPart: (r: string) => locale === "pt" ? `PARTE ${r} →` : `PART ${r} →`,
+    partLabel: (r: string, title: string) => locale === "pt"
+      ? `PARTE ${r} · ${title}`
+      : `PART ${r} · ${title}`,
+    clickContinue: locale === "pt"
+      ? "CLIQUE OU PRESSIONE → PARA CONTINUAR"
+      : "CLICK OR PRESS → TO CONTINUE",
+    partTransitionLabel: (r: string) => locale === "pt" ? `PARTE ${r}` : `PART ${r}`,
+  };
+
   const nextLabel = !nav.nextRoute
     ? null
     : nextPartRoman
-    ? `PART ${nextPartRoman} →`
-    : "NEXT →";
+    ? t.nextPart(nextPartRoman)
+    : t.next;
+
+  const currentPart = LAB_PARTS.find((p) => p.number === nav.partNumber);
+  const partDisplayTitle = locale === "pt" ? (currentPart?.titlePt ?? nav.partTitle) : nav.partTitle;
 
   const baseOpacity: React.CSSProperties = {
     opacity: visible ? 1 : 0,
@@ -195,7 +218,7 @@ export function LabChrome({ route }: Props) {
                 animation: "lcFadeUp 0.6s 0.1s both",
               }}
             >
-              PART {ROMAN[transition.partNumber]}
+              {t.partTransitionLabel(ROMAN[transition.partNumber])}
             </p>
             <h2
               style={{
@@ -223,7 +246,7 @@ export function LabChrome({ route }: Props) {
                 animation: "lcFadeUp 0.6s 0.65s both",
               }}
             >
-              &ldquo;{transition.tagline}&rdquo;
+              &ldquo;{locale === "pt" ? (transition.taglinePt ?? transition.tagline) : transition.tagline}&rdquo;
             </p>
             <span
               style={{
@@ -235,7 +258,7 @@ export function LabChrome({ route }: Props) {
                 animation: "lcBlink 1.8s 1.5s infinite",
               }}
             >
-              CLICK OR PRESS → TO CONTINUE
+              {t.clickContinue}
             </span>
           </div>
         </div>
@@ -271,8 +294,13 @@ export function LabChrome({ route }: Props) {
           (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.09)";
         }}
       >
-        ← LAB
+        {t.back}
       </Link>
+
+      {/* Lang switch — top right */}
+      <div style={{ ...baseOpacity, position: "fixed", top: 18, right: 18, zIndex: 200 }}>
+        <LabLangSwitch locale={locale} onToggle={toggleLocale} />
+      </div>
 
       {/* Bottom chrome strip */}
       <div
@@ -313,7 +341,7 @@ export function LabChrome({ route }: Props) {
             }}
           />
           <span style={{ color: accent, opacity: 0.85 }}>
-            PART {roman} · {nav.partTitle}
+            {t.partLabel(roman, partDisplayTitle)}
           </span>
         </span>
 
@@ -321,6 +349,9 @@ export function LabChrome({ route }: Props) {
         <span style={{ color: "rgba(255,255,255,0.18)" }}>
           {phaseNum} / {nav.totalInPart}
         </span>
+
+        {/* Lang switch */}
+        <LabLangSwitch locale={locale} onToggle={toggleLocale} />
 
         {/* Next / back */}
         {nav.nextRoute && nextLabel ? (

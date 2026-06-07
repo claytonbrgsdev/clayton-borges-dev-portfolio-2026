@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -120,6 +121,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["ORBIT","PRECESSION","RESONANCE","SCATTERING"];
+const CH_NAMES_PT = ["ÓRBITA","PRECESSÃO","RESSONÂNCIA","ESPALHAMENTO"];
 
 const HEADINGS: [string,string][] = [
   ["GRAVITY",    "an attraction without touching"],
@@ -134,6 +136,21 @@ const HEADINGS: [string,string][] = [
   ["SCATTERING", "chaos in the language of trajectories"],
   ["MEMORY",     "the density of where they have been"],
   ["TRACE",      "the orbit drawn by all its moments"],
+];
+
+const HEADINGS_PT: [string,string][] = [
+  ["GRAVIDADE",         "uma atração sem contato"],
+  ["ÓRBITA",            "cair eternamente de lado"],
+  ["PERÍODO",           "o tempo antes do retorno"],
+  ["PRECESSÃO",         "o eixo que gira lentamente"],
+  ["RESSONÂNCIA",       "quando dois períodos compartilham uma razão"],
+  ["PÉTALA",            "a flor feita pela órbita instável"],
+  ["TRÊS CORPOS",       "o problema sem solução"],
+  ["EFEITO ESTILINGUE", "a máquina do momento roubado"],
+  ["FUGA",              "a velocidade mínima para nunca retornar"],
+  ["ESPALHAMENTO",      "caos na linguagem das trajetórias"],
+  ["MEMÓRIA",           "a densidade de onde estiveram"],
+  ["TRAÇO",             "a órbita desenhada por todos os seus momentos"],
 ];
 
 // [bg_r,bg_g,bg_b, trail_r,trail_g,trail_b]
@@ -275,6 +292,7 @@ export function OrbitLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -311,18 +329,21 @@ export function OrbitLab() {
     zIndex:10, maxWidth:"28rem",
   };
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   return (
     <div ref={scrollRef} style={{height:"1200vh", background:"#040510"}}>
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",

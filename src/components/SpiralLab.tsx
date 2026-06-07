@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
+import { useLabLocale } from "@/hooks/useLabLocale";
 
 const ss   = (a: number, b: number, t: number) => { const x=Math.max(0,Math.min(1,(t-a)/(b-a))); return x*x*(3-2*x); };
 const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
@@ -52,6 +53,7 @@ const SECTIONS = [
 ] as const;
 
 const CH_NAMES = ["EXCITATION","ROTATION","PROPAGATION","DISSOLUTION"];
+const CH_NAMES_PT = ["EXCITAÇÃO","ROTAÇÃO","PROPAGAÇÃO","DISSOLUÇÃO"];
 
 const HEADINGS: [string,string][] = [
   ["THRESHOLD",   "the line the system must cross"],
@@ -66,6 +68,21 @@ const HEADINGS: [string,string][] = [
   ["TURBULENCE",  "when spirals break and multiply"],
   ["DISSOLUTION", "the excitable medium goes quiet"],
   ["REST",        "before the next disturbance arrives"],
+];
+
+const HEADINGS_PT: [string,string][] = [
+  ["LIMIAR",         "a linha que o sistema deve cruzar"],
+  ["FRENTE DE ONDA", "a borda do que já disparou"],
+  ["ESPIRAL",        "rotação sem centro"],
+  ["ROTAÇÃO",        "o eixo se organiza do nada"],
+  ["REFRATÁRIO",     "o período durante o qual nada pode acontecer"],
+  ["RECUPERAÇÃO",    "o lento retorno à prontidão"],
+  ["PROPAGAÇÃO",     "cada célula dispara o que recebeu"],
+  ["COLISÃO",        "duas ondas se aniquilam ao se encontrar"],
+  ["CARDÍACO",       "esse padrão corre em cada batimento"],
+  ["TURBULÊNCIA",    "quando espirais quebram e se multiplicam"],
+  ["DISSOLUÇÃO",     "o meio excitável fica quieto"],
+  ["REPOUSO",        "antes da próxima perturbação chegar"],
 ];
 
 // [bg_r,bg_g,bg_b,  ex_r,ex_g,ex_b]
@@ -333,6 +350,7 @@ export function SpiralLab() {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement|null>>(Array(12).fill(null));
+  const [locale] = useLabLocale();
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -369,18 +387,21 @@ export function SpiralLab() {
     zIndex:10, maxWidth:"28rem",
   };
 
+  const activeChNames = locale === "pt" ? CH_NAMES_PT : CH_NAMES;
+  const activeHeadings = locale === "pt" ? HEADINGS_PT : HEADINGS;
+
   return (
     <div ref={scrollRef} style={{height:"1200vh", background:"#0c0305"}}>
       <div ref={containerRef} style={{position:"fixed", inset:0, zIndex:1}}/>
       {SECTIONS.map((sec, i) => {
         const chIdx = (sec[0] as number) - 1;
-        const [headline, sub] = HEADINGS[i];
+        const [headline, sub] = activeHeadings[i];
         return (
           <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{...base, ...positions[i]}}>
             <span style={{
               display:"block", fontSize:"0.55rem", letterSpacing:"0.38em",
               color:chips[chIdx], textTransform:"uppercase", marginBottom:10,
-            }}>{`CH${chIdx+1} · ${CH_NAMES[chIdx]}`}</span>
+            }}>{`CH${chIdx+1} · ${activeChNames[chIdx]}`}</span>
             <h2 style={{
               margin:0, fontSize:"clamp(1.7rem,3.8vw,3.2rem)", fontWeight:700,
               lineHeight:1.05, letterSpacing:"-0.01em",
