@@ -16,11 +16,11 @@ const secAlpha = (sp: number, i0: number, i1: number, o0: number, o1: number) =>
 // ── Palette ────────────────────────────────────────────────────────────────────
 const BG      = "#0a0a0c";
 const PRIMARY = "#f0ede8";
-const ACCENT  = "#C84030";
+const ACCENT  = "#D86020";
 // numeric channels for canvas rgba() calls
 const BG_R = 10,  BG_G = 10,  BG_B = 12;
 const PR_R = 240, PR_G = 237, PR_B = 232;
-const AC_R = 200, AC_G = 64,  AC_B = 48;
+const AC_R = 216, AC_G = 96,  AC_B = 32;
 
 // ── Chapter boundaries ─────────────────────────────────────────────────────────
 const CH: [number, number][] = [

@@ -38,12 +38,9 @@ const TERM_LINES: { t: string; kind: "cmd" | "out" | "success" | "blank" }[] = [
   { t: "✓  deployed  moveofilmes.com.br  [2.4s]",          kind: "success" },
 ];
 
-const TECH       = ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Vercel"];
-const HIGHLIGHTS = [
-  "38 páginas auto-geradas",
-  "Sync via headless CMS",
-  "99.8% uptime",
-];
+const TECH           = ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Vercel"];
+const HIGHLIGHTS_EN  = ["38 auto-generated pages", "Synced via headless CMS", "99.8% uptime"];
+const HIGHLIGHTS_PT  = ["38 páginas auto-geradas", "Sincronizado via headless CMS", "99.8% uptime"];
 const MACOS_DOTS = ["#ff5f57", "#febc2e", "#28c840"];
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -59,7 +56,7 @@ function TitleBar({ label }: { label: string }) {
       {MACOS_DOTS.map(c => (
         <span key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c, opacity: 0.8, flexShrink: 0 }} />
       ))}
-      <span style={{ marginLeft: "auto", fontFamily: "monospace", fontSize: "10px", opacity: 0.28, letterSpacing: "0.04em" }}>
+      <span style={{ marginLeft: "auto", fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px", opacity: 0.28, letterSpacing: "0.04em" }}>
         {label}
       </span>
     </div>
@@ -188,7 +185,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
       ref={sectionRef}
       style={{
         height: "100vh",
-        background: "#07090e",
+        background: "#0A0909",
         overflow: "hidden",
         position: "relative",
       }}
@@ -209,8 +206,8 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
         position: "absolute", top: "28px", left: "40px",
         zIndex: 30, pointerEvents: "none",
       }}>
-        <span style={{ fontFamily: "monospace", fontSize: "10px", opacity: 0.28, letterSpacing: "0.14em", textTransform: "uppercase" }}>
-          Featured Project
+        <span style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px", opacity: 0.28, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+          {locale === "pt" ? "Projeto em Destaque" : "Featured Project"}
         </span>
       </div>
 
@@ -229,7 +226,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
           willChange: "transform",
         }}>
           <TitleBar label="[slug]/page.tsx" />
-          <div style={{ padding: "12px 16px", fontFamily: "monospace", fontSize: "11px", lineHeight: 1.72, overflowX: "hidden" }}>
+          <div style={{ padding: "12px 16px", fontFamily: "var(--font-geist-mono, monospace)", fontSize: "11px", lineHeight: 1.72, overflowX: "hidden" }}>
             {CODE_LINES.map((line, i) => (
               <div
                 key={i}
@@ -269,7 +266,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
           willChange: "transform",
         }}>
           <TitleBar label="zsh — moveo-filmes" />
-          <div style={{ padding: "10px 14px", fontFamily: "monospace", fontSize: "11px", lineHeight: 1.7 }}>
+          <div style={{ padding: "10px 14px", fontFamily: "var(--font-geist-mono, monospace)", fontSize: "11px", lineHeight: 1.7 }}>
             {TERM_LINES.map((line, i) => (
               <div
                 key={i}
@@ -318,7 +315,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
               border: "1px solid rgba(255,255,255,0.07)",
               borderRadius: "4px",
               padding: "3px 10px",
-              fontFamily: "monospace", fontSize: "10px",
+              fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px",
               color: "rgba(255,255,255,0.2)",
             }}>
               moveofilmes.com.br
@@ -326,7 +323,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
           </div>
 
           {/* Viewport */}
-          <div style={{ flex: 1, overflow: "hidden", background: "#08090e" }}>
+          <div style={{ flex: 1, overflow: "hidden", background: "#0A0909" }}>
             <video
               ref={videoRef}
               src={MOVEO_VIDEO}
@@ -356,8 +353,8 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
             position: "absolute", top: "44px", left: "50%",
             transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap",
           }}>
-            <span style={{ fontFamily: "monospace", fontSize: "10px", opacity: 0.28, display: "block", marginBottom: "6px", letterSpacing: "0.14em", textTransform: "uppercase" }}>
-              01 · Client Work · CMS Platform · 2024
+            <span style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px", opacity: 0.28, display: "block", marginBottom: "6px", letterSpacing: "0.14em", textTransform: "uppercase" }}>
+              {locale === "pt" ? "01 · Trabalho para Cliente · Plataforma CMS · 2024" : "01 · Client Work · CMS Platform · 2024"}
             </span>
             <h3 style={{ fontWeight: 700, fontSize: "1.7rem", lineHeight: 1 }}>Moveo Filmes</h3>
           </div>
@@ -369,10 +366,10 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
             display: "flex", gap: "18px", alignItems: "center",
             whiteSpace: "nowrap",
           }}>
-            {HIGHLIGHTS.map((h, i) => (
+            {(locale === "pt" ? HIGHLIGHTS_PT : HIGHLIGHTS_EN).map((h, i) => (
               <span key={h} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                 {i > 0 && <span style={{ opacity: 0.18, fontSize: "10px" }}>·</span>}
-                <span style={{ fontFamily: "monospace", fontSize: "10px", opacity: 0.42 }}>
+                <span style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px", opacity: 0.42 }}>
                   <span style={{ opacity: 0.5 }}>▸ </span>{h}
                 </span>
               </span>
@@ -388,7 +385,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
           }}>
             <Link
               href={`/${locale}/projects/moveo-filmes`}
-              style={{ fontFamily: "monospace", fontSize: "10px", opacity: 0.55, letterSpacing: "0.08em", textDecoration: "none", color: "inherit" }}
+              style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px", opacity: 0.55, letterSpacing: "0.08em", textDecoration: "none", color: "inherit" }}
             >
               {locale === "pt" ? "Ver Case Study →" : "View Case Study →"}
             </Link>
@@ -402,7 +399,7 @@ export function IDEDeploySequence({ locale = "en" }: IDEProps) {
           }}>
             {TECH.map(t => (
               <span key={t} style={{
-                fontFamily: "monospace", fontSize: "10px",
+                fontFamily: "var(--font-geist-mono, monospace)", fontSize: "10px",
                 border: "1px solid rgba(255,255,255,0.14)", padding: "3px 9px", opacity: 0.42,
               }}>
                 {t}

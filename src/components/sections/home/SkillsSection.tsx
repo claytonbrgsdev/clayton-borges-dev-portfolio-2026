@@ -17,7 +17,7 @@ export function SkillsSection({ dict }: SkillsSectionProps) {
       style={{ zIndex: 2 }}
     >
       <div className="mx-auto max-w-6xl">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
           {skills.label}
         </span>
         <h2 className="text-3xl md:text-5xl font-bold mb-16">{skills.heading}</h2>
@@ -25,14 +25,14 @@ export function SkillsSection({ dict }: SkillsSectionProps) {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
           {stack.map((category) => (
             <div key={category.title}>
-              <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-5">
+              <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-5">
                 {category.title}
               </span>
               <div className="flex flex-wrap gap-2">
                 {category.items.map((item) => (
                   <span
                     key={item.name}
-                    className="font-mono text-sm border border-white/15 px-3 py-1.5 opacity-70"
+                    className="font-sans text-sm border border-white/15 px-3 py-1.5 opacity-70"
                     title={item.note}
                   >
                     {item.name}

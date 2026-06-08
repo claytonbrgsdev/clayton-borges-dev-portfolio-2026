@@ -83,7 +83,7 @@ export function AboutSection({ dict }: AboutSectionProps) {
         {/* Right: product datasheet */}
         <div style={{ padding: isMobile ? "32px 32px 32px 32px" : "48px 32px 48px 40px" }}>
           <div style={{ ...mono, fontSize: 9, letterSpacing: "0.1em", color: "#9A9A9A", textTransform: "uppercase", marginBottom: 24 }}>
-            SPECIFICATIONS
+            {t.spec_heading}
           </div>
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <tbody>

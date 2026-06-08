@@ -4,7 +4,8 @@
     "projects": "Projetos",
     "hardware": "Hardware",
     "about": "Sobre",
-    "contact": "Contato"
+    "contact": "Contato",
+    "logo_tagline": "Desenvolvedor Full-Stack"
   },
   "home": {
     "hero": {
@@ -14,7 +15,16 @@
       "hook": "Construo plataformas de produção, experiências 3D em tempo real e ferramentas generativas — do backend ao último pixel.",
       "subtitle": "React · Next.js · Three.js · GSAP · Python",
       "cta_projects": "Ver Trabalhos",
-      "cta_contact": "Entrar em Contato"
+      "cta_contact": "Entrar em Contato",
+      "index_code": "CB-2025 · PORTFÓLIO",
+      "descriptor": "Desenvolvedor full-stack e criativo\nespecializado em 3D interativo,\narte generativa e aplicações web em produção.",
+      "tech_strip": "React · Next.js · Three.js · GSAP · Python · TypeScript",
+      "scroll_hint": "Role para explorar ↓"
+    },
+    "instrument": {
+      "portfolio_code": "PORTFÓLIO INTERATIVO",
+      "live_label": "AO VIVO",
+      "tagline": "Dev. Full-Stack / Criativo"
     },
     "about_preview": {
       "label": "Sobre Mim",
@@ -51,6 +61,72 @@
       "heading": "Hardware",
       "subheading": "Computação física — microcontroladores, síntese de áudio embarcada e design de circuitos.",
       "cta": "Ver Projetos de Hardware"
+    },
+    "about_section": {
+      "code": "03 — Sobre",
+      "manifesto": "Crio coisas que se movem, reagem e parecem vivas.",
+      "bio": "Desenvolvedor full-stack e criativo baseado em Brasília, com 3 anos entregando aplicações de produção, experiências 3D interativas e ferramentas generativas para clientes no Brasil e no exterior.",
+      "available_for": "Aberto a vagas remotas, contratos freelance e relocação.",
+      "spec_heading": "ESPECIFICAÇÕES",
+      "spec_location": "LOCALIZAÇÃO",
+      "location_val": "Brasília, Brasil — Pronto para Remoto",
+      "spec_discipline": "DISCIPLINA",
+      "discipline_val": "Full-Stack · Dev. Criativo · Arte Generativa",
+      "spec_year": "EXPERIÊNCIA",
+      "year_val": "3 anos em produção",
+      "spec_studio": "ESTÚDIO",
+      "studio_val": "DISCLAYMER · com Raphael Palmer",
+      "spec_available": "DISPONÍVEL PARA",
+      "available_val": "Freelance · Relocação · Remoto",
+      "spec_tools": "FERRAMENTAS"
+    },
+    "contact_section": {
+      "code": "05 — Contato",
+      "availability_text": "Aberto a contratos freelance, vagas full-time e relocação. Remoto ou presencial.",
+      "cta_code": "→",
+      "cta_label": "Entrar em Contato"
+    },
+    "work_section": {
+      "code": "02 — Trabalhos",
+      "heading": "Trabalhos Selecionados",
+      "cta_all": "Todos os Projetos →",
+      "projects": [
+        {
+          "type": "Plataforma · 2024",
+          "role": "Full-Stack / CMS",
+          "desc": "CMS bilíngue para empresa de cinema independente. Cliente gerencia catálogo completo sem tocar no código."
+        },
+        {
+          "type": "Vitrine de Produto · 2024",
+          "role": "3D / Interativo",
+          "desc": "Configurador 3D de capas de carro em tempo real. Altere cor, costura e logo — renderizado instantaneamente no modelo."
+        },
+        {
+          "type": "Dashboard · 2024",
+          "role": "Dashboard / Web3",
+          "desc": "Subnet 68 do Bittensor — descoberta de fármacos por IA on-chain. Rankings de mineradores e competições moleculares por época."
+        },
+        {
+          "type": "Plataforma · 2023",
+          "role": "E-Commerce / Música",
+          "desc": "E-commerce e streaming de música. Checkout duplo Stripe + Mercado Pago, Spotify API, assets de áudio no AWS S3."
+        }
+      ]
+    },
+    "stats_strip": {
+      "lab_experiments": "Experimentos no Lab",
+      "years": "Anos em produção"
+    },
+    "section_labels": {
+      "entry": "01 — Entrada",
+      "work": "02 — Trabalhos",
+      "selected_projects": "Projetos\nSelecionados",
+      "about": "03 — Sobre",
+      "lab": "04 — Lab",
+      "contact": "05 — Contato",
+      "scroll": "Scroll",
+      "nav_dots": ["Início", "Trabalhos", "Sobre", "Abordagem", "Lab"],
+      "lang_tooltip": "Want to see this in English?"
     }
   },
   "projects": {

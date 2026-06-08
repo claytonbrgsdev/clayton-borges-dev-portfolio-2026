@@ -19,11 +19,11 @@ export function HowIWork({ dict, locale }: HowIWorkProps) {
       style={{ zIndex: 2 }}
     >
       <div className="mx-auto max-w-6xl">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
           Approach
         </span>
         <h2 className="text-3xl md:text-5xl font-bold mb-6">{p.heading}</h2>
-        <p className="text-sm opacity-50 mb-16 max-w-xl">{p.subheading}</p>
+        <p className="font-sans text-sm opacity-50 mb-16 max-w-xl">{p.subheading}</p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {principles.map((principle) => (
@@ -37,7 +37,7 @@ export function HowIWork({ dict, locale }: HowIWorkProps) {
               <h3 className="font-bold text-base mb-3">
                 {locale === "pt" ? principle.titlePt : principle.title}
               </h3>
-              <p className="text-sm opacity-50 leading-relaxed">
+              <p className="font-sans text-sm opacity-50 leading-relaxed">
                 {locale === "pt" ? principle.descriptionPt : principle.description}
               </p>
             </div>

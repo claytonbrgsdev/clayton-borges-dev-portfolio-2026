@@ -24,13 +24,13 @@ export function HardwareCallout({ dict, locale }: HardwareCalloutProps) {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div className="max-w-xl">
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
               Hardware
             </span>
             <h2 className="text-2xl md:text-4xl font-bold mb-4">
               {hardware_callout.heading}
             </h2>
-            <p className="text-sm opacity-50 leading-relaxed mb-6">
+            <p className="font-sans text-sm opacity-50 leading-relaxed mb-6">
               {hardware_callout.subheading}
             </p>
 
@@ -39,7 +39,7 @@ export function HardwareCallout({ dict, locale }: HardwareCalloutProps) {
               {hardwareProjects.map((hw) => (
                 <span
                   key={hw.id}
-                  className="font-mono text-xs border border-white/15 px-3 py-1.5 opacity-60"
+                  className="font-sans text-xs border border-white/15 px-3 py-1.5 opacity-60"
                 >
                   {locale === "pt" ? hw.namePt : hw.nameEn}
                 </span>
@@ -48,7 +48,7 @@ export function HardwareCallout({ dict, locale }: HardwareCalloutProps) {
 
             <Link
               href={`/${locale}/hardware`}
-              className="inline-block px-6 py-2.5 border border-white/30 font-mono text-sm tracking-wide hover:border-white/70 transition-colors"
+              className="inline-block px-6 py-2.5 border border-white/30 font-sans text-sm tracking-wide hover:border-white/70 transition-colors"
             >
               {hardware_callout.cta} →
             </Link>

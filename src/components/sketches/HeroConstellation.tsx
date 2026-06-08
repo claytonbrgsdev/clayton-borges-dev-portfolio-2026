@@ -22,11 +22,13 @@ const STEPS   = 4;          // integration steps per frame
 const TRAIL   = 1800;       // max trail points
 
 export function HeroConstellation() {
-  const bodyRef  = useRef<HTMLElement | null>(null);
+  const bodyRef    = useRef<HTMLElement | null>(null);
   const [mounted, setMounted] = useState(false);
   const [enabled, setEnabled] = useState(false);
   // Normalised mouse position 0→1
-  const mouseXRef = useRef(0.5);
+  const mouseXRef  = useRef(0.5);
+  // Scroll velocity — pixels/frame, smoothed via lerp (0 when still)
+  const velocityRef = useRef(0);
 
   useEffect(() => {
     setMounted(true);
@@ -46,6 +48,23 @@ export function HeroConstellation() {
   }, [enabled]);
 
   const progressRef = useScrollProgress(bodyRef);
+
+  // Track scroll velocity for sketch modulation
+  useEffect(() => {
+    if (!enabled) return;
+    let prevY = window.scrollY;
+    let rafId: number;
+    const measure = () => {
+      const curr = window.scrollY;
+      const delta = Math.abs(curr - prevY);
+      // Lerp: decay quickly when idle, respond fast when moving
+      velocityRef.current = velocityRef.current * 0.78 + delta * 0.22;
+      prevY = curr;
+      rafId = requestAnimationFrame(measure);
+    };
+    rafId = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(rafId);
+  }, [enabled]);
 
   const sketch = useCallback<P5Sketch>((p) => {
     // Lorenz state
@@ -115,9 +134,14 @@ export function HeroConstellation() {
       p.clear();
       const prog  = progressRef.current;
 
-      // Mouse → rotation target, smoothly tracked
-      thetaTgt = (mouseXRef.current - 0.5) * Math.PI * 0.65;
-      theta   += (thetaTgt - theta) * 0.025;
+      // Scroll velocity — how fast the user is scrolling (px/frame, smoothed)
+      const vel = velocityRef.current;
+
+      // Mouse → rotation target, smoothly tracked.
+      // Velocity adds a small angular nudge — fast scroll spins the butterfly slightly.
+      thetaTgt  = (mouseXRef.current - 0.5) * Math.PI * 0.65;
+      thetaTgt += vel * 0.00045;                   // velocity → extra rotation
+      theta    += (thetaTgt - theta) * 0.025;
 
       // Scroll → shrink trail, morph rho toward bifurcation (ρ=24.06),
       //          fade alpha, pull butterfly toward screen center
@@ -126,8 +150,12 @@ export function HeroConstellation() {
       const scale     = Math.min(w, h) * (0.0085 - prog * 0.002);
       const headAlpha = 0.65 - prog * 0.48;
 
-      // Advance attractor STEPS steps
-      for (let s = 0; s < STEPS; s++) {
+      // Velocity → extra integration steps: fast scroll = more chaos per frame.
+      // Clamped to STEPS+4 so it never gets out of hand.
+      const activeSteps = STEPS + Math.min(4, Math.floor(vel * 0.18));
+
+      // Advance attractor activeSteps steps
+      for (let s = 0; s < activeSteps; s++) {
         [lx, ly, lz] = rk4(lx, ly, lz, rho);
         trail.push(project(lx, ly, lz, theta, scale));
         while (trail.length > TRAIL) trail.shift();

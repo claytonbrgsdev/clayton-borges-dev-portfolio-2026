@@ -41,18 +41,18 @@ export function ContactSection({ dict }: ContactSectionProps) {
   return (
     <div>
       <div className="mb-16">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
           Get in touch
         </span>
         <h1 className="text-4xl md:text-6xl font-bold mb-4">{contact.heading}</h1>
-        <p className="text-lg opacity-50">{contact.subheading}</p>
+        <p className="font-sans text-lg opacity-50">{contact.subheading}</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-16">
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <label className="font-sans text-xs tracking-widest uppercase opacity-40">
               {contact.form_name}
             </label>
             <input
@@ -63,7 +63,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <label className="font-sans text-xs tracking-widest uppercase opacity-40">
               {contact.form_email}
             </label>
             <input
@@ -74,7 +74,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <label className="font-sans text-xs tracking-widest uppercase opacity-40">
               {contact.form_subject}
             </label>
             <input
@@ -85,7 +85,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <label className="font-sans text-xs tracking-widest uppercase opacity-40">
               {contact.form_message}
             </label>
             <textarea
@@ -97,16 +97,16 @@ export function ContactSection({ dict }: ContactSectionProps) {
           </div>
 
           {status === "success" && (
-            <p className="text-sm text-green-400 font-mono">{contact.form_success}</p>
+            <p className="text-sm text-green-400 font-sans">{contact.form_success}</p>
           )}
           {status === "error" && (
-            <p className="text-sm text-red-400 font-mono">{contact.form_error}</p>
+            <p className="text-sm text-red-400 font-sans">{contact.form_error}</p>
           )}
 
           <button
             type="submit"
             disabled={status === "sending" || status === "success"}
-            className="mt-2 px-8 py-3 bg-white text-black font-mono text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start flex items-center gap-3"
+            className="mt-2 px-8 py-3 bg-white text-black font-sans text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start flex items-center gap-3"
           >
             {status === "sending" && (
               <span className="inline-block w-3 h-3 border border-black/30 border-t-black rounded-full animate-spin" />
@@ -117,7 +117,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
 
         {/* Direct links */}
         <div className="flex flex-col gap-8">
-          <span className="font-mono text-xs tracking-widest uppercase opacity-40">
+          <span className="font-sans text-xs tracking-widest uppercase opacity-40">
             {contact.or_reach}
           </span>
           <div className="flex flex-col gap-4">
@@ -125,7 +125,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               href={`mailto:${contactInfo.email}`}
               className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-mono text-xs opacity-40 w-16">Email</span>
+              <span className="font-sans text-xs opacity-40 w-16">Email</span>
               <span>{contactInfo.email}</span>
             </a>
             <a
@@ -134,7 +134,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               rel="noopener noreferrer"
               className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-mono text-xs opacity-40 w-16">GitHub</span>
+              <span className="font-sans text-xs opacity-40 w-16">GitHub</span>
               <span>claytonbrgsdev</span>
             </a>
             <a
@@ -143,7 +143,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               rel="noopener noreferrer"
               className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-mono text-xs opacity-40 w-16">LinkedIn</span>
+              <span className="font-sans text-xs opacity-40 w-16">LinkedIn</span>
               <span>clayton-borges-web-dev</span>
             </a>
           </div>

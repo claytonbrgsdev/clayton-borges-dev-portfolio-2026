@@ -16,10 +16,10 @@ const secAlpha = (sp: number, i0: number, i1: number, o0: number, o1: number) =>
 // ── Palette ────────────────────────────────────────────────────────────────────
 const PAL_BG  = [0,   0,   12 ] as const;
 const PAL_PRI = [232, 238, 255] as const;
-const PAL_ACC = [48,  96,  208] as const;
+const PAL_ACC = [30,  68,  240] as const;
 const BG      = "#00000c";
 const PRIMARY = "#e8eeff";
-const ACCENT  = "#3060D0";
+const ACCENT  = "#1E44F0";
 
 // ── Grid / wave constants ──────────────────────────────────────────────────────
 const GW = 80, GH = 50, N_CELLS = GW * GH;

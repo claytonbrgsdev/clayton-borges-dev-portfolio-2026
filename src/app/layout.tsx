@@ -7,6 +7,7 @@ import { CursorCanvas } from "@/components/CursorCanvas";
 const orbit = localFont({
   src: [
     { path: "./fonts/Orbit-Regular.woff2" },
+    { path: "./fonts/Orbit-Regular.ttf" },
   ],
   variable: "--font-geist-sans",
   weight: "400",

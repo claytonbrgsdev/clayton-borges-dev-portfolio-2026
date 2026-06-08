@@ -117,7 +117,7 @@ export function DualInstrument({ labels }: DualInstrumentProps) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: muted ? "rgba(10,10,10,0.28)" : "#6B35D9",
+              color: muted ? "rgba(10,10,10,0.28)" : "#1E44F0",
               fontFamily: mono,
               padding: 0,
               lineHeight: 1,

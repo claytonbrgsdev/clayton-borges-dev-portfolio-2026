@@ -19,7 +19,7 @@ interface Renderer {
 // ══════════════════════════════════════════════════════════════════════════════
 // PHASE 23-c · IFS CHAOS GAME — iterated function systems
 // 220×146 density buffer accumulating random affine transform applications.
-// 4 fractals: Barnsley fern → Sierpinski → Lévy curve → Heighway dragon.
+// 3 fractals: Barnsley fern → Lévy curve → Heighway dragon.
 // sqrt-mapped density gives natural luminance falloff.
 // ══════════════════════════════════════════════════════════════════════════════
 class IFSRenderer implements Renderer {
@@ -28,17 +28,13 @@ class IFSRenderer implements Renderer {
   private offImg: ImageData | null = null;
   private readonly WI = 220; private readonly HI = 146; private readonly NI = 220*146;
   private readonly density = new Float32Array(220*146);
-  private curX = 0; private curY = 0; private lastCh = -1;
+  private curX = 0; private curY = 0; private lastCh = -1; private chapterStartT = -1;
 
   // [a,b,c,d,e,f], cumulative probs
   private readonly SYSTEMS: { t: [number,number,number,number,number,number][]; cp: number[]; xMin:number;xMax:number;yMin:number;yMax:number }[] = [
     { // Barnsley fern
       t:  [[ 0.00, 0.00, 0.00, 0.16, 0.00, 0.00],[ 0.85, 0.04,-0.04, 0.85, 0.00, 1.60],[ 0.20,-0.26, 0.23, 0.22, 0.00, 1.60],[-0.15, 0.28, 0.26, 0.24, 0.00, 0.44]],
       cp: [0.01, 0.86, 0.93, 1.00], xMin:-2.5, xMax:2.5, yMin:0, yMax:10,
-    },
-    { // Sierpinski triangle
-      t:  [[0.50,0.00,0.00,0.50,0.00,0.00],[0.50,0.00,0.00,0.50,0.50,0.00],[0.50,0.00,0.00,0.50,0.25,0.43]],
-      cp: [0.333,0.667,1.000], xMin:0, xMax:1, yMin:0, yMax:0.87,
     },
     { // Lévy C curve
       t:  [[ 0.50,-0.50, 0.50, 0.50, 0.00, 0.00],[ 0.50, 0.50,-0.50, 0.50, 0.50, 0.50]],
@@ -50,10 +46,9 @@ class IFSRenderer implements Renderer {
     },
   ];
   private readonly PALS: [number,number,number,number,number,number][] = [
-    [ 7,  9, 14,  30,  98, 210],  // BG → blue C1  (Barnsley fern)
-    [ 7,  9, 14, 110,  80, 192],  // BG → violet C3 (Sierpinski)
-    [ 7,  9, 14, 200, 106,  40],  // BG → amber C2  (Lévy C)
-    [ 7,  9, 14,  30, 170, 200],  // BG → teal      (Heighway dragon)
+    [10,  9,  9,  30,  68, 240],  // BG → blue   (Barnsley fern)
+    [10,  9,  9, 216,  96,  32],  // BG → orange (Lévy C)
+    [10,  9,  9,  30,  68, 240],  // BG → blue   (Heighway dragon)
   ];
 
   init(_w: number, _h: number) {
@@ -63,20 +58,22 @@ class IFSRenderer implements Renderer {
       this.offCtx = this.offEl.getContext("2d");
     }
     this.offImg = this.offCtx!.createImageData(this.WI, this.HI);
-    this.density.fill(0); this.lastCh = -1; this.curX = 0; this.curY = 0;
+    this.density.fill(0); this.lastCh = -1; this.curX = 0; this.curY = 0; this.chapterStartT = -1;
   }
 
-  draw(ctx: CanvasRenderingContext2D, p: number, _t: number, w: number, h: number) {
+  draw(ctx: CanvasRenderingContext2D, p: number, t: number, w: number, h: number) {
     const { WI, HI, NI, density, SYSTEMS, PALS } = this;
-    const chF = p * 4, chIdx = Math.min(3, chF|0), chT = chF - chIdx;
-    const next = Math.min(3, chIdx + 1), blend = ss(0.72, 1.0, chT);
+    const chIdx = Math.min(2, (p * 3) | 0);
 
     if (chIdx !== this.lastCh) {
-      density.fill(0); this.curX = 0; this.curY = 0; this.lastCh = chIdx;
+      density.fill(0); this.curX = 0; this.curY = 0; this.lastCh = chIdx; this.chapterStartT = t;
     }
 
     const sys = SYSTEMS[chIdx];
-    const SPLAT = 0.035, DECAY = 0.9987, N = 6000;
+    const SPLAT = 0.035, DECAY = 0.9987;
+    // fractal formation: ramp N quadratically from ~0 to 6000 over 3s
+    const buildRamp = Math.min(1, (t - this.chapterStartT) / 3.0);
+    const N = Math.max(80, (6000 * buildRamp * buildRamp) | 0);
 
     for (let i = 0; i < NI; i++) density[i] *= DECAY;
 
@@ -96,9 +93,10 @@ class IFSRenderer implements Renderer {
       }
     }
 
-    const p0 = PALS[chIdx], p1 = PALS[next];
-    const bgR=lerp(p0[0],p1[0],blend)|0, bgG=lerp(p0[1],p1[1],blend)|0, bgB=lerp(p0[2],p1[2],blend)|0;
-    const fgR=lerp(p0[3],p1[3],blend)|0, fgG=lerp(p0[4],p1[4],blend)|0, fgB=lerp(p0[5],p1[5],blend)|0;
+    // hard palette per chapter — no RGB lerp between chapters (avoids green bleed)
+    const pal = PALS[chIdx];
+    const bgR = pal[0], bgG = pal[1], bgB = pal[2];
+    const fgR = pal[3], fgG = pal[4], fgB = pal[5];
 
     const sd = this.offImg!.data;
     for (let idx = 0; idx < NI; idx++) {
@@ -115,7 +113,7 @@ class IFSRenderer implements Renderer {
     ctx.drawImage(this.offEl!, 0, 0, w, h);
   }
 
-  reset() { this.density.fill(0); this.lastCh = -1; this.curX = 0; this.curY = 0; }
+  reset() { this.density.fill(0); this.lastCh = -1; this.curX = 0; this.curY = 0; this.chapterStartT = -1; }
   destroy() { this.offEl = null; this.offCtx = null; this.offImg = null; }
 }
 
@@ -127,6 +125,7 @@ class IFSRenderer implements Renderer {
 class LSystemRenderer implements Renderer {
   private data: { segs:Float32Array; nSegs:number; xMin:number; xMax:number; yMin:number; yMax:number } | null = null;
   private lastCh = -1;
+  private chapterStartT = -1;
 
   private readonly SYS = [
     { axiom:"F--F--F",     rules:{ F:"F+F--F+F" },                              angle:60,  depth:4,  init:0 },
@@ -134,8 +133,8 @@ class LSystemRenderer implements Renderer {
     { axiom:"A",           rules:{ A:"+BF-AFA-FB+", B:"-AF+BFB+FA-" },          angle:90,  depth:5,  init:0 },
     { axiom:"X",           rules:{ X:"F+[[X]-X]-F[-FX]+X", F:"FF" },            angle:25,  depth:6,  init:-Math.PI*0.5 },
   ];
-  private readonly DARK = ["#07090e","#07090e","#07090e","#07090e"];
-  private readonly COLS: [number,number,number][] = [[30,98,210],[30,180,140],[110,80,192],[200,106,40]];
+  private readonly DARK = ["#0A0909","#0A0909","#0A0909","#0A0909"];
+  private readonly COLS: [number,number,number][] = [[30,68,240],[216,96,32],[30,68,240],[216,96,32]];
 
   private expand(axiom: string, rules: Record<string,string>, n: number): string {
     let s = axiom;
@@ -170,14 +169,15 @@ class LSystemRenderer implements Renderer {
     return { segs, nSegs:n, xMin, xMax, yMin, yMax };
   }
 
-  init(_w: number, _h: number) { this.data = null; this.lastCh = -1; }
+  init(_w: number, _h: number) { this.data = null; this.lastCh = -1; this.chapterStartT = -1; }
 
-  draw(ctx: CanvasRenderingContext2D, p: number, _t: number, w: number, h: number) {
+  draw(ctx: CanvasRenderingContext2D, p: number, t: number, w: number, h: number) {
     const chIdx = Math.min(3, (p * 4) | 0);
     if (chIdx !== this.lastCh) {
       const sys = this.SYS[chIdx];
       this.data = this.interpret(this.expand(sys.axiom, sys.rules as unknown as Record<string, string>, sys.depth), sys.angle, sys.init);
       this.lastCh = chIdx;
+      this.chapterStartT = t;
     }
     if (!this.data) return;
 
@@ -190,8 +190,9 @@ class LSystemRenderer implements Renderer {
     const offX = w/2 - (xMin+pxR/2)*scale;
     const offY = h/2 - (yMin+pyR/2)*scale;
 
-    const chT = p*4 - chIdx;
-    const drawCount = Math.min(nSegs, (nSegs * ss(0, 0.9, chT)) | 0);
+    const elapsed = t - this.chapterStartT;
+    const animFrac = (elapsed * 0.22) % 1;
+    const drawCount = (nSegs * animFrac) | 0;
     const [r,g,b] = this.COLS[chIdx];
 
     ctx.beginPath();
@@ -205,7 +206,7 @@ class LSystemRenderer implements Renderer {
     ctx.stroke();
   }
 
-  reset() { this.data = null; this.lastCh = -1; }
+  reset() { this.data = null; this.lastCh = -1; this.chapterStartT = -1; }
   destroy() {}
 }
 
@@ -228,10 +229,10 @@ class WireWorldRenderer implements Renderer {
   // [bg, wire, head, tail] per chapter (RGB triples)
   // [bg, wire, head, tail] per chapter — unified palette
   private readonly PALS = [
-    [[7,9,14],[25,50,105],[30,98,210],[15,40,80]],    // blue circuit
-    [[7,9,14],[55,32,95],[110,80,192],[38,22,68]],    // violet circuit
-    [[7,9,14],[88,48,18],[200,106,40],[65,32,10]],    // amber circuit
-    [[7,9,14],[18,65,72],[30,170,185],[12,48,58]],    // teal circuit
+    [[10,9,9],[20,38,95],[30,68,240],[12,25,60]],    // blue   (circles)
+    [[10,9,9],[80,42,10],[216,96,32],[50,25,6]],     // orange (Lissajous)
+    [[10,9,9],[20,38,95],[30,68,240],[12,25,60]],    // blue   (rose)
+    [[10,9,9],[80,42,10],[216,96,32],[50,25,6]],     // orange (hypocycloid)
   ];
 
   private w(x: number, y: number) {
@@ -340,7 +341,7 @@ class WireWorldRenderer implements Renderer {
         case 3: this.initHypocycloid(); break;
       }
     }
-    this.step();
+    this.step(); this.step(); this.step();
 
     const pal = this.PALS[chIdx];
     const sd = this.offImg!.data;
@@ -414,7 +415,7 @@ class SandRenderer implements Renderer {
   }
 
   draw(ctx: CanvasRenderingContext2D, p: number, _t: number, w: number, h: number) {
-    ctx.fillStyle = "#07090e";
+    ctx.fillStyle = "#0A0909";
     ctx.fillRect(0, 0, w, h);
 
     // Spawn material
@@ -433,7 +434,7 @@ class SandRenderer implements Renderer {
       for (let x=0; x<GW; x++) {
         const c = grid[y*GW+x];
         if (c===0) continue;
-        ctx.fillStyle = c===1 ? "#c86a28" : c===2 ? "#1e62d2" : "#3c3c5a";
+        ctx.fillStyle = c===1 ? "#D86020" : c===2 ? "#1E44F0" : "#1C1A18";
         ctx.fillRect(x*scale, y*scale, scale, scale);
       }
     }
@@ -573,7 +574,7 @@ export function AboutBackground() {
       const p = Math.min(1, phaseTime / PHASE_DURATION);
       const t = ts * 0.001;
 
-      ctx.fillStyle = "rgb(7,9,14)";
+      ctx.fillStyle = "rgb(10,9,9)";
       ctx.fillRect(0, 0, W, H);
       ctx.globalAlpha = fadeAlpha * 0.45;
       renderers[activePhase].draw(ctx, p, t, W, H);

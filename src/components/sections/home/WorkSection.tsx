@@ -1,8 +1,10 @@
 "use client";
 
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
+import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 interface WorkSectionProps {
   dict: Dictionary;
@@ -94,54 +96,52 @@ function ThumbWave() {
   );
 }
 
-const CLIENT_PROJECTS = [
-  {
-    id:    "W-001",
-    name:  "Moveo Filmes",
-    role:  "Full-Stack / CMS",
-    type:  "Platform · 2024",
-    desc:  "Bilingual CMS for an independent film company. Client manages full catalog without touching code.",
-    tech:  "Next.js 16 · Supabase RLS · TipTap · dnd-kit · GSAP",
-    Thumb: ThumbGrid,
-    href:  null,
-  },
-  {
-    id:    "W-002",
-    name:  "MzPrime",
-    role:  "3D / Interactive",
-    type:  "Product Showcase · 2024",
-    desc:  "Real-time 3D car cover configurator. Change color, stitching, and logo — rendered instantly on the model.",
-    tech:  "Three.js · React Three Fiber · MeshStandardMaterial · CanvasTexture",
-    Thumb: ThumbOrbs,
-    href:  "https://claytonbrgsdev.github.io/product-showcase-v2/",
-  },
-  {
-    id:    "W-003",
-    name:  "Metanova Labs",
-    role:  "Dashboard / Web3",
-    type:  "Dashboard · 2024",
-    desc:  "Bittensor subnet 68 — on-chain AI drug discovery. Miner leaderboards and molecular competitions per epoch.",
-    tech:  "Next.js 15 · TypeScript · Radix UI · SWR",
-    Thumb: ThumbNet,
-    href:  "https://metanovalabs.ai/dashboard",
-  },
-  {
-    id:    "W-004",
-    name:  "DSRPTV Records",
-    role:  "E-Commerce / Music",
-    type:  "Platform · 2023",
-    desc:  "Music e-commerce and streaming. Stripe + Mercado Pago dual checkout, Spotify API, AWS S3 audio assets.",
-    tech:  "Stripe · Mercado Pago · Spotify API · AWS S3 · Three.js",
-    Thumb: ThumbWave,
-    href:  "http://dsrptvrec.com",
-  },
+const PROJECT_BASE = [
+  { id: "W-001", name: "Moveo Filmes", tech: "Next.js 16 · Supabase RLS · TipTap · dnd-kit · GSAP", Thumb: ThumbGrid, href: null },
+  { id: "W-002", name: "MzPrime",       tech: "Three.js · React Three Fiber · MeshStandardMaterial · CanvasTexture", Thumb: ThumbOrbs, href: "https://claytonbrgsdev.github.io/product-showcase-v2/" },
+  { id: "W-003", name: "Metanova Labs", tech: "Next.js 15 · TypeScript · Radix UI · SWR", Thumb: ThumbNet, href: "https://metanovalabs.ai/dashboard" },
+  { id: "W-004", name: "DSRPTV Records", tech: "Stripe · Mercado Pago · Spotify API · AWS S3 · Three.js", Thumb: ThumbWave, href: "http://dsrptvrec.com" },
 ];
+
+interface ProjectCardData {
+  id: string;
+  name: string;
+  type: string;
+  role: string;
+  desc: string;
+  tech: string;
+  Thumb: () => React.JSX.Element;
+  href: string | null;
+}
 
 const border = "1px solid rgba(10,10,10,0.12)";
 const mono: React.CSSProperties = { fontFamily: "var(--font-geist-mono, monospace)" };
 
 export function WorkSection({ dict, locale }: WorkSectionProps) {
   const t = dict.home.work_section;
+  const CLIENT_PROJECTS = PROJECT_BASE.map((p, i) => ({
+    ...p,
+    type: t.projects[i].type,
+    role: t.projects[i].role,
+    desc: t.projects[i].desc,
+  }));
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const el = headingRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const split = new SplitText(el, { type: "chars" });
+    gsap.from(split.chars, {
+      y: 20,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.03,
+      ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+    });
+    return () => split.revert();
+  }, []);
 
   return (
     <section
@@ -150,10 +150,10 @@ export function WorkSection({ dict, locale }: WorkSectionProps) {
     >
       {/* Section header */}
       <div style={{ borderBottom: border, padding: "14px 32px", display: "flex", alignItems: "center", gap: 24 }}>
-        <span style={{ ...mono, fontSize: 9, letterSpacing: "0.12em", color: "#9A9A9A", textTransform: "uppercase" }}>
+        <span style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 9, letterSpacing: "0.12em", color: "#9A9A9A", textTransform: "uppercase" }}>
           {t.code}
         </span>
-        <h2 style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 13, fontWeight: 600, color: "#0A0A0A", margin: 0 }}>
+        <h2 ref={headingRef} style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 13, fontWeight: 600, color: "#0A0A0A", margin: 0 }}>
           {t.heading}
         </h2>
       </div>
@@ -169,22 +169,73 @@ export function WorkSection({ dict, locale }: WorkSectionProps) {
       <div style={{ borderTop: border, margin: "40px 0 0", padding: "14px 32px", display: "flex", justifyContent: "flex-end" }}>
         <Link
           href={`/${locale}/projects`}
-          style={{ ...mono, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(10,10,10,0.45)", textDecoration: "none", transition: "color 0.1s" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#6B35D9"; }}
+          style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(10,10,10,0.45)", textDecoration: "none", transition: "color 0.1s" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#1E44F0"; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(10,10,10,0.45)"; }}
         >
-          ALL PROJECTS →
+          {t.cta_all}
         </Link>
       </div>
     </section>
   );
 }
 
-function ProjectCard({ proj }: { proj: typeof CLIENT_PROJECTS[number] }) {
+function ProjectCard({ proj }: { proj: ProjectCardData }) {
   const { id, name, role, type, desc, tech, Thumb, href } = proj;
+  const cardRef  = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+
+  // Perspective tilt on the whole card
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      gsap.to(el, {
+        rotationY: x * 8,
+        rotationX: -y * 6,
+        transformPerspective: 800,
+        ease: "power2.out",
+        duration: 0.3,
+        overwrite: "auto",
+      });
+    };
+    const onLeave = () =>
+      gsap.to(el, { rotationY: 0, rotationX: 0, duration: 0.5, ease: "power2.out" });
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  // Clip-path reveal on thumbnail as it enters viewport
+  useEffect(() => {
+    const el = thumbRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.set(el, { clipPath: "inset(100% 0 0 0)" });
+    const st = ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      end: "top 35%",
+      scrub: 1.2,
+      onUpdate: (self) => {
+        const p = (1 - self.progress) * 100;
+        gsap.set(el, { clipPath: `inset(${p}% 0 0 0)` });
+      },
+    });
+    return () => st.kill();
+  }, []);
 
   const inner = (
     <div
+      ref={cardRef}
       style={{
         border,
         borderRadius: 3,
@@ -192,20 +243,15 @@ function ProjectCard({ proj }: { proj: typeof CLIENT_PROJECTS[number] }) {
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        transition: "transform 0.12s ease-out, box-shadow 0.12s ease-out",
         cursor: href ? "pointer" : "default",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(10,10,10,0.08)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.transform = "";
-        (e.currentTarget as HTMLElement).style.boxShadow = "";
+        transformStyle: "preserve-3d",
       }}
     >
       {/* Thumbnail */}
-      <div style={{ background: "rgba(10,10,10,0.03)", padding: "20px 24px", borderBottom: border, height: 130, display: "flex", alignItems: "center" }}>
+      <div
+        ref={thumbRef}
+        style={{ background: "rgba(10,10,10,0.03)", padding: "20px 24px", borderBottom: border, height: 130, display: "flex", alignItems: "center" }}
+      >
         <Thumb />
       </div>
 
@@ -213,14 +259,14 @@ function ProjectCard({ proj }: { proj: typeof CLIENT_PROJECTS[number] }) {
       <div style={{ padding: "16px 20px 20px", display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: 9, letterSpacing: "0.1em", color: "#9A9A9A" }}>{id}</span>
-          <span style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: 9, color: "#9A9A9A" }}>{type}</span>
+          <span style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 9, color: "#9A9A9A" }}>{type}</span>
         </div>
 
         <h3 style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 17, fontWeight: 600, color: "#0A0A0A", margin: 0, letterSpacing: "-0.01em" }}>
           {name}
         </h3>
 
-        <p style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.06em", margin: 0 }}>
+        <p style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.06em", margin: 0 }}>
           {role}
         </p>
 
@@ -228,7 +274,7 @@ function ProjectCard({ proj }: { proj: typeof CLIENT_PROJECTS[number] }) {
           {desc}
         </p>
 
-        <p style={{ fontFamily: "var(--font-geist-mono, monospace)", fontSize: 10, color: "#9A9A9A", margin: "4px 0 0", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 10, color: "#9A9A9A", margin: "4px 0 0", lineHeight: 1.6 }}>
           {tech}
         </p>
       </div>

@@ -1,8 +1,10 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 interface ContactSectionProps {
   dict: Dictionary;
@@ -21,6 +23,20 @@ const LINKS = [
 
 export function ContactSection({ dict, locale }: ContactSectionProps) {
   const t = dict.home.contact_section;
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.from(el, {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 85%", once: true },
+    });
+  }, []);
 
   return (
     <section
@@ -55,7 +71,7 @@ export function ContactSection({ dict, locale }: ContactSectionProps) {
                   transition: "border-color 0.12s",
                   paddingBottom: 1,
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#6B35D9"; (e.currentTarget as HTMLAnchorElement).style.color = "#6B35D9"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1E44F0"; (e.currentTarget as HTMLAnchorElement).style.color = "#1E44F0"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(10,10,10,0.2)"; (e.currentTarget as HTMLAnchorElement).style.color = "#0A0A0A"; }}
               >
                 {lnk.value}
@@ -65,10 +81,9 @@ export function ContactSection({ dict, locale }: ContactSectionProps) {
         </div>
 
         {/* Right: CTA */}
-        <div style={{ padding: "48px 32px 48px 40px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", gap: 24 }}>
+        <div ref={ctaRef} style={{ padding: "48px 32px 48px 40px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", gap: 24 }}>
           <p style={{ fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: 18, color: "#0A0A0A", opacity: 0.7, margin: 0, lineHeight: 1.5, maxWidth: 340 }}>
-            Open to freelance contracts, full-time positions, and relocation.
-            <br />Remote or on-site.
+            {t.availability_text}
           </p>
           <Link
             href={`/${locale}/contact`}
@@ -87,7 +102,7 @@ export function ContactSection({ dict, locale }: ContactSectionProps) {
               textTransform: "uppercase",
               transition: "background 0.12s",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#6B35D9"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#1E44F0"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#0A0A0A"; }}
           >
             <span style={{ ...mono, fontSize: 10, opacity: 0.6 }}>{t.cta_code}</span>

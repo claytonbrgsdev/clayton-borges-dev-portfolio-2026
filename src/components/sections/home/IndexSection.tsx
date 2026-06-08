@@ -59,7 +59,7 @@ export function IndexSection({ dict }: IndexSectionProps) {
               width: 6,
               height: 6,
               borderRadius: "50%",
-              background: "#FF4F00",
+              background: "#D86020",
               animation: "pulse-live 2s ease-in-out infinite",
             }}
           />
@@ -107,7 +107,7 @@ export function IndexSection({ dict }: IndexSectionProps) {
               marginTop: 16,
               lineHeight: 1.6,
             }}>
-              Creative /<br />Full-Stack Dev.
+              {t.tagline}
             </p>
           </div>
 

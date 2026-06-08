@@ -681,7 +681,7 @@ function drawAudioFeedback(
 
 // ── Synth sequencer row ───────────────────────────────────────────────────────
 interface SynthSeqState { steps: boolean[]; beat: number; timer: number; }
-const ACC_S: [number,number,number] = [107, 53, 217];
+const ACC_S: [number,number,number] = [30, 68, 240]; // accent-blue #1E44F0
 const FG_S:  [number,number,number] = [10, 10, 10];
 
 function drawSynthSeq(p: p5Type, synthSeq: SynthSeqState): void {
@@ -772,9 +772,9 @@ function ModeBtn({ code, label, active, onClick }: { code: string; label: string
         letterSpacing: "0.06em",
         padding: "8px 0",
         minHeight: 32,
-        border: active ? "1.5px solid #6B35D9" : "1px solid rgba(10,10,10,0.18)",
-        background: active ? "#6B35D9" : hov ? "rgba(107,53,217,0.06)" : "transparent",
-        color: active ? "#F2F0EC" : hov ? "#6B35D9" : "#9A9A9A",
+        border: active ? "1.5px solid #1E44F0" : "1px solid rgba(10,10,10,0.18)",
+        background: active ? "#1E44F0" : hov ? "rgba(30,68,240,0.06)" : "transparent",
+        color: active ? "#F2F0EC" : hov ? "#1E44F0" : "#9A9A9A",
         cursor: "pointer",
         borderRadius: 2,
         transition: "background 0.1s, border-color 0.1s, color 0.1s",

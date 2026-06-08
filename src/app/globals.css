@@ -11,6 +11,11 @@
   --accent-blue:   #1E44F0;
   --accent-light:  #F2F0EC;
 
+  /* ── 3 tamanhos de fonte — sistema único ── */
+  --fs-lg: clamp(2.8rem, 7vw, 5.5rem);
+  --fs-md: clamp(0.8rem, 1.4vw, 0.95rem);
+  --fs-sm: 9px;
+
   /* retrocompatibilidade semântica */
   --background: var(--bg);
   --foreground: var(--text);
@@ -30,6 +35,13 @@ body {
   color: var(--text);
   font-family: var(--font-geist-mono);
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-geist-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-style: normal;
 }
 
 ::-webkit-scrollbar       { width: 2px; }

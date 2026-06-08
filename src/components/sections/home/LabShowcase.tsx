@@ -118,7 +118,7 @@ export function LabShowcase({ locale }: Props) {
       p.createCanvas(w, h);
       p.colorMode(p.RGB, 255, 255, 255, 1);
       p.noStroke();
-      p.background(7, 9, 14);
+      p.background(10, 9, 9);
       for (let i = 0; i < NUM; i++) particles.push(spawnParticle());
     };
 
@@ -154,7 +154,7 @@ export function LabShowcase({ locale }: Props) {
         bgAlpha = 0.28;
         transitionRef.current = Math.max(0, transitionRef.current - 0.025);
       }
-      p.fill(7, 9, 14, bgAlpha);
+      p.fill(10, 9, 9, bgAlpha);
       p.noStroke();
       p.rect(0, 0, p.width, p.height);
 
@@ -191,7 +191,7 @@ export function LabShowcase({ locale }: Props) {
 
     p.windowResized = () => {
       p.resizeCanvas(p.windowWidth, Math.round(p.windowHeight * 0.82));
-      p.background(7, 9, 14);
+      p.background(10, 9, 9);
     };
   }, []); // stable — reads from refs
 
@@ -236,13 +236,13 @@ export function LabShowcase({ locale }: Props) {
         className="absolute inset-y-0 left-0 z-[1] pointer-events-none"
         style={{
           width: "55%",
-          background: "linear-gradient(to right, rgba(7,9,14,0.88) 55%, transparent)",
+          background: "linear-gradient(to right, rgba(10,9,9,0.88) 55%, transparent)",
         }}
       />
       {/* bottom gradient */}
       <div
         className="absolute bottom-0 left-0 right-0 z-[1] pointer-events-none"
-        style={{ height: "120px", background: "linear-gradient(to top, rgba(7,9,14,0.85), transparent)" }}
+        style={{ height: "120px", background: "linear-gradient(to top, rgba(10,9,9,0.85), transparent)" }}
       />
 
       {/* ── Content ──────────────────────────────────────────────────────── */}
@@ -250,12 +250,12 @@ export function LabShowcase({ locale }: Props) {
 
         {/* Header row */}
         <div className="flex items-center justify-between mb-10">
-          <span className="font-mono text-xs tracking-widest uppercase" style={{ opacity: 0.35 }}>
+          <span className="font-sans text-xs tracking-widest uppercase" style={{ opacity: 0.35 }}>
             Creative Lab
           </span>
           <Link
             href="/lab"
-            className="hidden md:block font-mono text-xs tracking-wide hover:opacity-100 transition-opacity"
+            className="hidden md:block font-sans text-xs tracking-wide hover:opacity-100 transition-opacity"
             style={{ opacity: 0.4 }}
           >
             {isPt ? `Explorar todos os ${TOTAL} experimentos →` : `Explore all ${TOTAL} experiments →`}
@@ -267,14 +267,14 @@ export function LabShowcase({ locale }: Props) {
 
           {/* Focus badge */}
           <span
-            className="font-mono text-xs tracking-widest inline-block border px-2.5 py-1 mb-4 w-fit transition-all duration-500"
+            className="font-sans text-xs tracking-widest inline-block border px-2.5 py-1 mb-4 w-fit transition-all duration-500"
             style={{ borderColor: focusBorderColor, color: focusTextColor, opacity: 0.85 }}
           >
             {FOCUS_LABEL[focus]}
           </span>
 
           {/* Phase + index */}
-          <span className="font-mono text-xs mb-2" style={{ opacity: 0.28 }}>
+          <span className="font-sans text-xs mb-2" style={{ opacity: 0.28 }}>
             {`${isPt ? "Fase" : "Phase"} ${current.phase}  ·  ${activeIdx + 1} / ${FEATURED.length}`}
           </span>
 
@@ -288,7 +288,7 @@ export function LabShowcase({ locale }: Props) {
 
           {/* Description */}
           <p
-            className="text-sm leading-relaxed mb-6 max-w-sm"
+            className="font-sans text-sm leading-relaxed mb-6 max-w-sm"
             style={{ opacity: 0.52 }}
           >
             {isPt ? current.descriptionPt : current.description}
@@ -299,7 +299,7 @@ export function LabShowcase({ locale }: Props) {
             {current.tech.map(t => (
               <span
                 key={t}
-                className="font-mono text-xs border px-2.5 py-0.5"
+                className="font-sans text-xs border px-2.5 py-0.5"
                 style={{ borderColor: "rgba(255,255,255,0.12)", opacity: 0.38 }}
               >
                 {t}
@@ -310,7 +310,7 @@ export function LabShowcase({ locale }: Props) {
           {/* CTA */}
           <Link
             href={current.route}
-            className="font-mono text-xs tracking-widest uppercase border px-6 py-3 w-fit transition-colors duration-200 hover:bg-white hover:text-black"
+            className="font-sans text-xs tracking-widest uppercase border px-6 py-3 w-fit transition-colors duration-200 hover:bg-white hover:text-black"
             style={{ borderColor: "rgba(255,255,255,0.28)" }}
           >
             {isPt ? "Entrar →" : "Enter Experiment →"}
@@ -346,7 +346,7 @@ export function LabShowcase({ locale }: Props) {
           <div className="flex items-center gap-2">
             <button
               onClick={prev}
-              className="font-mono text-sm border w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+              className="font-sans text-sm border w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
               style={{ borderColor: "rgba(255,255,255,0.18)", opacity: 0.55 }}
               aria-label="Previous experiment"
             >
@@ -354,7 +354,7 @@ export function LabShowcase({ locale }: Props) {
             </button>
             <button
               onClick={next}
-              className="font-mono text-sm border w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+              className="font-sans text-sm border w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
               style={{ borderColor: "rgba(255,255,255,0.18)", opacity: 0.55 }}
               aria-label="Next experiment"
             >
@@ -366,7 +366,7 @@ export function LabShowcase({ locale }: Props) {
         {/* Mobile: explore all */}
         <Link
           href="/lab"
-          className="md:hidden font-mono text-xs tracking-wide mt-4 block hover:opacity-100 transition-opacity"
+          className="md:hidden font-sans text-xs tracking-wide mt-4 block hover:opacity-100 transition-opacity"
           style={{ opacity: 0.38 }}
         >
           {isPt ? `Explorar todos os ${TOTAL} experimentos →` : `Explore all ${TOTAL} experiments →`}

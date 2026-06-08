@@ -42,13 +42,13 @@ function FeaturedCard({ project, locale, dict }: { project: Project; locale: Loc
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-white/[0.03]">
-            <span className="font-mono text-xs text-white/20 tracking-widest uppercase">
+            <span className="font-sans text-xs text-white/20 tracking-widest uppercase">
               {project.type ?? name}
             </span>
           </div>
         )}
         {/* Case study badge */}
-        <span className="absolute top-3 right-3 font-mono text-xs bg-white text-black px-2 py-0.5 tracking-wide">
+        <span className="absolute top-3 right-3 font-sans text-xs bg-white text-black px-2 py-0.5 tracking-wide">
           Case Study
         </span>
       </div>
@@ -56,34 +56,34 @@ function FeaturedCard({ project, locale, dict }: { project: Project; locale: Loc
       {/* Body */}
       <div className="p-6 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono text-xs text-white/30">{project.year}</span>
+          <span className="font-sans text-xs text-white/30">{project.year}</span>
           {project.client && (
-            <span className="font-mono text-xs text-white/35">{project.client}</span>
+            <span className="font-sans text-xs text-white/35">{project.client}</span>
           )}
         </div>
 
         <h3 className="font-bold text-xl mb-1 leading-tight">{name}</h3>
         {project.type && (
-          <span className="font-mono text-xs text-white/35 block mb-3">{project.type}</span>
+          <span className="font-sans text-xs text-white/35 block mb-3">{project.type}</span>
         )}
 
-        <p className="text-sm text-white/50 leading-relaxed mb-4 flex-1 line-clamp-3">{desc}</p>
+        <p className="font-sans text-sm text-white/50 leading-relaxed mb-4 flex-1 line-clamp-3">{desc}</p>
 
         <div className="flex flex-wrap gap-1.5 mb-5">
           {project.tech.slice(0, 4).map((t) => (
-            <span key={t} className="font-mono text-xs border border-white/10 px-2 py-0.5 text-white/45">
+            <span key={t} className="font-sans text-xs border border-white/10 px-2 py-0.5 text-white/45">
               {t}
             </span>
           ))}
           {project.tech.length > 4 && (
-            <span className="font-mono text-xs text-white/25">+{project.tech.length - 4}</span>
+            <span className="font-sans text-xs text-white/25">+{project.tech.length - 4}</span>
           )}
         </div>
 
         <div className="flex gap-5 mt-auto">
           <Link
             href={`/${locale}/projects/${project.id}`}
-            className="font-mono text-xs tracking-wide text-white/60 hover:text-white transition-colors"
+            className="font-sans text-xs tracking-wide text-white/60 hover:text-white transition-colors"
           >
             {dict.projects.view_case_study} →
           </Link>
@@ -92,7 +92,7 @@ function FeaturedCard({ project, locale, dict }: { project: Project; locale: Loc
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide text-white/35 hover:text-white/70 transition-colors"
+              className="font-sans text-xs tracking-wide text-white/35 hover:text-white/70 transition-colors"
             >
               {dict.projects.view_live} ↗
             </a>
@@ -123,27 +123,27 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
 
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-xs text-white/28">{project.year}</span>
+          <span className="font-sans text-xs text-white/28">{project.year}</span>
           {project.client && (
-            <span className="font-mono text-xs text-white/30">{project.client}</span>
+            <span className="font-sans text-xs text-white/30">{project.client}</span>
           )}
         </div>
 
         <h3 className="font-bold text-base mb-1 leading-snug">{name}</h3>
         {project.type && (
-          <span className="font-mono text-xs text-white/30 block mb-2">{project.type}</span>
+          <span className="font-sans text-xs text-white/30 block mb-2">{project.type}</span>
         )}
 
-        <p className="text-xs text-white/45 leading-relaxed mb-3 flex-1 line-clamp-2">{desc}</p>
+        <p className="font-sans text-xs text-white/45 leading-relaxed mb-3 flex-1 line-clamp-2">{desc}</p>
 
         <div className="flex flex-wrap gap-1 mb-4">
           {project.tech.slice(0, 3).map((t) => (
-            <span key={t} className="font-mono text-xs border border-white/10 px-1.5 py-0.5 text-white/38">
+            <span key={t} className="font-sans text-xs border border-white/10 px-1.5 py-0.5 text-white/38">
               {t}
             </span>
           ))}
           {project.tech.length > 3 && (
-            <span className="font-mono text-xs text-white/22">+{project.tech.length - 3}</span>
+            <span className="font-sans text-xs text-white/22">+{project.tech.length - 3}</span>
           )}
         </div>
 
@@ -151,7 +151,7 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
           {project.overview && (
             <Link
               href={`/${locale}/projects/${project.id}`}
-              className="font-mono text-xs text-white/50 hover:text-white transition-colors"
+              className="font-sans text-xs text-white/50 hover:text-white transition-colors"
             >
               {dict.projects.view_case_study} →
             </Link>
@@ -161,7 +161,7 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs text-white/32 hover:text-white/65 transition-colors"
+              className="font-sans text-xs text-white/32 hover:text-white/65 transition-colors"
             >
               {dict.projects.view_live} ↗
             </a>
@@ -171,7 +171,7 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs text-white/28 hover:text-white/55 transition-colors"
+              className="font-sans text-xs text-white/28 hover:text-white/55 transition-colors"
             >
               {dict.projects.view_code} ↗
             </a>
@@ -209,7 +209,7 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
           <button
             key={key}
             onClick={() => setActive(key)}
-            className={`font-mono text-xs tracking-wide px-4 py-2 border transition-colors ${
+            className={`font-sans text-xs tracking-wide px-4 py-2 border transition-colors ${
               active === key
                 ? "border-white bg-white text-black"
                 : "border-white/18 text-white/45 hover:text-white/80 hover:border-white/40"
@@ -221,14 +221,14 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
       </div>
 
       {/* ── Count ────────────────────────────────────────────────────────── */}
-      <div className="mb-10 font-mono text-xs text-white/28 tracking-widest">
+      <div className="mb-10 font-sans text-xs text-white/28 tracking-widest">
         {countLabel}
       </div>
 
       {/* ── Featured — 2-col with thumbnail ──────────────────────────────── */}
       {featured.length > 0 && (
         <div className="mb-14">
-          <span className="font-mono text-xs tracking-widest uppercase text-white/25 block mb-5">
+          <span className="font-sans text-xs tracking-widest uppercase text-white/25 block mb-5">
             {isPt ? "Case Studies" : "Case Studies"}
           </span>
           <div className="grid md:grid-cols-2 gap-5">
@@ -243,7 +243,7 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
       {regular.length > 0 && (
         <div>
           {featured.length > 0 && (
-            <span className="font-mono text-xs tracking-widest uppercase text-white/25 block mb-5">
+            <span className="font-sans text-xs tracking-widest uppercase text-white/25 block mb-5">
               {isPt ? "Outros Projetos" : "Other Work"}
             </span>
           )}

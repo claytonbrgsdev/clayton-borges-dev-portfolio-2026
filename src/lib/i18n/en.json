@@ -4,7 +4,8 @@
     "projects": "Projects",
     "hardware": "Hardware",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "logo_tagline": "Full Stack Developer"
   },
   "home": {
     "hero": {
@@ -14,7 +15,16 @@
       "hook": "I build production platforms, real-time 3D experiences, and generative tools — from backend to the last pixel.",
       "subtitle": "React · Next.js · Three.js · GSAP · Python",
       "cta_projects": "View Work",
-      "cta_contact": "Get In Touch"
+      "cta_contact": "Get In Touch",
+      "index_code": "CB-2025 · PORTFOLIO",
+      "descriptor": "Full-stack & creative developer\nspecializing in interactive 3D,\ngenerative art, and production web apps.",
+      "tech_strip": "React · Next.js · Three.js · GSAP · Python · TypeScript",
+      "scroll_hint": "Scroll to explore ↓"
+    },
+    "instrument": {
+      "portfolio_code": "INTERACTIVE PORTFOLIO",
+      "live_label": "LIVE",
+      "tagline": "Full-Stack / Creative Dev."
     },
     "about_preview": {
       "label": "About Me",
@@ -51,6 +61,72 @@
       "heading": "Hardware",
       "subheading": "Physical computing — microcontrollers, embedded audio synthesis, and circuit design.",
       "cta": "View Hardware Projects"
+    },
+    "about_section": {
+      "code": "03 — About",
+      "manifesto": "I make things that move, react, and feel alive.",
+      "bio": "Full-stack and creative developer based in Brasília with 3 years shipping production apps, interactive 3D experiences, and generative tools for clients in Brazil and worldwide.",
+      "available_for": "Open to remote roles, freelance contracts, and relocation.",
+      "spec_heading": "SPECIFICATIONS",
+      "spec_location": "LOCATION",
+      "location_val": "Brasília, Brazil — Remote Ready",
+      "spec_discipline": "DISCIPLINE",
+      "discipline_val": "Full-Stack · Creative Dev · Generative Art",
+      "spec_year": "EXPERIENCE",
+      "year_val": "3 years in production",
+      "spec_studio": "STUDIO",
+      "studio_val": "DISCLAYMER · with Raphael Palmer",
+      "spec_available": "AVAILABLE FOR",
+      "available_val": "Freelance · Relocation · Remote",
+      "spec_tools": "TOOLS"
+    },
+    "contact_section": {
+      "code": "05 — Contact",
+      "availability_text": "Open to freelance contracts, full-time positions, and relocation. Remote or on-site.",
+      "cta_code": "→",
+      "cta_label": "Get In Touch"
+    },
+    "work_section": {
+      "code": "02 — Work",
+      "heading": "Selected Work",
+      "cta_all": "All Projects →",
+      "projects": [
+        {
+          "type": "Platform · 2024",
+          "role": "Full-Stack / CMS",
+          "desc": "Bilingual CMS for an independent film company. Client manages full catalog without touching code."
+        },
+        {
+          "type": "Product Showcase · 2024",
+          "role": "3D / Interactive",
+          "desc": "Real-time 3D car cover configurator. Change color, stitching, and logo — rendered instantly on the model."
+        },
+        {
+          "type": "Dashboard · 2024",
+          "role": "Dashboard / Web3",
+          "desc": "Bittensor subnet 68 — on-chain AI drug discovery. Miner leaderboards and molecular competitions per epoch."
+        },
+        {
+          "type": "Platform · 2023",
+          "role": "E-Commerce / Music",
+          "desc": "Music e-commerce and streaming. Stripe + Mercado Pago dual checkout, Spotify API, AWS S3 audio assets."
+        }
+      ]
+    },
+    "stats_strip": {
+      "lab_experiments": "Lab experiments",
+      "years": "Years in production"
+    },
+    "section_labels": {
+      "entry": "01 — Entry",
+      "work": "02 — Work",
+      "selected_projects": "Selected\nProjects",
+      "about": "03 — About",
+      "lab": "04 — Lab",
+      "contact": "05 — Contact",
+      "scroll": "Scroll",
+      "nav_dots": ["Hero", "Work", "About", "Approach", "Lab"],
+      "lang_tooltip": "Quer ver este site em Português?"
     }
   },
   "projects": {

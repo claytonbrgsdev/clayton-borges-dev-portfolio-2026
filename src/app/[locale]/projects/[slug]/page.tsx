@@ -73,13 +73,13 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           <div className="mx-auto max-w-2xl">
             <Link
               href={`/${locale}/projects`}
-              className="font-mono text-xs tracking-widest uppercase opacity-30 hover:opacity-70 transition-opacity mb-14 inline-flex items-center gap-2"
+              className="font-sans text-xs tracking-widest uppercase opacity-30 hover:opacity-70 transition-opacity mb-14 inline-flex items-center gap-2"
             >
               ← {p.back_to_projects}
             </Link>
             <div className="mb-14">
               {project.client && (
-                <span className="font-mono text-xs opacity-35 block mb-3">
+                <span className="font-sans text-xs opacity-35 block mb-3">
                   {p.client_label}: {project.client}
                 </span>
               )}
@@ -87,33 +87,33 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
                   {name}
                 </h1>
-                <span className="font-mono text-xs opacity-25 border border-white/10 px-2.5 py-1.5 shrink-0 mt-1">
+                <span className="font-sans text-xs opacity-25 border border-white/10 px-2.5 py-1.5 shrink-0 mt-1">
                   {project.year}
                 </span>
               </div>
               {project.type && (
-                <span className="font-mono text-xs opacity-35 block mb-5">
+                <span className="font-sans text-xs opacity-35 block mb-5">
                   {project.type}
                 </span>
               )}
-              <p className="text-sm leading-relaxed opacity-50 border-l border-white/[0.12] pl-4">
+              <p className="font-sans text-sm leading-relaxed opacity-50 border-l border-white/[0.12] pl-4">
                 {desc}
               </p>
             </div>
             <div className="space-y-12">
               {overview && (
                 <Section label={p.case_study_overview}>
-                  <p className="text-sm opacity-55 leading-relaxed">{overview}</p>
+                  <p className="font-sans text-sm opacity-55 leading-relaxed">{overview}</p>
                 </Section>
               )}
               {problem && (
                 <Section label={p.case_study_problem}>
-                  <p className="text-sm opacity-55 leading-relaxed">{problem}</p>
+                  <p className="font-sans text-sm opacity-55 leading-relaxed">{problem}</p>
                 </Section>
               )}
               {goal && (
                 <Section label={p.case_study_goal}>
-                  <p className="text-sm opacity-55 leading-relaxed">{goal}</p>
+                  <p className="font-sans text-sm opacity-55 leading-relaxed">{goal}</p>
                 </Section>
               )}
               {role && role.length > 0 && (
@@ -122,7 +122,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     {role.map((r) => (
                       <li
                         key={r}
-                        className="flex items-start gap-3 text-sm opacity-55"
+                        className="font-sans flex items-start gap-3 text-sm opacity-55"
                       >
                         <span className="font-mono opacity-35 mt-0.5 shrink-0 text-xs">
                           ◈
@@ -138,7 +138,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                   {project.tech.map((t) => (
                     <span
                       key={t}
-                      className="font-mono text-xs border border-white/[0.12] px-3 py-1.5 opacity-60"
+                      className="font-sans text-xs border border-white/[0.12] px-3 py-1.5 opacity-60"
                     >
                       {t}
                     </span>
@@ -151,7 +151,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     {decisions.map((d, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-4 text-sm opacity-55 leading-relaxed"
+                        className="font-sans flex items-start gap-4 text-sm opacity-55 leading-relaxed"
                       >
                         <span className="font-mono opacity-25 shrink-0 w-5 text-right text-xs mt-0.5">
                           {String(i + 1).padStart(2, "0")}
@@ -168,7 +168,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     {learnings.map((l, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-3 text-sm opacity-55 leading-relaxed"
+                        className="font-sans flex items-start gap-3 text-sm opacity-55 leading-relaxed"
                       >
                         <span className="font-mono opacity-30 shrink-0 mt-0.5">
                           →
@@ -181,7 +181,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               )}
               {status && (
                 <Section label={p.case_study_status}>
-                  <p className="font-mono text-sm opacity-55">{status}</p>
+                  <p className="font-sans text-sm opacity-55">{status}</p>
                 </Section>
               )}
               {(project.liveUrl || project.githubUrl) && (
@@ -192,7 +192,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono text-sm opacity-55 hover:opacity-100 transition-opacity border-b border-white/20 pb-0.5"
+                        className="font-sans text-sm opacity-55 hover:opacity-100 transition-opacity border-b border-white/20 pb-0.5"
                       >
                         {p.view_live} ↗
                       </a>
@@ -202,7 +202,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-mono text-sm opacity-55 hover:opacity-100 transition-opacity border-b border-white/20 pb-0.5"
+                        className="font-sans text-sm opacity-55 hover:opacity-100 transition-opacity border-b border-white/20 pb-0.5"
                       >
                         {p.view_code} ↗
                       </a>
@@ -237,7 +237,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           {/* 1. Back link */}
           <Link
             href={`/${locale}/projects`}
-            className="font-mono text-xs tracking-widest uppercase opacity-30 hover:opacity-70 transition-opacity mb-16 inline-flex items-center gap-2"
+            className="font-sans text-xs tracking-widest uppercase opacity-30 hover:opacity-70 transition-opacity mb-16 inline-flex items-center gap-2"
           >
             ← {p.back_to_projects}
           </Link>
@@ -245,7 +245,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           {/* 2. Hero section */}
           <div className="mb-16">
             {/* Project type badge */}
-            <span className="font-mono text-xs text-white/40 uppercase tracking-widest block mb-4">
+            <span className="font-sans text-xs text-white/40 uppercase tracking-widest block mb-4">
               {projectType}
             </span>
 
@@ -255,12 +255,12 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             </h1>
 
             {/* Tagline */}
-            <p className="text-xl text-white/70 leading-snug mb-8 max-w-2xl">
+            <p className="font-sans text-xl text-white/70 leading-snug mb-8 max-w-2xl">
               {tagline}
             </p>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 font-mono text-xs text-white/40">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 font-sans text-xs text-white/40">
               <span>
                 {p.client_label}: {caseStudy.client}
               </span>
@@ -270,7 +270,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                   href={caseStudy.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-white/90 transition-colors border-b border-white/20 pb-px"
+                  className="font-sans text-white/60 hover:text-white/90 transition-colors border-b border-white/20 pb-px"
                 >
                   Live ↗
                 </a>
@@ -280,7 +280,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                   href={caseStudy.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-white/90 transition-colors border-b border-white/20 pb-px"
+                  className="font-sans text-white/60 hover:text-white/90 transition-colors border-b border-white/20 pb-px"
                 >
                   GitHub ↗
                 </a>
@@ -302,7 +302,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 className="w-full border border-white/10 bg-white/5 flex items-center justify-center"
                 style={{ aspectRatio: "16/9" }}
               >
-                <span className="font-mono text-xs text-white/30">
+                <span className="font-sans text-xs text-white/30">
                   {isPt ? "Imagem em breve" : "Image coming soon"}
                 </span>
               </div>
@@ -331,7 +331,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <h2 className="text-xl font-light tracking-tight border-b border-white/10 pb-2 mb-4 text-white/90">
                   {section.heading}
                 </h2>
-                <div className="text-sm text-white/80 leading-relaxed max-w-2xl whitespace-pre-line">
+                <div className="font-sans text-sm text-white/80 leading-relaxed max-w-2xl whitespace-pre-line">
                   {section.content}
                 </div>
               </div>
@@ -340,7 +340,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
           {/* 4. Gallery */}
           <div className="border-t border-white/[0.08] pt-10 mb-16">
-            <span className="font-mono text-xs tracking-widest uppercase text-white/30 block mb-6">
+            <span className="font-sans text-xs tracking-widest uppercase text-white/30 block mb-6">
               {isPt ? "Galeria" : "Gallery"}
             </span>
             {caseStudy.galleryImages.length > 0 ? (
@@ -364,7 +364,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     className="w-full border border-white/10 bg-white/5 flex items-center justify-center"
                     style={{ aspectRatio: "4/3" }}
                   >
-                    <span className="font-mono text-xs text-white/30">
+                    <span className="font-sans text-xs text-white/30">
                       {isPt ? "Imagem em breve" : "Image coming soon"}
                     </span>
                   </div>
@@ -375,14 +375,14 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
           {/* 5. Tech Stack */}
           <div className="border-t border-white/[0.08] pt-10 mb-16">
-            <span className="font-mono text-xs tracking-widest uppercase text-white/30 block mb-6">
+            <span className="font-sans text-xs tracking-widest uppercase text-white/30 block mb-6">
               Stack
             </span>
             <div className="flex flex-wrap gap-2">
               {caseStudy.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="font-mono text-xs border border-white/20 px-3 py-1 text-white/70"
+                  className="font-sans text-xs border border-white/20 px-3 py-1 text-white/70"
                 >
                   {tech}
                 </span>
@@ -393,16 +393,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           {/* 6. Key Outcomes */}
           {outcomes.length > 0 && (
             <div className="border-t border-white/[0.08] pt-10 mb-16">
-              <span className="font-mono text-xs tracking-widest uppercase text-white/30 block mb-6">
+              <span className="font-sans text-xs tracking-widest uppercase text-white/30 block mb-6">
                 {isPt ? "Resultados" : "Key Outcomes"}
               </span>
               <ul className="space-y-3">
                 {outcomes.map((outcome, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-3 text-sm text-white/90 leading-relaxed"
+                    className="font-sans flex items-start gap-3 text-sm text-white/90 leading-relaxed"
                   >
-                    <span className="font-mono text-white/40 shrink-0 mt-0.5">
+                    <span className="font-sans text-white/40 shrink-0 mt-0.5">
                       →
                     </span>
                     {outcome}
@@ -429,7 +429,7 @@ function Section({
 }) {
   return (
     <div className="border-t border-white/[0.08] pt-10">
-      <span className="font-mono text-xs tracking-widest uppercase opacity-30 block mb-5">
+      <span className="font-sans text-xs tracking-widest uppercase opacity-30 block mb-5">
         {label}
       </span>
       {children}
@@ -462,14 +462,14 @@ function BottomNav({
     <div className="mt-20 pt-10 border-t border-white/[0.08] flex items-center justify-between">
       <Link
         href={`/${locale}/projects`}
-        className="font-mono text-sm opacity-40 hover:opacity-100 transition-opacity"
+        className="font-sans text-sm opacity-40 hover:opacity-100 transition-opacity"
       >
         ← {p.back_to_projects}
       </Link>
       {nextName && next && (
         <Link
           href={`/${locale}/projects/${next.id}`}
-          className="font-mono text-xs opacity-30 hover:opacity-70 transition-opacity text-right"
+          className="font-sans text-xs opacity-30 hover:opacity-70 transition-opacity text-right"
         >
           {locale === "pt" ? "Próximo" : "Next"}: {nextName} →
         </Link>

@@ -20,13 +20,13 @@ export default async function HardwarePage({ params }: HardwarePageProps) {
     <div className="pt-24 pb-20 px-6 md:px-12">
       <div className="mx-auto max-w-6xl">
         <div className="mb-16">
-          <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+          <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
             Physical Computing
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
             {dict.hardware.heading}
           </h1>
-          <p className="text-lg opacity-60 max-w-2xl">{dict.hardware.subheading}</p>
+          <p className="font-sans text-lg opacity-60 max-w-2xl">{dict.hardware.subheading}</p>
         </div>
         <HardwareList dict={dict} locale={locale as Locale} projects={hardwareProjects} />
       </div>

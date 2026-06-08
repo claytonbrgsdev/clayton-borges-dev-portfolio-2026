@@ -23,13 +23,13 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
       <div className="relative z-10 pt-24 pb-20 px-6 md:px-12">
         <div className="mx-auto max-w-6xl">
           <div className="mb-16">
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
               Work
             </span>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
               {dict.projects.heading}
             </h1>
-            <p className="text-lg opacity-60 max-w-2xl">{dict.projects.subheading}</p>
+            <p className="font-sans text-lg opacity-60 max-w-2xl">{dict.projects.subheading}</p>
           </div>
           <ProjectsGrid dict={dict} locale={locale as Locale} projects={projects} />
         </div>

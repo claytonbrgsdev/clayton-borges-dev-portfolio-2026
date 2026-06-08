@@ -74,7 +74,7 @@ class CircuitRenderer implements Renderer {
   }
 
   draw(ctx: CanvasRenderingContext2D, p: number, t: number, w: number, h: number) {
-    ctx.fillStyle = "#07090e";
+    ctx.fillStyle = "#0A0909";
     ctx.fillRect(0, 0, w, h);
 
     // Dot grid
@@ -114,7 +114,7 @@ class CircuitRenderer implements Renderer {
       ctx.strokeStyle = `rgba(30,98,210,${(viaA * 0.32).toFixed(3)})`;
       ctx.lineWidth = 0.8;
       ctx.beginPath(); ctx.arc(v.x, v.y, 5, 0, Math.PI*2); ctx.stroke();
-      ctx.fillStyle = "#07090e";
+      ctx.fillStyle = "#0A0909";
       ctx.beginPath(); ctx.arc(v.x, v.y, 2.8, 0, Math.PI*2); ctx.fill();
       ctx.fillStyle = `rgba(30,98,210,${(viaA * 0.45).toFixed(3)})`;
       ctx.beginPath(); ctx.arc(v.x, v.y, 1.4, 0, Math.PI*2); ctx.fill();
@@ -171,7 +171,7 @@ class WolframRenderer implements Renderer {
   }
 
   draw(ctx: CanvasRenderingContext2D, p: number, _t: number, w: number, h: number) {
-    ctx.fillStyle = "#07090e";
+    ctx.fillStyle = "#0A0909";
     ctx.fillRect(0, 0, w, h);
 
     const nVisible = Math.ceil(h / this.rowH) + 2;
@@ -240,7 +240,7 @@ class LangtonRenderer implements Renderer {
   }
 
   draw(ctx: CanvasRenderingContext2D, p: number, _t: number, w: number, h: number) {
-    ctx.fillStyle = "#07090e";
+    ctx.fillStyle = "#0A0909";
     ctx.fillRect(0, 0, w, h);
 
     this.step(80 + Math.floor(p * 350));
@@ -303,7 +303,7 @@ class KikaiRenderer implements Renderer {
   }
 
   draw(ctx: CanvasRenderingContext2D, p: number, t: number, w: number, h: number) {
-    ctx.fillStyle = "#07090e";
+    ctx.fillStyle = "#0A0909";
     ctx.fillRect(0, 0, w, h);
 
     const revA = ss(0.05, 0.55, p);
@@ -354,10 +354,10 @@ class WaveOpticsRenderer implements Renderer {
   private readonly K_BY_CH = [Math.PI*2/30, Math.PI*2/20, Math.PI*2/16, Math.PI*2/18];
   // [bgR,bgG,bgB, brightR,brightG,brightB]
   private readonly CH_PALS: [number,number,number,number,number,number][] = [
-    [ 7,  9, 14,  30,  98, 210],  // BG → blue C1 (double-slit)
-    [ 7,  9, 14, 110,  80, 192],  // BG → violet C3 (wider slit)
-    [ 7,  9, 14,  30, 140, 210],  // BG → lighter blue (4-slit)
-    [ 7,  9, 14, 200, 106,  40],  // BG → amber C2 (ring)
+    [10,  9,  9,  30,  68, 240],  // BG → blue C1 (double-slit)
+    [10,  9,  9, 110,  80, 192],  // BG → violet C3 (wider slit)
+    [10,  9,  9,  30, 140, 210],  // BG → lighter blue (4-slit)
+    [10,  9,  9, 216,  96,  32],  // BG → amber C2 (ring)
   ];
 
   init(_w: number, _h: number) {
@@ -475,7 +475,7 @@ export function ProjectsBackground() {
       const p = Math.min(1, phaseTime / PHASE_DURATION);
       const t = ts * 0.001;
 
-      ctx.fillStyle = "rgb(7,9,14)";
+      ctx.fillStyle = "rgb(10,9,9)";
       ctx.fillRect(0, 0, W, H);
       ctx.globalAlpha = fadeAlpha * 0.50;
       renderers[activePhase].draw(ctx, p, t, W, H);

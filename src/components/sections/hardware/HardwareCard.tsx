@@ -49,15 +49,15 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
               {String(index + 1).padStart(2, "0")}
             </span>
             <span className="font-mono text-xs opacity-20">·</span>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40">
               {project.microcontroller}
             </span>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">·</span>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40">·</span>
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40">
               {project.year}
             </span>
             <span
-              className={`font-mono text-xs tracking-wide px-2 py-0.5 border ${
+              className={`font-sans text-xs tracking-wide px-2 py-0.5 border ${
                 project.status === "completed"
                   ? "border-green-500/40 text-green-400 opacity-70"
                   : project.status === "in-progress"
@@ -69,7 +69,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">{name}</h2>
-          <p className="opacity-50 text-lg">{tagline}</p>
+          <p className="font-sans opacity-50 text-lg">{tagline}</p>
         </div>
 
         {/* Links */}
@@ -79,7 +79,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
+              className="font-sans text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
             >
               {hw.view_code} ↗
             </a>
@@ -89,7 +89,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
               href={project.videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
+              className="font-sans text-xs tracking-wide border border-white/20 px-4 py-2 opacity-60 hover:opacity-100 hover:border-white/50 transition-all"
             >
               {hw.view_video} ↗
             </a>
@@ -125,14 +125,14 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
                     [{hw[IMAGE_TYPE_LABELS[project.images[activeImage].type]] as string}]
                   </span>
                 </div>
-                <div className="absolute bottom-3 right-3 font-mono text-xs opacity-40 bg-black/60 px-2 py-1">
+                <div className="absolute bottom-3 right-3 font-sans text-xs opacity-40 bg-black/60 px-2 py-1">
                   {hw[IMAGE_TYPE_LABELS[project.images[activeImage].type]] as string}
                 </div>
               </div>
 
               {/* Caption */}
               {project.images[activeImage].caption && (
-                <p className="text-xs opacity-40 font-mono mb-4">
+                <p className="text-xs opacity-40 font-sans mb-4">
                   {project.images[activeImage].caption}
                 </p>
               )}
@@ -162,7 +162,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
                         }}
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="font-mono text-[8px] opacity-30">
+                        <span className="font-sans text-[8px] opacity-30">
                           {hw[IMAGE_TYPE_LABELS[img.type]] as string}
                         </span>
                       </div>
@@ -181,12 +181,12 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
         {/* Right — Content */}
         <div className="flex flex-col gap-8">
           {/* Description */}
-          <p className="opacity-70 leading-relaxed">{description}</p>
+          <p className="font-sans opacity-70 leading-relaxed">{description}</p>
 
           {/* Body paragraphs */}
           <div className="flex flex-col gap-4">
             {paragraphs.map((para, i) => (
-              <p key={i} className="opacity-50 text-sm leading-relaxed">
+              <p key={i} className="font-sans opacity-50 text-sm leading-relaxed">
                 {para}
               </p>
             ))}
@@ -194,14 +194,14 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
 
           {/* Tech stack */}
           <div>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-3">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-3">
               Stack
             </span>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
                 <span
                   key={t}
-                  className="font-mono text-xs border border-white/15 px-3 py-1.5 opacity-60"
+                  className="font-sans text-xs border border-white/15 px-3 py-1.5 opacity-60"
                 >
                   {t}
                 </span>
@@ -212,14 +212,14 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
           {/* Specs table */}
           {project.specs.length > 0 && (
             <div>
-              <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-3">
+              <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-3">
                 {hw.specs_label}
               </span>
               <table className="w-full text-sm">
                 <tbody>
                   {project.specs.map((spec) => (
                     <tr key={spec.label} className="border-b border-white/5">
-                      <td className="py-2 pr-4 font-mono text-xs opacity-40 whitespace-nowrap align-top">
+                      <td className="py-2 pr-4 font-sans text-xs opacity-40 whitespace-nowrap align-top">
                         {spec.label}
                       </td>
                       <td className="py-2 opacity-70 align-top">{spec.value}</td>
@@ -239,7 +239,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
           onClick={() => setLightboxOpen(false)}
         >
           <button
-            className="absolute top-6 right-6 font-mono text-sm opacity-50 hover:opacity-100"
+            className="absolute top-6 right-6 font-sans text-sm opacity-50 hover:opacity-100"
             onClick={() => setLightboxOpen(false)}
           >
             ✕ close
@@ -254,7 +254,7 @@ export function HardwareCard({ project, dict, locale, index }: HardwareCardProps
             />
           </div>
           {project.images[activeImage].caption && (
-            <p className="absolute bottom-8 left-1/2 -translate-x-1/2 font-mono text-xs opacity-40">
+            <p className="absolute bottom-8 left-1/2 -translate-x-1/2 font-sans text-xs opacity-40">
               {project.images[activeImage].caption}
             </p>
           )}

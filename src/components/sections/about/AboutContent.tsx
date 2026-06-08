@@ -42,20 +42,20 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
     <div>
       {/* Header */}
       <div className="mb-20">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
           {about.subheading}
         </span>
         <h1 className="text-4xl md:text-6xl font-bold mb-10">{about.heading}</h1>
         <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
-          <p className="opacity-60 leading-relaxed">{about.bio_1}</p>
-          <p className="opacity-60 leading-relaxed">{about.bio_2}</p>
+          <p className="font-sans opacity-60 leading-relaxed">{about.bio_1}</p>
+          <p className="font-sans opacity-60 leading-relaxed">{about.bio_2}</p>
         </div>
-        <p className="opacity-80 mt-6 font-medium">{about.bio_3}</p>
+        <p className="font-sans opacity-80 mt-6 font-medium">{about.bio_3}</p>
       </div>
 
       {/* Experience */}
       <div className="mb-20 border-t border-white/10 pt-12">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.experience_label}
         </span>
         <div className="flex flex-col gap-0">
@@ -63,15 +63,15 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
             <div key={job.company} className="grid md:grid-cols-[200px_1fr] gap-4 py-8 border-b border-white/8">
               <div className="flex flex-col gap-1">
                 <span className="font-mono text-xs opacity-20 select-none">{String(idx + 1).padStart(2, "0")}</span>
-                <span className="font-mono text-xs opacity-40">{job.period}</span>
+                <span className="font-sans text-xs opacity-40">{job.period}</span>
               </div>
               <div>
                 <h3 className="font-bold mb-0.5">{job.role}</h3>
-                <span className="font-mono text-sm opacity-45 block mb-4">{job.company}</span>
+                <span className="font-sans text-sm opacity-45 block mb-4">{job.company}</span>
                 <ul className="flex flex-col gap-1.5">
                   {job.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-sm opacity-50">
-                      <span className="font-mono opacity-40 shrink-0 mt-0.5">→</span>
+                    <li key={h} className="font-sans flex items-start gap-2 text-sm opacity-50">
+                      <span className="font-sans opacity-40 shrink-0 mt-0.5">→</span>
                       <span>{h}</span>
                     </li>
                   ))}
@@ -84,17 +84,17 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
 
       {/* Education */}
       <div className="mb-20 border-t border-white/10 pt-12">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.education_label}
         </span>
         <div className="flex flex-col gap-4">
           {education.map((edu) => (
             <div key={edu.school} className="flex items-baseline justify-between border-b border-white/10 pb-4">
               <div>
-                <span className="font-bold">{edu.school}</span>
-                <span className="opacity-50 ml-3 text-sm">{edu.degree}</span>
+                <span className="font-sans font-bold">{edu.school}</span>
+                <span className="font-sans opacity-50 ml-3 text-sm">{edu.degree}</span>
               </div>
-              <span className="font-mono text-xs opacity-40">{edu.period}</span>
+              <span className="font-sans text-xs opacity-40">{edu.period}</span>
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
 
       {/* Languages */}
       <div className="mb-20 border-t border-white/10 pt-12">
-        <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-8">
+        <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-8">
           {about.languages_label}
         </span>
         <div className="flex flex-col gap-4 max-w-xs">
@@ -114,8 +114,8 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
             return (
               <div key={label}>
                 <div className="flex items-baseline justify-between mb-2">
-                  <span className="text-sm font-medium">{lang}</span>
-                  <span className="font-mono text-xs opacity-35">{proficiency}</span>
+                  <span className="font-sans text-sm font-medium">{lang}</span>
+                  <span className="font-sans text-xs opacity-35">{proficiency}</span>
                 </div>
                 <div className="h-px bg-white/8 relative">
                   <div className="h-px bg-white/40 absolute left-0 top-0" style={{ width: `${level * 100}%` }} />
@@ -132,7 +132,7 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
           href={contactInfo.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block px-8 py-3 border border-white/30 font-mono text-sm tracking-wide hover:border-white/70 transition-colors"
+          className="inline-block px-8 py-3 border border-white/30 font-sans text-sm tracking-wide hover:border-white/70 transition-colors"
         >
           {about.download_resume} ↗
         </a>
@@ -140,7 +140,7 @@ export function AboutContent({ dict, locale }: AboutContentProps) {
           href={contactInfo.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block px-8 py-3 border border-white/10 font-mono text-sm tracking-wide opacity-50 hover:opacity-90 hover:border-white/30 transition-all"
+          className="inline-block px-8 py-3 border border-white/10 font-sans text-sm tracking-wide opacity-50 hover:opacity-90 hover:border-white/30 transition-all"
         >
           GitHub ↗
         </a>

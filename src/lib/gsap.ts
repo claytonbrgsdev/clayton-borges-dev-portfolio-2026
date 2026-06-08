@@ -1,10 +1,11 @@
 // Shared GSAP config — single registration point; import from here, never from 'gsap' directly
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
-export { gsap, ScrollTrigger };
+export { gsap, ScrollTrigger, SplitText };
 
 // Motion grammar — consistent across all animations
 export const EASE_OUT = "power3.out";

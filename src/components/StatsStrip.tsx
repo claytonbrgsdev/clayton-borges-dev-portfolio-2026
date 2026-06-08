@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-const STATS = [
-  { target: 27, label: "Lab experiments"    },
-  { target: 3,  label: "Years in production" },
-];
-
 function animCounter(el: HTMLElement, target: number, duration: number) {
   const start = performance.now();
   const pad   = String(target).length;
@@ -19,7 +14,12 @@ function animCounter(el: HTMLElement, target: number, duration: number) {
   requestAnimationFrame(step);
 }
 
-export function StatsStrip() {
+export function StatsStrip({ locale }: { locale: string }) {
+  const isPt = locale === "pt";
+  const STATS = [
+    { target: 27, label: isPt ? "Experimentos no Lab" : "Lab experiments"    },
+    { target: 3,  label: isPt ? "Anos em produção"    : "Years in production" },
+  ];
   const stripRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function StatsStrip() {
           </div>
           <div
             style={{
-              fontFamily: "var(--font-geist-mono)",
+              fontFamily: "var(--font-geist-sans)",
               fontSize: 9,
               letterSpacing: "0.14em",
               textTransform: "uppercase",

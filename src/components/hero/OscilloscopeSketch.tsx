@@ -5,7 +5,7 @@ import type p5Type from "p5";
 
 const BG  = [242, 240, 236] as const;
 const FG  = [10,  10,  10]  as const;
-const ACC = [255, 79,  0]   as const; // TE orange #FF4F00
+const ACC = [216, 96,  32]  as const; // accent-orange #D86020
 const TAU = Math.PI * 2;
 
 const CHANNELS = [

@@ -6,11 +6,11 @@ interface SliderProps {
   value: number;          // 0–100
   onDrag: (v: number) => void;
   displayValue?: string;  // override shown below slider
-  accent?: string;        // defaults to "#6B35D9"
+  accent?: string;        // defaults to "#1E44F0"
   compact?: boolean;      // true = shorter slider for bottom bar
 }
 
-export function Slider({ label, value, onDrag, displayValue, accent = "#6B35D9", compact = false }: SliderProps) {
+export function Slider({ label, value, onDrag, displayValue, accent = "#1E44F0", compact = false }: SliderProps) {
   const dragRef = useRef<{ sy: number; sv: number } | null>(null);
   const [focused, setFocused] = useState(false);
 

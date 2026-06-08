@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
@@ -8,15 +8,66 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { stack } from "@/lib/data/stack";
 import { hardwareProjects } from "@/lib/data/hardware";
 import { contactInfo } from "@/lib/data/contact";
+import { AboutBackground } from "@/components/AboutBackground";
 import { StackOrbitField } from "@/components/sketches/StackOrbitField";
 import { ContactWaveform, type ContactLink } from "@/components/sketches/ContactWaveform";
 import { PrinciplesFullscreen } from "@/components/sections/home/PrinciplesFullscreen";
 import { LabShowcase } from "@/components/sections/home/LabShowcase";
 import { StatsStrip } from "@/components/StatsStrip";
 import { WorkHorizontal } from "@/components/sections/home/WorkHorizontal";
-import { AboutBackground } from "@/components/AboutBackground";
+import { HorizontalLabFlow } from "@/components/sections/home/HorizontalLabFlow";
 
-const SECTION_LABELS = ["Hero", "Work", "About", "Approach", "Lab"];
+// Section labels resolved at render time from dict — see usages below
+
+// ── Scramble ticker ───────────────────────────────────────────────────────────
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·/—";
+function ScrambleTicker({ locale }: { locale: string }) {
+  const phrases = locale === "pt"
+    ? ["DISPONÍVEL", "FULL-STACK", "REACT/NEXT.JS", "THREE.JS·3D", "CÓDIGO CRIATIVO"]
+    : ["AVAILABLE",  "FULL-STACK", "REACT/NEXT.JS", "THREE.JS·3D", "CREATIVE CODE"];
+  const [text, setText] = useState(phrases[0]);
+  const idx = useRef(0);
+  const ivl = useRef<ReturnType<typeof setInterval> | null>(null);
+  const tmr = useRef<ReturnType<typeof setTimeout>  | null>(null);
+
+  const scrambleTo = (target: string, cb?: () => void) => {
+    if (ivl.current) clearInterval(ivl.current);
+    let i = 0;
+    ivl.current = setInterval(() => {
+      setText(target.split("").map((ch, j) => {
+        if (ch === " ") return " ";
+        if (j < i) return ch;
+        return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+      }).join(""));
+      i += 0.7;
+      if (i >= target.length) {
+        clearInterval(ivl.current!); ivl.current = null;
+        setText(target); cb?.();
+      }
+    }, 35);
+  };
+
+  useEffect(() => {
+    const tick = () => {
+      idx.current = (idx.current + 1) % phrases.length;
+      scrambleTo(phrases[idx.current], () => { tmr.current = setTimeout(tick, 2500); });
+    };
+    tmr.current = setTimeout(tick, 2500);
+    return () => {
+      if (tmr.current) clearTimeout(tmr.current);
+      if (ivl.current) clearInterval(ivl.current);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <span
+      style={{ display: "inline-block", minWidth: "13ch", cursor: "default" }}
+      onMouseEnter={() => scrambleTo(phrases[idx.current])}
+    >
+      {text}
+    </span>
+  );
+}
 
 interface PortfolioExperienceProps {
   dict: Dictionary;
@@ -97,7 +148,7 @@ function WordSplitReveal({ text, style }: { text: string; style?: React.CSSPrope
 function SectionLabel({ label }: { label: string }) {
   return (
     <div style={{
-      fontFamily: "var(--font-geist-mono)", fontSize: 9,
+      fontFamily: "var(--font-geist-sans)", fontSize: 9,
       letterSpacing: "0.16em", textTransform: "uppercase",
       color: "var(--accent-orange)", display: "flex", alignItems: "center", gap: 16,
       marginBottom: 32,
@@ -109,10 +160,39 @@ function SectionLabel({ label }: { label: string }) {
 }
 
 export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) {
+  const sl = dict.home.section_labels ?? {
+    entry: "01 — Entry", work: "02 — Work", selected_projects: "Selected\nProjects",
+    about: "03 — About", lab: "04 — Lab", contact: "05 — Contact", scroll: "Scroll",
+    nav_dots: ["Hero", "Work", "About", "Approach", "Lab"], lang_tooltip: "",
+  };
+  const SECTION_LABELS = sl.nav_dots;
+
   const sectionsRef    = useRef<(HTMLElement | null)[]>([]);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const navDotsRef     = useRef<(HTMLButtonElement | null)[]>([]);
   const heroContentRef = useRef<HTMLDivElement>(null);
+  const claytonRef     = useRef<HTMLSpanElement>(null);
+  const borgesRef      = useRef<HTMLSpanElement>(null);
+  const labFlowRef     = useRef<HTMLElement | null>(null);
+
+  // ── Match BORGES width to CLAYTON width via scaleX ──────────────────────
+  useEffect(() => {
+    const match = () => {
+      const c = claytonRef.current;
+      const b = borgesRef.current;
+      if (!c || !b) return;
+      b.style.transform = "";
+      void b.offsetWidth;              // force reflow — measure natural inline-block width
+      const cw = c.getBoundingClientRect().width;
+      const bw = b.getBoundingClientRect().width;
+      if (cw === 0 || bw === 0) return;
+      b.style.transform = `scaleX(${cw / bw})`;
+      b.style.transformOrigin = "left center";
+    };
+    const t = setTimeout(match, 60); // after first paint
+    window.addEventListener("resize", match);
+    return () => { clearTimeout(t); window.removeEventListener("resize", match); };
+  }, []);
 
   // ── Scroll progress bar + nav dots ──────────────────────────────────────
   useEffect(() => {
@@ -236,6 +316,12 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       }));
     }
 
+    // Refresh after all triggers in this effect are created so that their start/end
+    // positions are computed against the final DOM (including the hero pin spacer).
+    // HorizontalLabFlow defers its own ScrollTrigger to the next macrotask, so it
+    // measures positions independently after this refresh has already settled.
+    ScrollTrigger.refresh();
+
     return () => { triggers.forEach(t => t?.kill()); };
   }, []);
 
@@ -245,6 +331,16 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
     const lenis = (window as unknown as { __lenis?: { scrollTo(target: number | HTMLElement, opts?: Record<string, unknown>): void } }).__lenis;
     if (lenis) lenis.scrollTo(el, { offset: 0 });
     else window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+  };
+
+  const scrollToLabFlow = () => {
+    const el = labFlowRef.current;
+    if (!el) return;
+    type LenisType = { scrollTo(target: number | HTMLElement, opts?: Record<string, unknown>): void };
+    const lenis = (window as unknown as { __lenis?: LenisType }).__lenis;
+    const top = el.offsetTop;
+    if (lenis) lenis.scrollTo(top, { immediate: true });
+    else window.scrollTo({ top });
   };
 
   const { home } = dict;
@@ -302,98 +398,217 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       {/* ── SECTION 0 — Hero ──────────────────────────────────────────────── */}
       <section
         ref={el => { sectionsRef.current[0] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 relative z-20"
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: "0 clamp(24px, 4vw, 64px) clamp(32px, 5vh, 64px)",
+          position: "relative",
+          zIndex: 20,
+        }}
       >
-        <div className="max-w-3xl" ref={heroContentRef}>
-          <span
-            className="font-mono text-xs tracking-widest uppercase mb-6 block"
-            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 0.9s forwards" }}
-          >
-            {home.hero.greeting}
-          </span>
-          <h1
-            className="font-bold leading-[0.9] tracking-tight mb-6"
-            style={{ fontFamily: "var(--font-geist-sans)", textShadow: "0 2px 60px rgba(0,0,0,0.6)" }}
-          >
-            <span
-              className="block hero-name-line"
-              style={{
-                fontSize: "clamp(4.2rem,11vw,9rem)",
-                letterSpacing: "-0.03em",
-                textTransform: "uppercase",
-                clipPath: "inset(0 100% 0 0)",
-                animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards",
-              }}
-            >
-              {home.hero.name.split(" ")[0]}
-            </span>
-            <span
-              className="block hero-name-line"
-              style={{
-                fontSize: "clamp(2.8rem,7.5vw,6rem)",
-                letterSpacing: "-0.02em",
-                textTransform: "uppercase",
-                opacity: 0.35,
-                clipPath: "inset(0 100% 0 0)",
-                animation: "revealName 1.1s cubic-bezier(0.16,1,0.3,1) 0.22s forwards",
-              }}
-            >
-              {home.hero.name.split(" ").slice(1).join(" ")}
-            </span>
-          </h1>
-          <p
-            className="font-light mb-4"
-            style={{ fontSize: "clamp(1rem,2vw,1.2rem)", opacity: 0, animation: "fadeIn 0.6s ease-out 0.95s forwards" }}
-          >
-            {home.hero.title}
-          </p>
-          <p
-            className="text-sm leading-relaxed mb-5 max-w-xl"
-            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 1.05s forwards" }}
-          >
-            {home.hero.hook}
-          </p>
-          <p
-            className="font-mono text-xs mb-10"
-            style={{ opacity: 0, letterSpacing: "0.1em", animation: "fadeIn 0.6s ease-out 1.15s forwards" }}
-          >
-            {home.hero.subtitle}
-          </p>
-          <div
-            className="flex flex-wrap gap-4"
-            style={{ opacity: 0, animation: "fadeIn 0.6s ease-out 1.25s forwards" }}
-          >
-            <Link
-              href={`/${locale}/projects`}
-              className="font-mono text-xs tracking-widest uppercase border px-6 py-3 hover:bg-white hover:text-black transition-colors"
-              style={{ borderColor: "rgba(255,255,255,0.3)" }}
-            >
-              {home.hero.cta_projects}
-            </Link>
-            <Link
-              href={`/${locale}/contact`}
-              className="font-mono text-xs tracking-widest uppercase px-6 py-3 hover:opacity-100 transition-opacity"
-              style={{ opacity: 0.40, border: "1px solid rgba(255,255,255,0.12)" }}
-            >
-              {home.hero.cta_contact}
-            </Link>
-          </div>
-        </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5" style={{ opacity: 0.28 }}>
-          <span className="font-mono text-[9px] tracking-widest uppercase">scroll</span>
-          <span className="font-mono text-xs animate-bounce">↓</span>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{
-          height: "180px",
-          background: "linear-gradient(to bottom, transparent, rgba(10,9,9,0.72))",
-          zIndex: 1,
-        }} />
-      </section>
+        <div ref={heroContentRef} style={{ width: "100%" }}>
 
-      {/* ── Stats strip ───────────────────────────────────────────────────── */}
-      <div className="relative z-20">
-        <StatsStrip />
-      </div>
+          {/* ── Top metadata rule ── */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "clamp(32px, 5vh, 56px)",
+            paddingBottom: 14,
+            borderBottom: "1px solid var(--rule)",
+            opacity: 0,
+            animation: "fadeIn 0.5s ease-out 0.2s forwards",
+          }}>
+            <span style={{ fontFamily: "var(--font-geist-sans)", fontSize: "var(--fs-sm)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-muted)" }}>
+              {sl.entry}
+            </span>
+            <span style={{ fontFamily: "var(--font-geist-sans)", fontSize: "var(--fs-sm)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-muted)" }}>
+              Brasília · BR
+            </span>
+          </div>
+
+          {/* ── Name + secondary — 2-col grid ── */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
+            gap: "clamp(24px, 4vw, 64px)",
+            alignItems: "flex-end",
+            marginBottom: "clamp(24px, 3vh, 40px)",
+          }}>
+            {/* Name */}
+            <h1 style={{
+              fontFamily: "var(--font-geist-sans)",
+              fontSize: "var(--fs-lg)",
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              lineHeight: 0.82,
+              textTransform: "uppercase",
+              margin: 0,
+              padding: "0.15em 0 0.05em",
+              clipPath: "inset(0 100% 0 0)",
+              animation: "revealName 1s cubic-bezier(0.16,1,0.3,1) 0.35s forwards",
+            }}>
+              <span ref={claytonRef} style={{ display: "block", width: "fit-content" }}>{home.hero.name.split(" ")[0]}</span>
+              <span ref={borgesRef} style={{ display: "inline-block", opacity: 0.22 }}>{home.hero.name.split(" ").slice(1).join(" ")}</span>
+            </h1>
+
+            {/* Secondary: ticker + title */}
+            <div style={{
+              textAlign: "right",
+              paddingBottom: 6,
+              opacity: 0,
+              animation: "fadeIn 0.5s ease-out 0.75s forwards",
+            }}>
+              <div style={{
+                fontFamily: "var(--font-geist-sans)",
+                fontSize: "var(--fs-sm)",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--accent-orange)",
+                marginBottom: 10,
+              }}>
+                <ScrambleTicker locale={locale} />
+              </div>
+              <p style={{
+                fontFamily: "var(--font-geist-sans)",
+                fontSize: "var(--fs-md)",
+                color: "var(--text-muted)",
+                margin: 0,
+                lineHeight: 1.4,
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+              }}>
+                {home.hero.title}
+              </p>
+            </div>
+          </div>
+
+          {/* ── Horizontal datum ── */}
+          <div style={{
+            height: 1,
+            background: "var(--rule)",
+            marginBottom: "clamp(20px, 3vh, 36px)",
+            opacity: 0,
+            animation: "fadeIn 0.4s ease-out 0.9s forwards",
+          }} />
+
+          {/* ── Bottom: hook + CTAs ── */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto",
+            gap: "clamp(24px, 4vw, 64px)",
+            alignItems: "flex-end",
+            opacity: 0,
+            animation: "fadeIn 0.5s ease-out 1s forwards",
+          }}>
+            <p style={{
+              fontFamily: "var(--font-geist-sans)",
+              fontSize: "var(--fs-md)",
+              color: "var(--text-muted)",
+              lineHeight: 1.65,
+              margin: 0,
+              maxWidth: 520,
+            }}>
+              {home.hero.hook}
+            </p>
+            <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
+              <Link
+                href={`/${locale}/projects`}
+                style={{
+                  fontFamily: "var(--font-geist-sans)",
+                  fontSize: "var(--fs-sm)",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  color: "var(--text)",
+                  border: "1px solid var(--rule)",
+                  padding: "10px 18px",
+                  transition: "border-color 200ms, color 200ms",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--accent-orange)"; (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-orange)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--rule)"; (e.currentTarget as HTMLAnchorElement).style.color = "var(--text)"; }}
+              >
+                {home.hero.cta_projects}
+              </Link>
+              <Link
+                href={`/${locale}/contact`}
+                style={{
+                  fontFamily: "var(--font-geist-sans)",
+                  fontSize: "var(--fs-sm)",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  color: "var(--text-muted)",
+                  padding: "10px 18px",
+                  border: "1px solid transparent",
+                  transition: "color 200ms, border-color 200ms",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--text)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--rule)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "transparent"; }}
+              >
+                {home.hero.cta_contact}
+              </Link>
+            </div>
+          </div>
+
+          {/* Fork — two scroll paths */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "clamp(20px, 3vh, 32px)",
+            paddingTop: "clamp(14px, 2vh, 22px)",
+            borderTop: "1px solid var(--rule)",
+          }}>
+
+            {/* ↓ THE WORK — passive indicator */}
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 6,
+              opacity: 0.22,
+              userSelect: "none",
+            }}>
+              <span style={{ fontFamily: "var(--font-geist-sans)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase" }}>
+                {locale === "pt" ? "O trabalho" : "The work"}
+              </span>
+              <span style={{ fontSize: 14 }}>↓</span>
+            </div>
+
+            {/* Separator */}
+            <div style={{ height: 32, width: 1, background: "rgba(255,255,255,0.1)" }} />
+
+            {/* → CREATIVE LAB — active CTA */}
+            <button
+              onClick={scrollToLabFlow}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                opacity: 0.55,
+                transition: "opacity 200ms",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.55"; }}
+            >
+              <span style={{ fontFamily: "var(--font-geist-sans)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--accent-orange)" }}>
+                {locale === "pt" ? "Lab Criativo" : "Creative Lab"}
+              </span>
+              <span style={{ fontSize: 14, color: "var(--accent-orange)" }}>→</span>
+            </button>
+
+          </div>
+
+        </div>
+      </section>
 
       {/* ── SECTION 1 — Work (horizontal scroll) ─────────────────────────── */}
       <section ref={el => { sectionsRef.current[1] = el; }} className="relative z-20">
@@ -408,10 +623,10 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       >
         <div className="max-w-5xl mx-auto w-full">
 
-          <SectionLabel label="03 — About" />
+          <SectionLabel label={sl.about} />
 
           {/* Heading — line reveal */}
-          <div className="mb-6 font-bold" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>
+          <div className="mb-6 font-bold font-sans uppercase" style={{ fontSize: "clamp(1.6rem,3.5vw,2.4rem)" }}>
             <LineReveal delay={0}>
               <span style={{ display: "block" }}>{home.about_preview.heading}</span>
             </LineReveal>
@@ -420,13 +635,13 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           {/* Bio */}
           <div data-about-text className="mb-14 max-w-2xl">
             <LineReveal delay={80}>
-              <p className="text-sm leading-relaxed mb-6" style={{ opacity: 0.52 }}>
+              <p className="font-sans text-sm leading-relaxed mb-6" style={{ opacity: 0.52 }}>
                 {home.about_preview.body}
               </p>
             </LineReveal>
             <Link
               href={`/${locale}/about`}
-              className="font-mono text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity"
+              className="font-sans text-xs tracking-wide underline underline-offset-4 hover:opacity-100 transition-opacity"
               style={{ opacity: 0.45 }}
             >
               {home.about_preview.cta} →
@@ -440,7 +655,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           >
             <div data-about-tags>
               <div style={{
-                fontFamily: "var(--font-geist-mono)", fontSize: 9,
+                fontFamily: "var(--font-geist-sans)", fontSize: 9,
                 letterSpacing: "0.16em", textTransform: "uppercase",
                 color: "var(--accent-orange)", marginBottom: 16,
               }}>
@@ -454,12 +669,12 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
               <div className="space-y-4">
                 {stack.map(cat => (
                   <div key={cat.title}>
-                    <span className="font-mono text-xs tracking-widest uppercase block mb-2" style={{ opacity: 0.28 }}>{cat.title}</span>
+                    <span className="font-sans text-xs tracking-widest uppercase block mb-2" style={{ opacity: 0.28 }}>{cat.title}</span>
                     <div className="flex flex-wrap gap-1.5">
                       {cat.items.map(item => (
                         <span
                           key={item.name}
-                          className="font-mono text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
+                          className="font-sans text-xs border px-2.5 py-1 hover:border-white/30 transition-colors"
                           style={{ borderColor: "rgba(255,255,255,0.14)", opacity: 0.62, background: "rgba(0,0,0,0.4)" }}
                           title={item.note}
                         >
@@ -489,6 +704,14 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
         <PrinciplesFullscreen dict={dict} locale={locale} />
       </section>
 
+      {/* ── Horizontal Lab Flow ─────────────────────────────────────────────── */}
+      <section
+        ref={el => { labFlowRef.current = el; }}
+        className="relative z-20"
+      >
+        <HorizontalLabFlow locale={locale} />
+      </section>
+
       {/* ── SECTION 4 — Lab + Hardware + Contact ─────────────────────────── */}
       <section
         ref={el => { sectionsRef.current[4] = el; }}
@@ -497,7 +720,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       >
         <div className="max-w-5xl mx-auto w-full">
 
-          <SectionLabel label="04 — Lab" />
+          <SectionLabel label={sl.lab} />
 
           <LabShowcase locale={locale} />
 
@@ -509,15 +732,15 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <span className="font-mono text-xs tracking-widest uppercase block mb-1" style={{ opacity: 0.35 }}>
+                  <span className="font-sans text-xs tracking-widest uppercase block mb-1" style={{ opacity: 0.35 }}>
                     {home.hardware_callout.heading}
                   </span>
-                  <p className="text-sm mb-3" style={{ opacity: 0.48 }}>{home.hardware_callout.subheading}</p>
+                  <p className="font-sans text-sm mb-3" style={{ opacity: 0.48 }}>{home.hardware_callout.subheading}</p>
                   <div className="flex flex-wrap gap-2">
                     {hardwareProjects.map(hw => (
                       <span
                         key={hw.id}
-                        className="font-mono text-xs border px-2 py-0.5"
+                        className="font-sans text-xs border px-2 py-0.5"
                         style={{ borderColor: "rgba(255,255,255,0.12)", opacity: 0.42 }}
                       >
                         {locale === "pt" ? hw.namePt : hw.nameEn}
@@ -527,7 +750,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 </div>
                 <Link
                   href={`/${locale}/hardware`}
-                  className="font-mono text-xs tracking-wide border px-5 py-2.5 hover:border-white/50 transition-colors whitespace-nowrap shrink-0"
+                  className="font-sans text-xs tracking-wide border px-5 py-2.5 hover:border-white/50 transition-colors whitespace-nowrap shrink-0"
                   style={{ borderColor: "rgba(255,255,255,0.2)" }}
                 >
                   {home.hardware_callout.cta} →
@@ -538,7 +761,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
 
           {/* Contact CTA */}
           <div className="border-t pt-16" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-            <SectionLabel label="05 — Contact" />
+            <SectionLabel label={sl.contact} />
             <WordSplitReveal
               text={home.contact_cta.heading}
               style={{
@@ -548,28 +771,29 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 letterSpacing: "-0.03em",
                 lineHeight: 1,
                 marginBottom: 80,
+                textTransform: "uppercase",
               }}
             />
-            <p className="text-sm mb-8 max-w-md" style={{ opacity: 0.55 }}>
+            <p className="font-sans text-sm mb-8 max-w-md" style={{ opacity: 0.55 }}>
               {home.contact_cta.body}
             </p>
             <div className="flex flex-wrap gap-4 items-center mb-8">
               <a
                 href={`mailto:${contactInfo.email}`}
-                className="font-mono text-sm border px-6 py-3 hover:bg-white hover:text-black transition-colors"
+                className="font-sans text-sm border px-6 py-3 hover:bg-white hover:text-black transition-colors"
                 style={{ borderColor: "rgba(255,255,255,0.28)" }}
               >
                 {contactInfo.email}
               </a>
               <Link
                 href={`/${locale}/contact`}
-                className="font-mono text-sm px-6 py-3 border hover:border-white/30 transition-colors hover:opacity-100"
+                className="font-sans text-sm px-6 py-3 border hover:border-white/30 transition-colors hover:opacity-100"
                 style={{ opacity: 0.45, borderColor: "rgba(255,255,255,0.12)" }}
               >
                 {home.contact_cta.cta} →
               </Link>
             </div>
-            <div className="flex items-center gap-6 font-mono text-xs" style={{ letterSpacing: "0.1em" }}>
+            <div className="flex items-center gap-6 font-sans text-xs" style={{ letterSpacing: "0.1em" }}>
               <a href={contactInfo.github} target="_blank" rel="noopener noreferrer"
                 className="hover:opacity-70 transition-opacity" style={{ opacity: 0.32 }}>GitHub</a>
               <span style={{ opacity: 0.18 }}>·</span>

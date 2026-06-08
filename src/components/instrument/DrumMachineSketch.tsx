@@ -7,7 +7,7 @@ import { makeNoiseBuffer, fireKick, fireSnare, fireHiHat, fireTom } from "@/lib/
 // ── Color constants ────────────────────────────────────────────────────────────
 const BG:        [number, number, number] = [242, 240, 236]; // #F2F0EC
 const FG:        [number, number, number] = [10,  10,  10];  // #0A0A0A
-const ACC:       [number, number, number] = [107, 53,  217]; // #6B35D9
+const ACC:       [number, number, number] = [30,  68,  240]; // accent-blue #1E44F0
 const MUT:       [number, number, number] = [100, 100, 100]; // dim
 const OLED_BG:     [number,number,number] = [8,   12,  20];   // dark blue-black
 const OLED_FG:     [number,number,number] = [190, 210, 240];  // cold blue-white

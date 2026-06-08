@@ -5,22 +5,24 @@ import Link from "next/link";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 // ── Project data ────────────────────────────────────────────────────────────
-const PROJECT = {
-  index:    "01",
-  type:     "Client Work · CMS Platform",
-  year:     "2024",
-  name:     "Moveo Filmes",
-  description:
-    "CMS platform for Brazil's independent film industry. 38 film pages auto-generated from a headless CMS, serving a full catalog at national scale with 99.8% uptime.",
-  highlights: [
-    "38 páginas auto-geradas",
-    "Sync via headless CMS",
-    "99.8% uptime",
-  ],
-  tech:     ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Vercel"],
-  video:    "/videos/moveo/moveo_2.mp4",
-  slug:     "moveo-filmes",
-  liveUrl:  "https://moveofilmes.com.br",
+const PROJECT_EN = {
+  index:       "01",
+  type:        "Client Work · CMS Platform",
+  year:        "2024",
+  name:        "Moveo Filmes",
+  description: "CMS platform for Brazil's independent film industry. 38 film pages auto-generated from a headless CMS, serving a full catalog at national scale with 99.8% uptime.",
+  highlights:  ["38 auto-generated pages", "Synced via headless CMS", "99.8% uptime"],
+  tech:        ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Vercel"],
+  video:       "/videos/moveo/moveo_2.mp4",
+  slug:        "moveo-filmes",
+  liveUrl:     "https://moveofilmes.com.br",
+};
+
+const PROJECT_PT = {
+  ...PROJECT_EN,
+  type:        "Trabalho para Cliente · Plataforma CMS",
+  description: "Plataforma CMS para a indústria cinematográfica independente do Brasil. 38 páginas de filmes auto-geradas a partir de um headless CMS, servindo um catálogo completo em escala nacional com 99,8% de uptime.",
+  highlights:  ["38 páginas auto-geradas", "Sincronizado via headless CMS", "99,8% uptime"],
 };
 
 const MACOS_DOTS = ["#ff5f57", "#febc2e", "#28c840"];
@@ -30,8 +32,9 @@ interface FeaturedProjectCardProps {
 }
 
 export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps) {
-  const wrapRef  = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const wrapRef      = useRef<HTMLDivElement>(null);
+  const videoRef     = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
 
   // Stall recovery — keeps video looping on cold-start dev server
   useEffect(() => {
@@ -45,26 +48,76 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
     return () => v.removeEventListener("stalled", onStalled);
   }, []);
 
-  // Scroll-reveal entrance
+  // Scroll-reveal entrance — wrapRef: simple fade; videoWrap: clip-path reveal
   useEffect(() => {
-    const el = wrapRef.current;
+    const el  = wrapRef.current;
+    const vid = videoWrapRef.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Wrapper fade-in (left column + overall)
     gsap.set(el, { opacity: 0, y: 28 });
-    const trigger = ScrollTrigger.create({
+    const fadeTrigger = ScrollTrigger.create({
       trigger: el,
       start: "top 82%",
       once: true,
       onEnter: () => gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }),
     });
-    return () => trigger.kill();
+
+    // Video column — clip-path reveal from bottom
+    if (vid) {
+      gsap.set(vid, { clipPath: "inset(100% 0 0 0)" });
+      const clipTrigger = ScrollTrigger.create({
+        trigger: vid,
+        start: "top 78%",
+        end: "top 30%",
+        scrub: 1.4,
+        onUpdate: (self) => {
+          const p = (1 - self.progress) * 100;
+          gsap.set(vid, { clipPath: `inset(${p}% 0 0 0)` });
+        },
+      });
+      return () => { fadeTrigger.kill(); clipTrigger.kill(); };
+    }
+
+    return () => fadeTrigger.kill();
   }, []);
 
-  const isEn = locale !== "pt";
+  // Perspective tilt on video wrapper
+  useEffect(() => {
+    const el = videoWrapRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      gsap.to(el, {
+        rotationY: x * 10,
+        rotationX: -y * 8,
+        transformPerspective: 900,
+        ease: "power2.out",
+        duration: 0.35,
+        overwrite: "auto",
+      });
+    };
+    const onLeave = () =>
+      gsap.to(el, { rotationY: 0, rotationX: 0, duration: 0.55, ease: "power2.out" });
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  const isEn   = locale !== "pt";
+  const PROJECT = isEn ? PROJECT_EN : PROJECT_PT;
 
   return (
     <div
       style={{
-        background: "#07090e",
+        background: "#0A0909",
         padding: "0 0 72px",
         position: "relative",
       }}
@@ -90,7 +143,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
           {/* Left — info ───────────────────────────────────────────── */}
           <div>
             <span style={{
-              fontFamily: "monospace", fontSize: "10px",
+              fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: "10px",
               letterSpacing: "0.14em", textTransform: "uppercase",
               opacity: 0.30, display: "block", marginBottom: "18px",
             }}>
@@ -106,6 +159,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
             </h3>
 
             <p style={{
+              fontFamily: "var(--font-geist-sans, sans-serif)",
               fontSize: "13px", lineHeight: 1.75,
               opacity: 0.50, marginBottom: "22px",
               maxWidth: "340px",
@@ -118,7 +172,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
               {PROJECT.highlights.map(h => (
                 <div key={h} style={{
                   display: "flex", alignItems: "center", gap: "7px",
-                  fontFamily: "monospace", fontSize: "11px",
+                  fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: "11px",
                   opacity: 0.38, marginBottom: "5px",
                 }}>
                   <span style={{ opacity: 0.5 }}>▸</span>
@@ -134,7 +188,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
             }}>
               {PROJECT.tech.map(t => (
                 <span key={t} style={{
-                  fontFamily: "monospace", fontSize: "10px",
+                  fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: "10px",
                   border: "1px solid rgba(255,255,255,0.14)",
                   padding: "3px 9px", opacity: 0.36,
                 }}>
@@ -148,7 +202,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
               <Link
                 href={`/${locale}/projects/${PROJECT.slug}`}
                 style={{
-                  fontFamily: "monospace", fontSize: "11px",
+                  fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: "11px",
                   opacity: 0.58, letterSpacing: "0.07em",
                   textDecoration: "none", color: "inherit",
                   transition: "opacity 0.2s",
@@ -163,7 +217,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontFamily: "monospace", fontSize: "11px",
+                  fontFamily: "var(--font-geist-sans, sans-serif)", fontSize: "11px",
                   opacity: 0.30, letterSpacing: "0.07em",
                   textDecoration: "none", color: "inherit",
                   transition: "opacity 0.2s",
@@ -177,11 +231,15 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
           </div>
 
           {/* Right — video preview ─────────────────────────────────── */}
-          <div style={{
-            border: "1px solid rgba(255,255,255,0.09)",
-            overflow: "hidden",
-            background: "rgba(0,0,0,0.4)",
-          }}>
+          <div
+            ref={videoWrapRef}
+            style={{
+              border: "1px solid rgba(255,255,255,0.09)",
+              overflow: "hidden",
+              background: "rgba(0,0,0,0.4)",
+              transformStyle: "preserve-3d",
+            }}
+          >
             {/* Minimal browser-chrome strip */}
             <div style={{
               display: "flex", alignItems: "center", gap: "5px",
@@ -196,7 +254,7 @@ export function FeaturedProjectCard({ locale = "en" }: FeaturedProjectCardProps)
                 }} />
               ))}
               <span style={{
-                marginLeft: 8, fontFamily: "monospace", fontSize: "9px",
+                marginLeft: 8, fontFamily: "var(--font-geist-mono, monospace)", fontSize: "9px",
                 opacity: 0.22, letterSpacing: "0.04em",
               }}>
                 moveofilmes.com.br

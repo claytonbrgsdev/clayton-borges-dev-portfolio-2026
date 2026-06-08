@@ -285,7 +285,7 @@ export function WorkHorizontal({ locale }: { locale: string }) {
                 {name}
               </h3>
               <p style={{
-                fontFamily: "var(--font-geist-mono)",
+                fontFamily: "var(--font-geist-sans)",
                 fontSize: "clamp(9px, 0.75vw, 11px)",
                 color: "rgba(255,255,255,0.48)",
                 lineHeight: 1.8,

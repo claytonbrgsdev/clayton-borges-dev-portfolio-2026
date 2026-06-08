@@ -20,11 +20,11 @@ export function LabSection({ dict }: LabSectionProps) {
       <div className="mx-auto max-w-6xl">
         <div className="flex items-end justify-between mb-16">
           <div>
-            <span className="font-mono text-xs tracking-widest uppercase opacity-40 block mb-4">
+            <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
               Creative Lab
             </span>
             <h2 className="text-3xl md:text-5xl font-bold mb-4">{lab.heading}</h2>
-            <p className="text-sm opacity-50 max-w-lg">{lab.subheading}</p>
+            <p className="font-sans text-sm opacity-50 max-w-lg">{lab.subheading}</p>
           </div>
           <Link
             href="/lab"
@@ -51,14 +51,14 @@ export function LabSection({ dict }: LabSectionProps) {
               </span>
 
               {/* Focus tag */}
-              <span className="absolute top-4 right-4 font-mono text-xs opacity-30 border border-white/15 px-2 py-0.5">
+              <span className="absolute top-4 right-4 font-sans text-xs opacity-30 border border-white/15 px-2 py-0.5">
                 {exp.focus}
               </span>
 
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h3 className="font-bold text-base mb-1 text-white">{exp.title}</h3>
-                <p className="text-xs opacity-50 leading-relaxed text-white line-clamp-2">
+                <p className="font-sans text-xs opacity-50 leading-relaxed text-white line-clamp-2">
                   {exp.description}
                 </p>
                 <span className="font-mono text-xs opacity-0 group-hover:opacity-60 transition-opacity mt-3 block text-white">
