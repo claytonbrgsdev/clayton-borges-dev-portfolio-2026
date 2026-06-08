@@ -3,6 +3,7 @@
 
 # Local 3D models symlink — large GLB files, needs CDN hosting for production
 public/models
+public/models~HEAD
 
 # Untracked lab preview pages not ready for production
 src/app/lab-preview-transitions/
