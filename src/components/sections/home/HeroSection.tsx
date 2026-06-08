@@ -75,7 +75,9 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
             fontSize: 10,
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            opacity: 0.4,
+            opacity: 0.6,
+            color: "white",
+            mixBlendMode: "difference",
           }}
         >
           {hero.greeting}
@@ -83,7 +85,13 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
 
         <h1
           ref={nameRef}
-          style={{ lineHeight: 0.92, letterSpacing: "-0.03em", margin: 0 }}
+          style={{
+            lineHeight: 0.92,
+            letterSpacing: "-0.03em",
+            margin: 0,
+            color: "white",
+            mixBlendMode: "difference",
+          }}
         >
           <span
             className="block"
@@ -101,7 +109,7 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
               style={{
                 fontSize: "clamp(48px, 7.5vw, 120px)",
                 fontWeight: 800,
-                opacity: 0.35,
+                opacity: 0.55,
                 display: "block",
               }}
             >
@@ -114,10 +122,12 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
           ref={subtitleRef}
           style={{
             fontSize: 14,
-            opacity: 0.5,
+            opacity: 0.65,
             margin: "8px 0 0",
             fontFamily: "var(--font-geist-sans, sans-serif)",
             textTransform: "uppercase",
+            color: "white",
+            mixBlendMode: "difference",
           }}
         >
           {hero.title}

@@ -76,8 +76,16 @@ export function Header({ dict }: HeaderProps) {
         >
           <span style={{ display: "block", width: 5, height: 5, background: "var(--accent-orange)", flexShrink: 0 }} />
           <span style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {/* Line 1 — defines the container width */}
             <span style={{ ...SANS, color: "var(--text)", opacity: 0.85 }}>Clayton Borges</span>
-            <span style={{ ...MONO, color: "var(--text-muted)", textTransform: "none", letterSpacing: "0.05em", fontSize: "8px" }}>{dict.nav.logo_tagline}</span>
+            {/* Line 2 — letters spread to exactly match line 1 width */}
+            <span style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+              {Array.from("DESENVOLVEDOR").map((char, i) => (
+                <span key={i} style={{ ...MONO, color: "var(--text-muted)", letterSpacing: 0, fontSize: "8px", textTransform: "uppercase" }}>
+                  {char}
+                </span>
+              ))}
+            </span>
           </span>
         </Link>
 
