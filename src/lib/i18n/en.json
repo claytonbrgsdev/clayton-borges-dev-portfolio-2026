@@ -29,7 +29,7 @@
     "about_preview": {
       "label": "About Me",
       "heading": "3 years. Shipped.",
-      "body": "3 years building production web apps, interactive 3D experiences, and creative developer tools for clients in Brazil and worldwide. Based in Brasília — open to relocation and remote work.",
+      "body": "3 years building production web apps, interactive 3D experiences, and creative tools — freelance for clients and companies across Brazil and beyond. The Lab is my parallel universe: interactive experiments in physics, math, and design, where the challenge is finding the thread that connects them all.",
       "cta": "Learn More"
     },
     "featured_projects": {
@@ -53,9 +53,9 @@
     },
     "lab": {
       "heading": "The Lab",
-      "subheading": "Generative experiments — computational art, physics simulations, and interactive systems.",
+      "subheading": "A compilation of interactive visual experiments spanning physics, math, and design — a space to challenge ideas and find the thread that connects them all.",
       "enter": "Enter",
-      "explore_all": "Explore all 27 experiments →"
+      "explore_all": "Enter the Lab →"
     },
     "hardware_callout": {
       "heading": "Hardware",
@@ -65,7 +65,7 @@
     "about_section": {
       "code": "03 — About",
       "manifesto": "I make things that move, react, and feel alive.",
-      "bio": "Full-stack and creative developer based in Brasília with 3 years shipping production apps, interactive 3D experiences, and generative tools for clients in Brazil and worldwide.",
+      "bio": "Full-stack and creative developer based in Brasília — 3 years freelance, shipping production apps, interactive 3D experiences, and generative tools for clients and companies worldwide. The Lab is where it all converges.",
       "available_for": "Open to remote roles, freelance contracts, and relocation.",
       "spec_heading": "SPECIFICATIONS",
       "spec_location": "LOCATION",

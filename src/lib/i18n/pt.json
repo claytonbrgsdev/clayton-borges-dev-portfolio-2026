@@ -29,7 +29,7 @@
     "about_preview": {
       "label": "Sobre Mim",
       "heading": "3 anos. Entregue.",
-      "body": "3 anos desenvolvendo aplicações web em produção, experiências 3D interativas e ferramentas criativas para clientes no Brasil e no exterior. Baseado em Brasília — aberto a relocação e trabalho remoto.",
+      "body": "3 anos desenvolvendo aplicações web em produção, experiências 3D interativas e ferramentas criativas — freelance para clientes e empresas no Brasil e no exterior. O Lab é meu universo paralelo: experimentos visuais interativos em física, matemática e design, onde o desafio é encontrar o fio que conecta tudo.",
       "cta": "Saiba Mais"
     },
     "featured_projects": {
@@ -53,9 +53,9 @@
     },
     "lab": {
       "heading": "O Lab",
-      "subheading": "Experimentos generativos — arte computacional, simulações físicas e sistemas interativos.",
+      "subheading": "Uma compilação de experimentos visuais interativos em física, matemática e design — um espaço para desafiar ideias e encontrar o fio que os conecta.",
       "enter": "Entrar",
-      "explore_all": "Explorar todos os 27 experimentos →"
+      "explore_all": "Entrar no Lab →"
     },
     "hardware_callout": {
       "heading": "Hardware",
@@ -65,7 +65,7 @@
     "about_section": {
       "code": "03 — Sobre",
       "manifesto": "Crio coisas que se movem, reagem e parecem vivas.",
-      "bio": "Desenvolvedor full-stack e criativo baseado em Brasília, com 3 anos entregando aplicações de produção, experiências 3D interativas e ferramentas generativas para clientes no Brasil e no exterior.",
+      "bio": "Desenvolvedor full-stack e criativo baseado em Brasília — 3 anos freelance, entregando aplicações de produção, experiências 3D interativas e ferramentas generativas para clientes e empresas no Brasil e no exterior. O Lab é onde tudo converge.",
       "available_for": "Aberto a vagas remotas, contratos freelance e relocação.",
       "spec_heading": "ESPECIFICAÇÕES",
       "spec_location": "LOCALIZAÇÃO",

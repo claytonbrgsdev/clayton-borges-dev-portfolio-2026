@@ -18,10 +18,70 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["300", "400", "700"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://claytonborges.dev";
+
 export const metadata: Metadata = {
-  title: "Clayton Borges — Full-Stack Developer",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Clayton Borges — Full-Stack & Creative Developer",
+    template: "%s · Clayton Borges",
+  },
   description:
-    "Full-Stack Developer specializing in React, Next.js, Three.js 3D, and Python. Based in Brasília, Brazil. Available for remote work.",
+    "Full-stack and creative developer with 3 years shipping production web apps, interactive 3D experiences, and generative tools — freelance for clients and companies across Brazil and beyond. Creator of The Lab.",
+  keywords: [
+    "Full-Stack Developer",
+    "Creative Developer",
+    "React",
+    "Next.js",
+    "Three.js",
+    "GSAP",
+    "TypeScript",
+    "Python",
+    "Brasília",
+    "Brazil",
+    "Freelance",
+    "3D",
+    "Generative Art",
+    "Interactive",
+    "The Lab",
+  ],
+  authors: [{ name: "Clayton Borges", url: SITE_URL }],
+  creator: "Clayton Borges",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    alternateLocale: "pt_BR",
+    url: SITE_URL,
+    title: "Clayton Borges — Full-Stack & Creative Developer",
+    description:
+      "Full-stack and creative developer with 3 years shipping production web apps, interactive 3D experiences, and generative tools — freelance for clients across Brazil and beyond.",
+    siteName: "Clayton Borges",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Clayton Borges — Full-Stack & Creative Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Clayton Borges — Full-Stack & Creative Developer",
+    description:
+      "Full-stack and creative developer — production apps, interactive 3D, generative tools. Creator of The Lab.",
+    images: ["/opengraph-image"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({

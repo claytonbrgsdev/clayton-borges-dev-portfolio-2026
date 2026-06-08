@@ -16,10 +16,6 @@ function animCounter(el: HTMLElement, target: number, duration: number) {
 
 export function StatsStrip({ locale }: { locale: string }) {
   const isPt = locale === "pt";
-  const STATS = [
-    { target: 27, label: isPt ? "Experimentos no Lab" : "Lab experiments"    },
-    { target: 3,  label: isPt ? "Anos em produção"    : "Years in production" },
-  ];
   const stripRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,53 +34,89 @@ export function StatsStrip({ locale }: { locale: string }) {
     return () => io.disconnect();
   }, []);
 
+  const CELL: React.CSSProperties = {
+    background: "var(--bg)",
+    padding: "28px 32px",
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+  };
+
+  const LABEL: React.CSSProperties = {
+    fontFamily: "var(--font-geist-sans)",
+    fontSize: 9,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+    color: "var(--text-muted)",
+  };
+
+  const BIG: React.CSSProperties = {
+    fontFamily: "var(--font-geist-sans)",
+    fontSize: "clamp(40px,6vw,80px)",
+    fontWeight: 800,
+    letterSpacing: "-0.025em",
+    lineHeight: 1,
+  };
+
+  const MED: React.CSSProperties = {
+    fontFamily: "var(--font-geist-sans)",
+    fontSize: "clamp(18px,2vw,28px)",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+    lineHeight: 1.1,
+    color: "var(--text)",
+  };
+
+  const SUB: React.CSSProperties = {
+    fontFamily: "var(--font-geist-mono)",
+    fontSize: 10,
+    letterSpacing: "0.04em",
+    color: "var(--text-muted)",
+    lineHeight: 1.6,
+    whiteSpace: "pre-line",
+  };
+
   return (
     <div
       ref={stripRef}
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
+        gridTemplateColumns: "repeat(3, 1fr)",
         gap: "1px",
         background: "var(--rule)",
         borderTop: "1px solid var(--rule)",
         borderBottom: "1px solid var(--rule)",
       }}
     >
-      {STATS.map(({ target, label }) => (
-        <div
-          key={label}
-          style={{
-            background: "var(--bg)",
-            padding: "28px 32px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "var(--font-geist-sans)",
-              fontSize: "clamp(40px,6vw,80px)",
-              fontWeight: 800,
-              letterSpacing: "-0.025em",
-              lineHeight: 1,
-            }}
-          >
-            <span data-target={target}>{String(target).padStart(String(target).length, "0")}</span>
-          </div>
-          <div
-            style={{
-              fontFamily: "var(--font-geist-sans)",
-              fontSize: 9,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--text-muted)",
-            }}
-          >
-            {label}
-          </div>
+      {/* Col 1 — 3 years in production (counter) */}
+      <div style={CELL}>
+        <div style={BIG}>
+          <span data-target={3}>3</span>
         </div>
-      ))}
+        <div style={LABEL}>
+          {isPt ? "Anos em produção" : "Years in production"}
+        </div>
+      </div>
+
+      {/* Col 2 — Freelance narrative */}
+      <div style={CELL}>
+        <div style={MED}>Freelance</div>
+        <div style={SUB}>
+          {isPt
+            ? "Clientes e empresas\nno Brasil e no exterior"
+            : "Clients & companies\nacross Brazil and beyond"}
+        </div>
+      </div>
+
+      {/* Col 3 — The Lab */}
+      <div style={CELL}>
+        <div style={MED}>The Lab</div>
+        <div style={SUB}>
+          {isPt
+            ? "Experimentos visuais interativos\nem física, matemática e design"
+            : "Interactive experiments\nin physics, math & design"}
+        </div>
+      </div>
     </div>
   );
 }

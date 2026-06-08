@@ -10,6 +10,8 @@ interface AboutPageProps {
 
 export const metadata: Metadata = {
   title: "About",
+  description:
+    "3 years freelance — shipping production apps, interactive 3D experiences, and generative tools for clients and companies worldwide. Based in Brasília. Creator of The Lab.",
 };
 
 export default async function AboutPage({ params }: AboutPageProps) {

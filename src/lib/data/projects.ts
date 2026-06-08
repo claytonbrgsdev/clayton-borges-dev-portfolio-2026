@@ -344,7 +344,9 @@ export const projects: Project[] = [
       "Simulação gamificada de reflorestamento full-stack com sistema de mapa hierárquico, parâmetros ambientais, pontuação de saúde e implantação Docker em múltiplos ambientes.",
     tech: ["FastAPI", "Next.js 15", "React 19", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Alembic"],
     categories: ["web-app", "platform"],
-    featured: true,
+    status: "In Progress",
+    statusPt: "Em desenvolvimento",
+    featured: false,
     year: 2025,
   },
   {

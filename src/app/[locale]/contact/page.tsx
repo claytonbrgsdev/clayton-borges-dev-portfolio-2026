@@ -9,6 +9,8 @@ interface ContactPageProps {
 
 export const metadata: Metadata = {
   title: "Contact",
+  description:
+    "Get in touch — open to freelance contracts, remote roles, and relocation. Based in Brasília, available worldwide.",
 };
 
 export default async function ContactPage({ params }: ContactPageProps) {

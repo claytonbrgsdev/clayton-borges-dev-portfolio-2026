@@ -8,7 +8,9 @@ interface HomePageProps {
 }
 
 export const metadata: Metadata = {
-  title: "Clayton Borges — Creative / Full-Stack Developer",
+  title: "Clayton Borges — Full-Stack & Creative Developer",
+  description:
+    "Full-stack and creative developer with 3 years shipping production web apps, interactive 3D experiences, and generative tools — freelance for clients across Brazil and beyond.",
 };
 
 export default async function HomePage({ params }: HomePageProps) {

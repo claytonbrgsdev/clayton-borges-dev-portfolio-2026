@@ -11,6 +11,8 @@ interface ProjectsPageProps {
 
 export const metadata: Metadata = {
   title: "Projects",
+  description:
+    "Client work, interactive 3D experiences, and production platforms — built freelance for companies and clients across Brazil and beyond.",
 };
 
 export default async function ProjectsPage({ params }: ProjectsPageProps) {
