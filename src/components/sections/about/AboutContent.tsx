@@ -13,13 +13,13 @@ const experience = [
   {
     role: "Freelance Dev",
     company: "Evolut Digital",
-    period: "Jan 2025 – Present",
+    period: "2025 – Present",
     highlights: ["MzPrime 3D — real-time vehicle cover customization (Three.js + GLB)"],
   },
   {
     role: "Freelance Dev",
     company: "Moveo Filmes",
-    period: "Jun 2024 – Present",
+    period: "2025 – Present",
     highlights: ["Bilingual film production platform with admin CMS", "GSAP ScrollTrigger + Lenis + Supabase RLS"],
   },
   {

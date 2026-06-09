@@ -107,7 +107,7 @@ export const projects: Project[] = [
     status: "Delivered and live",
     statusPt: "Entregue e no ar",
     featured: true,
-    year: 2024,
+    year: 2025,
     client: "Moveo Filmes",
   },
   {
