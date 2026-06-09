@@ -131,9 +131,9 @@ export const projects: Project[] = [
       "Optimized browser performance for a lightweight interactive showroom experience.",
     ],
     overview:
-      "MzPrime is an interactive 3D showroom for luxury custom vehicle covers. Users customize cover color, stitching color, vehicle category, and logo placement in real time — without reloading models for every configuration change. Predefined logo placement spots let customers upload a PNG and see it applied directly on the 3D cover, keeping the experience lightweight and immediately responsive in the browser.",
+      "Vitrine 3D is an interactive 3D showroom for luxury custom vehicle covers. Users customize cover color, stitching color, vehicle category, and logo placement in real time — without reloading models for every configuration change. Predefined logo placement spots let customers upload a PNG and see it applied directly on the 3D cover, keeping the experience lightweight and immediately responsive in the browser.",
     overviewPt:
-      "MzPrime é um showroom 3D interativo para capas de veículos de luxo personalizadas. Os usuários personalizam cor da capa, cor da costura, categoria do veículo e posicionamento de logo em tempo real — sem recarregar modelos a cada mudança de configuração. Áreas predefinidas para logos permitem que os clientes façam upload de um PNG e vejam ele aplicado diretamente na capa 3D, mantendo a experiência leve e imediatamente responsiva no navegador.",
+      "Vitrine 3D é um showroom 3D interativo para capas de veículos de luxo personalizadas. Os usuários personalizam cor da capa, cor da costura, categoria do veículo e posicionamento de logo em tempo real — sem recarregar modelos a cada mudança de configuração. Áreas predefinidas para logos permitem que os clientes façam upload de um PNG e vejam ele aplicado diretamente na capa 3D, mantendo a experiência leve e imediatamente responsiva no navegador.",
     problem:
       "Loading separate pre-rendered models for every customization variation — each cover color, stitching color, or vehicle type — creates loading interruptions that break the experience. For a luxury configurator where customers test many combinations quickly, any delay or loading screen destroys the sense of immediacy the product demands.",
     problemPt:
@@ -170,7 +170,7 @@ export const projects: Project[] = [
     ],
     status: "Delivered and live",
     statusPt: "Entregue e no ar",
-    liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
+    liveUrl: "https://claytonbrgsdev.github.io/mz-prime/",
     featured: true,
     year: 2025,
     client: "Evolut Digital",
