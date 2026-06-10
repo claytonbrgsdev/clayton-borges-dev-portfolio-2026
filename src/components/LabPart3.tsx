@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
 import { LabPartChrome } from "./LabPartChrome";
+import { useLabLocale } from "@/hooks/useLabLocale";
+import type { LabLocale } from "@/hooks/useLabLocale";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 const ss = (a: number, b: number, t: number) => {
@@ -103,28 +105,62 @@ const SECTIONS_P3 = [
   [6, "II", 0.930, 0.950, 0.975, 1.000],
 ] as const;
 
-const CH_NAMES_P3 = ["SEED", "GRAMMAR", "FLOW", "SIGNAL", "CURVE", "QUESTION"];
-
-const HEADINGS_P3: [string, string][] = [
-  ["THE CIRCLE",   "contains infinite edge"],
-  ["BOUNDARY",     "is not a line — it is a question"],
-  ["THE FIGURE-8", "every path crosses itself once"],
-  ["PERCOLATION",  "when connection becomes inevitable"],
-  ["THE BRAID",    "two frequencies, one path"],
-  ["INVISIBLE",    "the force that curves without contact"],
-  ["THE PULSE",    "discrete signals in a continuous field"],
-  ["COMPUTATION",  "is matter obeying a local rule"],
-  ["THE WEAVE",    "every orbit eventually returns"],
-  ["EVERY CURVE",  "is a sum of simpler curves"],
-  ["THIS DOT",     "was running a rule this whole time."],
-  ["so were you.", ""],
-];
+// ── Translations ───────────────────────────────────────────────────────────────
+const TRANSLATIONS = {
+  en: {
+    partLabel:    "PART III · MIND",
+    chapter:      "CH",
+    chapterWord:  "CHAPTER",
+    chNames:      ["SEED", "GRAMMAR", "FLOW", "SIGNAL", "CURVE", "QUESTION"] as string[],
+    headings: [
+      ["THE CIRCLE",   "contains infinite edge"],
+      ["BOUNDARY",     "is not a line — it is a question"],
+      ["THE FIGURE-8", "every path crosses itself once"],
+      ["PERCOLATION",  "when connection becomes inevitable"],
+      ["THE BRAID",    "two frequencies, one path"],
+      ["INVISIBLE",    "the force that curves without contact"],
+      ["THE PULSE",    "discrete signals in a continuous field"],
+      ["COMPUTATION",  "is matter obeying a local rule"],
+      ["THE WEAVE",    "every orbit eventually returns"],
+      ["EVERY CURVE",  "is a sum of simpler curves"],
+      ["THIS DOT",     "was running a rule this whole time."],
+      ["so were you.", ""],
+    ] as [string, string][],
+  },
+  pt: {
+    partLabel:    "PARTE III · MENTE",
+    chapter:      "CH",
+    chapterWord:  "CAPÍTULO",
+    chNames:      ["SEMENTE", "GRAMÁTICA", "FLUXO", "SINAL", "CURVA", "QUESTÃO"] as string[],
+    headings: [
+      ["O CÍRCULO",    "contém borda infinita"],
+      ["FRONTEIRA",    "não é uma linha — é uma pergunta"],
+      ["O OITO",       "todo caminho se cruza uma vez"],
+      ["PERCOLAÇÃO",   "quando a conexão se torna inevitável"],
+      ["A TRANÇA",     "duas frequências, um único caminho"],
+      ["INVISÍVEL",    "a força que curva sem contato"],
+      ["O PULSO",      "sinais discretos num campo contínuo"],
+      ["COMPUTAÇÃO",   "é a matéria obedecendo a uma regra local"],
+      ["O TECIDO",     "toda órbita eventualmente retorna"],
+      ["TODA CURVA",   "é soma de curvas mais simples"],
+      ["ESTE PONTO",   "seguia uma regra o tempo todo."],
+      ["você também.", ""],
+    ] as [string, string][],
+  },
+} as const satisfies Record<LabLocale, {
+  partLabel: string;
+  chapter: string;
+  chapterWord: string;
+  chNames: string[];
+  headings: [string, string][];
+}>;
 
 // ── buildSketch ────────────────────────────────────────────────────────────────
 function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement | null>,
+  localeRef: React.MutableRefObject<LabLocale>,
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     let traceCanvas: HTMLCanvasElement, traceCtx: CanvasRenderingContext2D;
@@ -319,13 +355,14 @@ function buildSketch(
         // ── HUD ───────────────────────────────────────────────────────────────
         const hudA = ss(0.04, 0.14, sp);
         if (hudA > 0.01) {
+          const t = TRANSLATIONS[localeRef.current];
           p.noStroke();
           p.fill(ACCENT_RGB[0], ACCENT_RGB[1], ACCENT_RGB[2], Math.round(hudA * 50));
           p.textSize(7);
-          p.textAlign(p.LEFT,  p.TOP);    p.text(`PART III · MIND`,           W * 0.018, H * 0.018);
-          p.textAlign(p.RIGHT, p.TOP);    p.text(`sp ${sp.toFixed(4)}`,        W * 0.982, H * 0.018);
-          p.textAlign(p.LEFT,  p.BOTTOM); p.text(`CH${chIdx+1} · ${CH_NAMES_P3[chIdx]}`, W * 0.018, H * 0.982);
-          p.textAlign(p.RIGHT, p.BOTTOM); p.text(`a=${la} b=${lb}`,           W * 0.982, H * 0.982);
+          p.textAlign(p.LEFT,  p.TOP);    p.text(t.partLabel,                            W * 0.018, H * 0.018);
+          p.textAlign(p.RIGHT, p.TOP);    p.text(`sp ${sp.toFixed(4)}`,                  W * 0.982, H * 0.018);
+          p.textAlign(p.LEFT,  p.BOTTOM); p.text(`${t.chapter}${chIdx+1} · ${t.chNames[chIdx]}`, W * 0.018, H * 0.982);
+          p.textAlign(p.RIGHT, p.BOTTOM); p.text(`a=${la} b=${lb}`,                      W * 0.982, H * 0.982);
         }
 
         // ── Text overlays ──────────────────────────────────────────────────────
@@ -346,6 +383,15 @@ function buildSketch(
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export function LabPart3() {
+  const [locale] = useLabLocale();
+  const localeRef = useRef<LabLocale>(locale);
+
+  // Keep localeRef current so the p5 draw loop always reads the latest value
+  // without needing to rebuild the sketch on every locale change.
+  useEffect(() => {
+    localeRef.current = locale;
+  }, [locale]);
+
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
@@ -354,11 +400,12 @@ export function LabPart3() {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type | null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
     return () => { alive = false; inst?.remove(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const positions: React.CSSProperties[] = [
@@ -390,7 +437,8 @@ export function LabPart3() {
 
         {SECTIONS_P3.map((sec, i) => {
           const chIdx  = (sec[0] as number) - 1;
-          const [headline, sub] = HEADINGS_P3[i];
+          const t = TRANSLATIONS[locale];
+          const [headline, sub] = t.headings[i];
           const isLast = i === 11;
 
           return (
@@ -400,7 +448,7 @@ export function LabPart3() {
                   display: "block", fontSize: "0.55rem", letterSpacing: "0.38em",
                   color: ACCENT, textTransform: "uppercase", marginBottom: 10,
                 }}>
-                  {`CH${chIdx + 1} · ${CH_NAMES_P3[chIdx]}`}
+                  {`${t.chapter}${chIdx + 1} · ${t.chNames[chIdx]}`}
                 </span>
               )}
 
