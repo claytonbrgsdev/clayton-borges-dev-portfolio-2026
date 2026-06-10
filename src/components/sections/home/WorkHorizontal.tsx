@@ -207,9 +207,9 @@ export function WorkHorizontal({ locale }: { locale: string }) {
           </div>
 
           {/* Hero image */}
-          <div style={{
+          <div className="md:flex-[0_0_52%]" style={{
             position: "relative",
-            flex: "0 0 52%",
+            minHeight: "clamp(160px, 50vw, 260px)",
             overflow: "hidden",
             background: "var(--bg-elevated)",
             borderBottom: "1px solid var(--rule)",
@@ -256,7 +256,7 @@ export function WorkHorizontal({ locale }: { locale: string }) {
           {/* Project info */}
           <div style={{
             flex: 1,
-            padding: "16px 24px",
+            padding: "clamp(12px, 2vw, 16px) clamp(16px, 3vw, 24px)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -267,7 +267,7 @@ export function WorkHorizontal({ locale }: { locale: string }) {
             <div>
               <h3 style={{
                 fontFamily: "var(--font-geist-sans)",
-                fontSize: "clamp(16px, 1.8vw, 28px)",
+                fontSize: "clamp(18px, 1.8vw, 28px)",
                 fontWeight: 800,
                 letterSpacing: "-0.025em",
                 textTransform: "uppercase",
@@ -279,12 +279,12 @@ export function WorkHorizontal({ locale }: { locale: string }) {
               </h3>
               <p style={{
                 fontFamily: "var(--font-geist-sans)",
-                fontSize: "clamp(9px, 0.75vw, 11px)",
+                fontSize: "clamp(11px, 0.75vw, 13px)",
                 color: "rgba(255,255,255,0.48)",
-                lineHeight: 1.8,
+                lineHeight: 1.7,
                 margin: 0,
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 3,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
               }}>

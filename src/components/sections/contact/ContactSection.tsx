@@ -106,7 +106,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
           <button
             type="submit"
             disabled={status === "sending" || status === "success"}
-            className="mt-2 px-8 py-3 bg-white text-black font-sans text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 self-start flex items-center gap-3"
+            className="mt-2 px-8 py-3 bg-white text-black font-sans text-sm tracking-wide hover:bg-white/90 transition-colors disabled:opacity-50 w-full sm:w-auto sm:self-start flex items-center justify-center gap-3"
           >
             {status === "sending" && (
               <span className="inline-block w-3 h-3 border border-black/30 border-t-black rounded-full animate-spin" />
