@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
 import { LabPartChrome } from "./LabPartChrome";
+import { useLabLocale, type LabLocale } from "../hooks/useLabLocale";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 const ss = (a: number, b: number, t: number) => {
@@ -148,6 +149,7 @@ function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement | null>,
+  localeRef: React.RefObject<LabLocale>,
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     sandpileInit(); lorenzInit(); glInit(42); caInit(30); isingInit();
@@ -368,10 +370,13 @@ function buildSketch(
         }
 
         // HUD
+        const hudNames = localeRef.current === "pt"
+          ? ["GRÃO","FLUXO","VIDA","REGRA","SPIN","SINAL"]
+          : ["GRAIN","FLOW","LIFE","RULE","SPIN","SIGNAL"];
         dc.font = `${Math.round(W * 0.009 + 5)}px 'Arial','Helvetica Neue',sans-serif`;
         dc.fillStyle = `rgba(${PAL_ACC[0]},${PAL_ACC[1]},${PAL_ACC[2]},0.35)`;
         dc.textAlign = "left";
-        dc.fillText(`CH${chIdx + 1} · ${["GRAIN","FLOW","LIFE","RULE","SPIN","SIGNAL"][chIdx]}`, W * 0.018, H * 0.97);
+        dc.fillText(`CH${chIdx + 1} · ${hudNames[chIdx]}`, W * 0.018, H * 0.97);
         dc.textAlign = "right";
         dc.fillText(`sp ${sp.toFixed(4)}`, W * 0.982, H * 0.97);
 
@@ -400,32 +405,60 @@ function buildSketch(
 }
 
 // ── Chapter copy ───────────────────────────────────────────────────────────────
-const CH_LABELS = [
-  "CH1 · GRAIN",
-  "CH2 · FLOW",
-  "CH3 · LIFE",
-  "CH4 · RULE",
-  "CH5 · SPIN",
-  "CH6 · SIGNAL",
-];
-
-const CH_HEADINGS: [string, string][] = [
-  ["CRITICALITY",  "grains at the threshold"],
-  ["CHAOS",        "the signal that never repeats"],
-  ["LIFE",         "the rule that breathes"],
-  ["AUTOMATON",    "one rule · infinite complexity"],
-  ["ISING",        "where order emerges from noise"],
-  ["DIFFRACTION",  "the same wave. different slits.\ndifferent worlds."],
-];
-
-const CH_SUBS = [
-  "self-organized criticality — one grain tips the balance",
-  "Lorenz x(t): butterfly wing-switching, drawn in real time",
-  "Conway's Game of Life — density per column, generation by generation",
-  "Rule 30 → Rule 110 — the wave learns to compute",
-  "Metropolis-Hastings — magnetic domains crystallize from randomness",
-  "N slits, one wave equation — the pattern was always there",
-];
+const TRANSLATIONS = {
+  en: {
+    chLabels: [
+      "CH1 · GRAIN",
+      "CH2 · FLOW",
+      "CH3 · LIFE",
+      "CH4 · RULE",
+      "CH5 · SPIN",
+      "CH6 · SIGNAL",
+    ],
+    chHeadings: [
+      ["CRITICALITY",  "grains at the threshold"],
+      ["CHAOS",        "the signal that never repeats"],
+      ["LIFE",         "the rule that breathes"],
+      ["AUTOMATON",    "one rule · infinite complexity"],
+      ["ISING",        "where order emerges from noise"],
+      ["DIFFRACTION",  "the same wave. different slits.\ndifferent worlds."],
+    ] as [string, string][],
+    chSubs: [
+      "self-organized criticality — one grain tips the balance",
+      "Lorenz x(t): butterfly wing-switching, drawn in real time",
+      "Conway's Game of Life — density per column, generation by generation",
+      "Rule 30 → Rule 110 — the wave learns to compute",
+      "Metropolis-Hastings — magnetic domains crystallize from randomness",
+      "N slits, one wave equation — the pattern was always there",
+    ],
+  },
+  pt: {
+    chLabels: [
+      "CH1 · GRÃO",
+      "CH2 · FLUXO",
+      "CH3 · VIDA",
+      "CH4 · REGRA",
+      "CH5 · SPIN",
+      "CH6 · SINAL",
+    ],
+    chHeadings: [
+      ["CRITICALIDADE",  "grãos no limiar do colapso"],
+      ["CAOS",           "o sinal que nunca se repete"],
+      ["VIDA",           "a regra que respira"],
+      ["AUTÔMATO",       "uma regra · complexidade infinita"],
+      ["ISING",          "onde a ordem emerge do ruído"],
+      ["DIFRAÇÃO",       "a mesma onda. fendas diferentes.\nmundos diferentes."],
+    ] as [string, string][],
+    chSubs: [
+      "criticalidade auto-organizada — um grão inclina a balança",
+      "Lorenz x(t): alternância entre as asas da borboleta, em tempo real",
+      "Jogo da Vida de Conway — densidade por coluna, geração a geração",
+      "Regra 30 → Regra 110 — a onda aprende a computar",
+      "Metropolis-Hastings — domínios magnéticos cristalizam do acaso",
+      "N fendas, uma equação de onda — o padrão sempre esteve lá",
+    ],
+  },
+} as const;
 
 // ── Component ──────────────────────────────────────────────────────────────────
 export function LabPart2() {
@@ -433,15 +466,20 @@ export function LabPart2() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(6).fill(null));
 
+  const [locale] = useLabLocale();
+  const localeRef = useRef<LabLocale>(locale);
+  localeRef.current = locale;
+
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type | null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
     return () => { alive = false; inst?.remove(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const positions: React.CSSProperties[] = [
@@ -465,9 +503,9 @@ export function LabPart2() {
       <LabPartChrome partNumber={2} nextRoute="/lab-part-3" />
       <div ref={scrollRef} style={{ height: "1600vh", background: BG }}>
         <div ref={containerRef} style={{ position: "fixed", inset: 0, zIndex: 1 }} />
-        {CH_LABELS.map((label, i) => {
-          const [heading, sub2] = CH_HEADINGS[i];
-          const subtitle = CH_SUBS[i];
+        {TRANSLATIONS[locale].chLabels.map((label, i) => {
+          const [heading, sub2] = TRANSLATIONS[locale].chHeadings[i];
+          const subtitle = TRANSLATIONS[locale].chSubs[i];
           return (
             <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{ ...base, ...positions[i] }}>
               <span style={{
