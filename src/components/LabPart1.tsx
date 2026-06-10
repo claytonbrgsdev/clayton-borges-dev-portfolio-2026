@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import type p5Type from "p5";
 import type React from "react";
 import { LabPartChrome } from "./LabPartChrome";
+import { useLabLocale, type LabLocale } from "../hooks/useLabLocale";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 const ss = (a: number, b: number, t: number) => {
@@ -130,11 +131,66 @@ let cymCtx:    CanvasRenderingContext2D | null = null;
 let lissCanvas: HTMLCanvasElement | null = null;
 let lissCtx:    CanvasRenderingContext2D | null = null;
 
+// ── Translations ───────────────────────────────────────────────────────────────
+const TRANSLATIONS = {
+  en: {
+    chLabels: [
+      "CH1 · SEKKEI",
+      "CH2 · KAITEN",
+      "CH3 · HAMON",
+      "CH4 · MYCELIA",
+      "CH5 · FIELD",
+      "CH6 · BLOOM",
+    ],
+    chHeadings: [
+      ["FORM",      "drawn by mathematics"],
+      ["MACHINE",   "the gear the pen traces"],
+      ["CHEMISTRY", "reaction without instruction"],
+      ["NETWORK",   "the circle becomes a node"],
+      ["FORCE",     "the circle as source of influence"],
+      ["SYNTHESIS", "every curve, a sum of circles"],
+    ] as [string, string][],
+    canvas: {
+      line1: "geometry · chemistry · networks · forces",
+      line2: "every curve is a sum of circles",
+      line3: "the circle was always all of these",
+    },
+  },
+  pt: {
+    chLabels: [
+      "CAP1 · SEKKEI",
+      "CAP2 · KAITEN",
+      "CAP3 · HAMON",
+      "CAP4 · MYCELIA",
+      "CAP5 · CAMPO",
+      "CAP6 · BLOOM",
+    ],
+    chHeadings: [
+      ["FORMA",     "desenhada pela matemática"],
+      ["MÁQUINA",   "a engrenagem que a caneta traça"],
+      ["QUÍMICA",   "reação sem instrução"],
+      ["REDE",      "o círculo vira um nó"],
+      ["FORÇA",     "o círculo como fonte de influência"],
+      ["SÍNTESE",   "cada curva, uma soma de círculos"],
+    ] as [string, string][],
+    canvas: {
+      line1: "geometria · química · redes · forças",
+      line2: "cada curva é uma soma de círculos",
+      line3: "o círculo sempre foi tudo isso",
+    },
+  },
+} satisfies Record<LabLocale, {
+  chLabels: string[];
+  chHeadings: [string, string][];
+  canvas: { line1: string; line2: string; line3: string };
+}>;
+
 // ── buildSketch ────────────────────────────────────────────────────────────────
 function buildSketch(
   el: HTMLElement,
   scrollEl: HTMLElement,
   sectionEls: Array<HTMLDivElement | null>,
+  localeRef: React.MutableRefObject<LabLocale>,
 ): Promise<p5Type> {
   return import("p5").then(({ default: P5 }) => {
     gsReady    = false;
@@ -672,6 +728,7 @@ function buildSketch(
           const line1A = ss(0.78, 0.84, t) * a6;
           const line2A = ss(0.84, 0.90, t) * a6;
           const line3A = ss(0.90, 0.97, t) * a6;
+          const canvasCopy = TRANSLATIONS[localeRef.current].canvas;
           dc.save();
           dc.textAlign    = "center";
           dc.textBaseline = "middle";
@@ -679,19 +736,19 @@ function buildSketch(
             dc.globalAlpha = line1A;
             dc.font        = "8px 'Courier New', monospace";
             dc.fillStyle   = `rgba(${AC_R},${AC_G},${AC_B},1)`;
-            dc.fillText("geometry · chemistry · networks · forces", cx, textY);
+            dc.fillText(canvasCopy.line1, cx, textY);
           }
           if (line2A > 0.01) {
             dc.globalAlpha = line2A;
             dc.font        = "10px 'Courier New', monospace";
             dc.fillStyle   = PRIMARY;
-            dc.fillText("every curve is a sum of circles", cx, textY + 22);
+            dc.fillText(canvasCopy.line2, cx, textY + 22);
           }
           if (line3A > 0.01) {
             dc.globalAlpha = line3A;
             dc.font        = "bold 14px 'Courier New', monospace";
             dc.fillStyle   = PRIMARY;
-            dc.fillText("the circle was always all of these", cx, textY + 48);
+            dc.fillText(canvasCopy.line3, cx, textY + 48);
           }
           dc.textAlign    = "left";
           dc.textBaseline = "alphabetic";
@@ -724,23 +781,7 @@ function buildSketch(
 }
 
 // ── Chapter copy ───────────────────────────────────────────────────────────────
-const CH_LABELS = [
-  "CH1 · SEKKEI",
-  "CH2 · KAITEN",
-  "CH3 · HAMON",
-  "CH4 · MYCELIA",
-  "CH5 · FIELD",
-  "CH6 · BLOOM",
-];
-
-const CH_HEADINGS: [string, string][] = [
-  ["FORM",      "drawn by mathematics"],
-  ["MACHINE",   "the gear the pen traces"],
-  ["CHEMISTRY", "reaction without instruction"],
-  ["NETWORK",   "the circle becomes a node"],
-  ["FORCE",     "the circle as source of influence"],
-  ["SYNTHESIS", "every curve, a sum of circles"],
-];
+// Locale-aware labels and headings are provided by TRANSLATIONS above.
 
 const CH_POSITIONS: React.CSSProperties[] = [
   { top: "13%",    left: "6%" },
@@ -753,6 +794,13 @@ const CH_POSITIONS: React.CSSProperties[] = [
 
 // ── Component ──────────────────────────────────────────────────────────────────
 export function LabPart1() {
+  const [locale] = useLabLocale();
+  const localeRef = useRef<LabLocale>(locale);
+
+  // Keep localeRef in sync so the running sketch always reads the current locale
+  // without needing to be rebuilt.
+  localeRef.current = locale;
+
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(6).fill(null));
@@ -761,11 +809,12 @@ export function LabPart1() {
     const container = containerRef.current, scroll = scrollRef.current;
     if (!container || !scroll) return;
     let inst: p5Type | null = null, alive = true;
-    buildSketch(container, scroll, sectionEls.current).then(p5inst => {
+    buildSketch(container, scroll, sectionEls.current, localeRef).then(p5inst => {
       if (!alive) { p5inst.remove(); return; }
       inst = p5inst;
     });
     return () => { alive = false; inst?.remove(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const base: React.CSSProperties = {
@@ -783,8 +832,8 @@ export function LabPart1() {
       <div ref={scrollRef} style={{ height: "1600vh", background: BG }}>
         <div ref={containerRef} style={{ position: "fixed", inset: 0, zIndex: 1 }} />
 
-        {CH_LABELS.map((label, i) => {
-          const [headline, sub] = CH_HEADINGS[i];
+        {TRANSLATIONS[locale].chLabels.map((label, i) => {
+          const [headline, sub] = TRANSLATIONS[locale].chHeadings[i];
           return (
             <div
               key={i}
