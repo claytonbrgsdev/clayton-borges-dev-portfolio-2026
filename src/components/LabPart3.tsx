@@ -285,51 +285,50 @@ function buildSketch(
         }
 
         // ── Scroll-scrubbed trace ─────────────────────────────────────────────
-        // Forward scroll  → append new segment at low alpha (accumulates density).
-        // Backward scroll → clear canvas and repaint 0→lissPhase in 4 passes
-        //                   to approximate the accumulated density.
-        const nPts = Math.max(400, Math.ceil(la * lb * 80));
-        const totalP = TOTAL_PHASE[chIdx];
+        // Full clear + redraw every frame so the trace is always correct for the
+        // current scroll position regardless of how fast the user scrolled.
+        // Density (number of passes) scales with chT so the figure builds up
+        // from faint → dense as you move through the chapter.
+        const nPts = Math.max(300, Math.ceil(la * lb * 60));
 
-        const drawTraceRange = (fromP: number, toP: number, passes: number) => {
-          if (toP <= fromP + 0.0001) return;
-          for (let pass = 0; pass < passes; pass++) {
+        if (Math.abs(lissPhase - prevLissPhase) > 0.0001 || lissPhase < 0.0001) {
+          traceCtx.clearRect(0, 0, W, H);
+
+          if (lissPhase > 0.001) {
+            // Number of overdraw passes grows with chapter progress (0 → MAX_PASSES)
+            const MAX_PASSES = chIdx === 4 ? 24 : 16;
+            const nPasses    = Math.max(1, Math.round(chT * MAX_PASSES));
+
             if (chIdx === 3) {
-              // SIGNAL: discrete ACCENT dots
-              const nDots = Math.max(4, Math.ceil((toP - fromP) / 0.04));
-              traceCtx.fillStyle = `rgba(${ACCENT_RGB[0]},${ACCENT_RGB[1]},${ACCENT_RGB[2]},0.22)`;
+              // SIGNAL: discrete ACCENT dots (digital / circuit feel)
+              const nDots = Math.max(8, Math.ceil(lissPhase / 0.035));
+              traceCtx.fillStyle = `rgba(${ACCENT_RGB[0]},${ACCENT_RGB[1]},${ACCENT_RGB[2]},0.30)`;
               for (let i = 0; i <= nDots; i++) {
-                const t2 = fromP + (i / nDots) * (toP - fromP);
+                const t2 = (i / nDots) * lissPhase;
                 const hx = cx + R * Math.sin(la * t2 + ld);
                 const hy = cy + R * Math.sin(lb * t2);
                 traceCtx.beginPath(); traceCtx.arc(hx, hy, 1.8, 0, Math.PI * 2); traceCtx.fill();
               }
             } else {
-              const segPts = Math.max(40, Math.ceil(nPts * (toP - fromP) / totalP));
+              // Smooth continuous trace — each pass adds alpha, building density
               const traceAlpha = chIdx === 4 ? 0.04 : 0.07;
               traceCtx.strokeStyle = `rgba(${PRIMARY_RGB[0]},${PRIMARY_RGB[1]},${PRIMARY_RGB[2]},${traceAlpha})`;
               traceCtx.lineWidth   = chIdx === 4 ? 0.55 : 0.85;
               traceCtx.lineJoin    = "round";
-              traceCtx.beginPath();
-              for (let i = 0; i <= segPts; i++) {
-                const t2 = fromP + (i / segPts) * (toP - fromP);
-                const hx = cx + R * Math.sin(la * t2 + ld);
-                const hy = cy + R * Math.sin(lb * t2);
-                if (i === 0) traceCtx.moveTo(hx, hy); else traceCtx.lineTo(hx, hy);
+              for (let pass = 0; pass < nPasses; pass++) {
+                traceCtx.beginPath();
+                for (let i = 0; i <= nPts; i++) {
+                  const t2 = (i / nPts) * lissPhase;
+                  const hx = cx + R * Math.sin(la * t2 + ld);
+                  const hy = cy + R * Math.sin(lb * t2);
+                  if (i === 0) traceCtx.moveTo(hx, hy); else traceCtx.lineTo(hx, hy);
+                }
+                traceCtx.stroke();
               }
-              traceCtx.stroke();
             }
           }
-        };
-
-        const wentBack = lissPhase < prevLissPhase - 0.05;
-        if (wentBack) {
-          traceCtx.clearRect(0, 0, W, H);
-          drawTraceRange(0, lissPhase, 4);
-        } else {
-          drawTraceRange(prevLissPhase, lissPhase, 1);
+          prevLissPhase = lissPhase;
         }
-        prevLissPhase = lissPhase;
 
         // Blit trace to main canvas, modulated by amp
         dc.save(); dc.globalAlpha = amp * 0.95;
