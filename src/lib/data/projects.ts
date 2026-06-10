@@ -40,6 +40,8 @@ export interface Project {
   featured: boolean;
   year: number;
   client?: string;
+  grant?: string;
+  grantPt?: string;
 }
 
 export const projects: Project[] = [
@@ -301,65 +303,72 @@ export const projects: Project[] = [
     year: 2023,
     client: "DSRPTV Records",
   },
-  {
-    id: "tropical-twista",
-    nameEn: "Tropical Twista – Video Automation",
-    namePt: "Tropical Twista – Automação de Vídeo",
-    name: "Tropical Twista",
-    descriptionEn:
-      "Video automation system using YouTube API v3 with FFmpeg encoding, Firestore catalog storage, and Firebase Auth with OAuth 2.0 for Tropical Twista Records.",
-    descriptionPt:
-      "Sistema de automação de vídeo usando YouTube API v3 com codificação FFmpeg, catálogo no Firestore e Firebase Auth com OAuth 2.0 para a Tropical Twista Records.",
-    tech: ["React", "TypeScript", "Node.js", "Express", "Firebase", "FFmpeg", "YouTube API"],
-    categories: ["platform", "web-app"],
-    featured: false,
-    year: 2023,
-    client: "Tropical Twista Records",
-  },
-
   // --- PERSONAL / OPEN SOURCE PROJECTS ---
-  {
-    id: "habitos",
-    nameEn: "Habitos – Habit & Therapy Tracker",
-    namePt: "Habitos – Rastreador de Hábitos e Terapia",
-    name: "Habitos",
-    descriptionEn:
-      "Full-stack habit and therapy tracking app for patient/therapist pairs. Built for ADHD support, then adapted and open-sourced.",
-    descriptionPt:
-      "App full-stack de rastreamento de hábitos e terapia para pares paciente/terapeuta. Desenvolvido para suporte a TDAH, depois adaptado e disponibilizado como open-source.",
-    tech: ["Next.js 16", "Prisma", "PostgreSQL", "Tailwind CSS"],
-    categories: ["web-app"],
-    githubUrl: "https://github.com/claytonbrgsdev/habitos",
-    featured: false,
-    year: 2025,
-  },
-  {
-    id: "novo-rio",
-    nameEn: "Novo Rio – Agroforestry Gamification",
-    namePt: "Novo Rio – Gamificação Agroflorestal",
-    name: "Novo Rio",
-    descriptionEn:
-      "Full-stack gamified reforestation simulation with hierarchical map system, environmental parameters, health scoring, and multi-environment Docker deployment.",
-    descriptionPt:
-      "Simulação gamificada de reflorestamento full-stack com sistema de mapa hierárquico, parâmetros ambientais, pontuação de saúde e implantação Docker em múltiplos ambientes.",
-    tech: ["FastAPI", "Next.js 15", "React 19", "PostgreSQL", "Redis", "Docker", "SQLAlchemy", "Alembic"],
-    categories: ["web-app", "platform"],
-    status: "In Progress",
-    statusPt: "Em desenvolvimento",
-    featured: false,
-    year: 2025,
-  },
   {
     id: "gio-study-scheduler",
     nameEn: "Gio – Intelligent ENEM Study Scheduler",
     namePt: "Gio – Agendador de Estudos Inteligente para o ENEM",
     name: "Gio",
+    type: "Full-Stack Web Application / AI-Powered Study Tool",
     descriptionEn:
-      "Adaptive study scheduler with spaced repetition (D+1, D+4, D+11, D+25), dynamic priority calculation, and intelligent task redistribution powered by OpenAI.",
+      "Adaptive study scheduler with spaced repetition (D+1, D+4, D+11, D+25), dynamic priority calculation, and intelligent task redistribution powered by OpenAI. Built for a real ENEM student.",
     descriptionPt:
-      "Agendador de estudos adaptativo com repetição espaçada (D+1, D+4, D+11, D+25), cálculo dinâmico de prioridades e redistribuição inteligente de tarefas com OpenAI.",
-    tech: ["Next.js 15", "Node.js", "Express", "Supabase", "OpenAI API"],
+      "Agendador de estudos adaptativo com repetição espaçada (D+1, D+4, D+11, D+25), cálculo dinâmico de prioridades e redistribuição inteligente de tarefas com OpenAI. Construído para uma aluna real do ENEM.",
+    tech: ["Next.js 15", "React 19", "TypeScript", "Node.js", "Express 5", "Supabase", "PostgreSQL", "OpenAI API", "Tailwind CSS 4", "Headless UI"],
     categories: ["ai-ml", "web-app"],
+    highlights: [
+      "Multi-factor priority score: difficulty × ENEM frequency × (5 − confidence) × days-since-studied",
+      "AI schedule reorganization: GPT-4o-mini rebuilds the next 7 days each night at 23:30 via node-cron",
+      "Spaced repetition intervals shorten when confidence is low (D+1, D+2, D+5, D+12) vs. high (D+1, D+4, D+11, D+25)",
+      "Focus of the Day — single highest-priority topic surfaced as a daily decision aid",
+      "Five task types: Study, Exercise, Review, Simulation — each with different default durations and frequency rules",
+    ],
+    overview:
+      "Gio is an AI-powered study scheduler built for a real student preparing for the ENEM (Brazil's national college entrance exam). Rather than a linear checklist, it uses a multi-factor priority algorithm to decide what to study each day across 45+ topics, automatically reorganizes the schedule every night using GPT-4o-mini, and enforces spaced repetition based on self-reported confidence. The student sets a target exam date and available study hours; Gio distributes all topics to the deadline and adapts daily.",
+    overviewPt:
+      "Gio é um agendador de estudos com IA criado para uma aluna real se preparando para o ENEM. Em vez de uma lista linear, ele usa um algoritmo de prioridade multi-fator para decidir o que estudar a cada dia entre 45+ tópicos, reorganiza o cronograma automaticamente toda noite via GPT-4o-mini, e aplica repetição espaçada baseada na autoavaliação de confiança. A aluna define a data do exame e as horas disponíveis; o Gio distribui todos os tópicos até o prazo e se adapta diariamente.",
+    problem:
+      "ENEM preparation spans months and dozens of subjects with wildly different difficulty levels and historical exam frequencies. Most students either follow a rigid linear plan (which ignores what they've already mastered) or study reactively (whatever feels hardest today). Neither approach optimizes the time-to-score ratio. A custom solution was needed that could reason about difficulty, frequency, confidence, and recency simultaneously — and recover gracefully when the student skips a day.",
+    problemPt:
+      "A preparação para o ENEM abrange meses e dezenas de disciplinas com dificuldades e frequências históricas muito diferentes. A maioria dos alunos segue um plano linear rígido (que ignora o que já dominam) ou estuda reativamente. Nenhuma abordagem otimiza a relação tempo-nota. Era necessária uma solução que raciocine sobre dificuldade, frequência, confiança e recência ao mesmo tempo — e se recupere quando a aluna pula um dia.",
+    goal:
+      "Build a two-service application (Next.js frontend + Express backend) that: (1) computes a daily priority-ranked study list; (2) surfaces a single 'Focus of the Day' topic; (3) tracks confidence per topic after each session; (4) rebuilds the upcoming week's schedule automatically every night with GPT-4o-mini; (5) visualizes progress via weekly planner and calendar heatmap.",
+    goalPt:
+      "Construir uma aplicação de dois serviços (frontend Next.js + backend Express) que: (1) calcule uma lista diária priorizada de estudos; (2) apresente um único tópico 'Foco do Dia'; (3) rastreie confiança por tópico após cada sessão; (4) reconstrua automaticamente o cronograma da semana toda noite com GPT-4o-mini; (5) visualize o progresso via planejador semanal e heatmap de calendário.",
+    role: ["Solo developer — architecture, frontend, backend, database, AI integration"],
+    rolePt: ["Desenvolvedor solo — arquitetura, frontend, backend, banco de dados, integração IA"],
+    technicalDecisions: [
+      "Multi-factor priority score — score = difficulty_weight + enem_frequency_weight + (5 − avg_confidence) × 0.6 + days_since_studied × 0.1. Four independent signals blended into one number: prevents starvation of medium-difficulty but high-frequency topics that a pure difficulty ranking would deprioritize.",
+      "GPT-4o-mini for nightly reorganization — implementing a custom constraint-satisfaction algorithm (3 tasks/day, ≤195 min total, balanced disciplines) is hard to maintain. GPT-4o-mini reasons about all constraints in natural language, outputs a structured JSON schedule, and explains its reasoning. Temperature 0.2 keeps output consistent; JSON-mode forces parseable responses.",
+      "node-cron at 23:30 for automatic reorganization — students don't check the app at end of day. A server-side cron rebuilds the next 7 days each night so the student wakes up to a realistic schedule that already accounts for what was and wasn't completed.",
+      "Supabase (São Paulo region) as the database — no DevOps required, RLS available, real-time subscriptions ready for future features. Regional choice minimizes latency for Brazilian users.",
+      "Separate frontend/backend repos — Next.js App Router on Vercel, Express on a separate host. Enables independent scaling and avoids cold-start latency on the Node backend from serverless constraints.",
+      "Confidence (0–5) as the central state metric — most study apps track completion (binary). Confidence captures nuance: a student can 'complete' a session but feel 2/5 confident. Spaced repetition intervals shorten when confidence is low, ensuring weak topics revisited more aggressively.",
+      "Focus of the Day as a decision-relief feature — when overwhelmed, students need one clear answer. The API calculates the single highest-priority topic and surfaces it prominently, reducing decision paralysis and increasing adherence.",
+    ],
+    technicalDecisionsPt: [
+      "Score de prioridade multi-fator — score = difficulty_weight + enem_frequency_weight + (5 − avg_confidence) × 0.6 + days_since_studied × 0.1. Quatro sinais independentes combinados em um número: evita que tópicos de dificuldade média mas alta frequência no ENEM sejam despriorizados por um ranking puramente por dificuldade.",
+      "GPT-4o-mini para reorganização noturna — implementar um algoritmo de satisfação de restrições (3 tarefas/dia, ≤195 min total, disciplinas balanceadas) é difícil de manter. O GPT-4o-mini raciocina sobre todas as restrições em linguagem natural, produz um cronograma JSON estruturado e explica o raciocínio. Temperature 0.2 mantém saída consistente; JSON-mode força respostas parseáveis.",
+      "node-cron às 23:30 para reorganização automática — alunos não verificam o app no fim do dia. Um cron server-side reconstrói os próximos 7 dias toda noite para que a aluna acorde com um cronograma realista que já considera o que foi e não foi feito.",
+      "Supabase (região São Paulo) como banco de dados — sem necessidade de DevOps, RLS disponível, subscriptions em tempo real prontas para features futuras. A escolha regional minimiza latência para usuários brasileiros.",
+      "Frontend/backend separados — Next.js App Router na Vercel, Express em host separado. Permite escalar independentemente e evita latência de cold-start no backend Node com restrições serverless.",
+      "Confiança (0–5) como métrica central — a maioria dos apps rastreia conclusão (binário). Confiança captura nuances: uma aluna pode 'completar' uma sessão mas sentir confiança 2/5. Os intervalos de repetição espaçada diminuem quando a confiança é baixa, garantindo revisitas mais frequentes em tópicos fracos.",
+      "Foco do Dia como alívio de decisão — quando sobrecarregada, a aluna precisa de uma resposta clara. A API calcula o tópico de maior prioridade e o apresenta de forma proeminente, reduzindo a paralisia decisória e aumentando a adesão.",
+    ],
+    learnings: [
+      "AI reorganization must be designed for failure modes: GPT-4o-mini occasionally omits topics or produces malformed JSON. A local fallback algorithm (pure priority score, no AI) runs when the API fails or returns invalid output — the student always gets a schedule.",
+      "Confidence as state is more honest than completion: the two-week beta showed students marking tasks complete at confidence 2/5 frequently. Adding a mandatory confidence rating after each session changed behavior — students started revisiting topics they thought they'd 'finished'.",
+      "node-cron in a long-running Express process is simpler than serverless scheduled functions for this use case: one less deployment target, no cold-start delay on the nightly job, and the reorganization context (previous days' tasks) is already in memory.",
+      "Supabase RLS should be designed upfront: disabling it for development and retrofitting it later caused a schema refactor. The lesson is to model row-level access alongside the data model, not after it.",
+    ],
+    learningsPt: [
+      "A reorganização com IA deve ser desenhada para modos de falha: o GPT-4o-mini ocasionalmente omite tópicos ou produz JSON malformado. Um algoritmo de fallback local (score de prioridade puro, sem IA) roda quando a API falha ou retorna saída inválida — a aluna sempre recebe um cronograma.",
+      "Confiança como estado é mais honesto que conclusão: o beta de duas semanas mostrou alunos marcando tarefas como concluídas com confiança 2/5 frequentemente. Adicionar uma avaliação de confiança obrigatória após cada sessão mudou o comportamento — eles passaram a revisar tópicos que achavam que já 'terminaram'.",
+      "node-cron em um processo Express de longa duração é mais simples que funções serverless agendadas para este caso: um destino de deploy a menos, sem cold-start no job noturno, e o contexto de reorganização já está em memória.",
+      "O RLS do Supabase deve ser projetado desde o início: desativá-lo no desenvolvimento e retroativamente aplicá-lo causou um refactor de schema. A lição é modelar o acesso por linha junto com o modelo de dados, não depois.",
+    ],
+    status: "Functional — used by a real student for active ENEM preparation",
+    statusPt: "Funcional — usado por uma aluna real em preparação ativa para o ENEM",
     featured: false,
     year: 2025,
   },
@@ -368,12 +377,64 @@ export const projects: Project[] = [
     nameEn: "ASA Player – ASCII Music Visualizer",
     namePt: "ASA Player – Visualizador de Música ASCII",
     name: "ASA Player",
+    type: "Creative Web Application / Audio Visualization",
     descriptionEn:
-      "Retro music player with real-time ASCII spectrum analyzer built with Web Audio API and Next.js.",
+      "Retro music player with a real-time 140×16 ASCII spectrum analyzer, adaptive quality system, VU meters, oscilloscope, and glitch visual effects — all built with Web Audio API and Next.js.",
     descriptionPt:
-      "Player de música retrô com analisador de espectro ASCII em tempo real construído com Web Audio API e Next.js.",
-    tech: ["Next.js", "TypeScript", "Web Audio API"],
+      "Player de música retrô com analisador de espectro ASCII 140×16 em tempo real, sistema de qualidade adaptativo, medidores VU, osciloscópio e efeitos visuais glitch — tudo construído com Web Audio API e Next.js.",
+    tech: ["Next.js 15", "React 19", "TypeScript", "Web Audio API", "Tailwind CSS", "Radix UI"],
     categories: ["audio", "web-app"],
+    highlights: [
+      "Logarithmic frequency mapping to 140 ASCII columns respects human hearing perception (20Hz–22kHz)",
+      "Adaptive quality system monitors FPS/CPU/memory in real time and auto-degrades FFT size from 512 to 64 bins",
+      "5 visualization modes sharing one AudioContext: ASCII analyzer, VU/PPM meters, oscilloscope, circular visualizer, terminal file browser",
+      "Glitch aesthetic layer (scanlines, RGB shift, static noise) runs on a separate decoupled render loop",
+      "Audio streams from cloud-hosted AZULBIC label catalog with crossOrigin anonymous for CORS-safe Web Audio analysis",
+    ],
+    overview:
+      "ASA Player is a retro-styled music player that renders real-time audio analysis as an ASCII spectrum on a 140×16 character grid, inspired by vintage hardware analyzers. It streams tracks from a record label catalog, analyzes frequency data with the Web Audio API, and maps FFT bins to ASCII characters logarithmically — matching how human hearing actually perceives pitch. Five distinct visualization modes share one AudioContext, with a glitch aesthetic overlay that runs independently from the audio loop.",
+    overviewPt:
+      "ASA Player é um player de música com estética retrô que renderiza análise de áudio em tempo real como um espectro ASCII em uma grade de 140×16 caracteres, inspirado em analisadores de hardware vintage. Transmite faixas de um catálogo de label musical, analisa dados de frequência com a Web Audio API, e mapeia bins FFT para caracteres ASCII de forma logarítmica — correspondendo à forma como o ouvido humano realmente percebe altura. Cinco modos de visualização distintos compartilham um AudioContext, com uma camada de efeitos glitch independente do loop de áudio.",
+    problem:
+      "Existing web music players display either no visualizer or generic canvas-based bar charts that all look the same. The goal was to build a player with a strong, distinctive aesthetic — retro ASCII art combined with real-time audio analysis — without sacrificing technical correctness. Frequency visualization on the web typically uses linear frequency mapping, which wastes column space on inaudible high frequencies and compresses the musically important bass range. The project needed a solution that matched human hearing perception.",
+    problemPt:
+      "Players de música web existentes mostram ou nenhum visualizador ou gráficos genéricos de barras em canvas que parecem todos iguais. O objetivo era construir um player com uma estética forte e distinta — arte ASCII retrô combinada com análise de áudio em tempo real — sem sacrificar a correção técnica. A visualização de frequências na web geralmente usa mapeamento linear, que desperdiça colunas em frequências inaudíveis e comprime a faixa de graves musicalmente importante. O projeto precisava de uma solução que correspondesse à percepção auditiva humana.",
+    goal:
+      "Build a production-quality web music player that: (1) renders a live ASCII spectrum analyzer with logarithmic frequency mapping; (2) supports multiple visualization modes from a single audio graph; (3) degrades gracefully on lower-end devices via an adaptive quality system; (4) maintains a cohesive retro glitch aesthetic without sacrificing readability or performance.",
+    goalPt:
+      "Construir um player de música web de qualidade de produção que: (1) renderize um analisador de espectro ASCII ao vivo com mapeamento logarítmico de frequências; (2) suporte múltiplos modos de visualização a partir de um único grafo de áudio; (3) degrade graciosamente em dispositivos mais lentos via sistema de qualidade adaptativo; (4) mantenha uma estética glitch retrô coesa sem sacrificar legibilidade ou performance.",
+    role: ["Solo developer — audio engineering, visualization design, frontend, deployment"],
+    rolePt: ["Desenvolvedor solo — engenharia de áudio, design de visualização, frontend, deploy"],
+    technicalDecisions: [
+      "Logarithmic frequency mapping — 140 ASCII columns are mapped to 20Hz–22kHz using log10 scaling. Each column's FFT bin index is computed as pow(10, logMin + (logRange × i) / (cols − 1)). This matches the musical scale (each octave gets equal visual space) and is how analog hardware analyzers work. A linear mapping would dedicate 75% of columns to frequencies above 5kHz that carry little musical information.",
+      "Adaptive quality system — 4 quality levels (ultra/high/medium/low) change the FFT size (512 → 64 bins) and visualization frame rate (20fps → 4fps). FPS is monitored with a rolling 10-sample history; auto-downgrade triggers at <30fps. This keeps the app usable on mid-range devices without a single hardcoded quality setting.",
+      "Separate glitch layer with AdditiveBlending — the scanlines, RGB shift, and static noise effects run in a dedicated component (glitch-noise-overlay.tsx) completely decoupled from the audio render loop. Using CSS mix-blend-difference for the RGB shift means the glitch layer composites correctly over any background color without per-pixel JavaScript calculations.",
+      "Dynamic import with loading skeletons — each of the 5 visualization components is code-split via Next.js dynamic(). Initial JS bundle is minimal; the heavy Three.js circular visualizer only loads if the user switches to that mode. Each component shows a themed ASCII loading skeleton during import.",
+      "Uint8Array throughout — Web Audio API's getByteFrequencyData() returns Uint8Array natively. The entire frequency data pipeline keeps this type (zero-copy from browser to visualization), avoiding GC pressure from array allocations on every animation frame.",
+      "crossOrigin='anonymous' on the audio element — required for Web Audio API's createMediaElementSource() to access audio data from a cross-origin URL. Without this attribute, the AnalyserNode can connect but getByteFrequencyData() returns zeros due to CORS security restrictions.",
+    ],
+    technicalDecisionsPt: [
+      "Mapeamento logarítmico de frequências — 140 colunas ASCII são mapeadas para 20Hz–22kHz usando escala log10. O índice do bin FFT de cada coluna é calculado como pow(10, logMin + (logRange × i) / (cols − 1)). Isso corresponde à escala musical (cada oitava recebe o mesmo espaço visual) e é como analisadores de hardware analógico funcionam. Um mapeamento linear dedicaria 75% das colunas a frequências acima de 5kHz que carregam poucas informações musicais.",
+      "Sistema de qualidade adaptativo — 4 níveis de qualidade (ultra/alto/médio/baixo) alteram o tamanho FFT (512 → 64 bins) e a taxa de frames de visualização (20fps → 4fps). O FPS é monitorado com um histórico de 10 amostras; o downgrade automático dispara abaixo de 30fps. Isso mantém o app utilizável em dispositivos de médio desempenho sem uma configuração de qualidade fixa.",
+      "Camada glitch separada com AdditiveBlending — os efeitos de scanlines, RGB shift e ruído estático rodam em um componente dedicado (glitch-noise-overlay.tsx) completamente desacoplado do loop de renderização de áudio. Usando CSS mix-blend-difference para o RGB shift, a camada glitch composita corretamente sobre qualquer cor de fundo sem cálculos JavaScript pixel a pixel.",
+      "Import dinâmico com skeletons de carregamento — cada um dos 5 componentes de visualização é code-split via dynamic() do Next.js. O bundle JS inicial é mínimo; o visualizador circular pesado com Three.js só carrega se o usuário mudar para esse modo. Cada componente mostra um skeleton de carregamento temático ASCII durante o import.",
+      "Uint8Array em todo o pipeline — getByteFrequencyData() da Web Audio API retorna Uint8Array nativamente. Todo o pipeline de dados de frequência mantém esse tipo (zero-copy do browser para a visualização), evitando pressão no GC por alocações de array a cada frame de animação.",
+      "crossOrigin='anonymous' no elemento de áudio — necessário para que createMediaElementSource() da Web Audio API acesse dados de áudio de uma URL cross-origin. Sem esse atributo, o AnalyserNode conecta mas getByteFrequencyData() retorna zeros por restrições de segurança CORS.",
+    ],
+    learnings: [
+      "Logarithmic frequency mapping is non-negotiable for musical visualizations — a linear mapping made bass frequencies invisible and high frequencies dominant. Switching to log scaling transformed the analyzer from a technically correct but musically useless display into something that actually feels like music.",
+      "Adaptive quality systems need real usage data to calibrate thresholds — the initial FPS thresholds were too aggressive, causing users on decent hardware to see unnecessary quality warnings. A 10-sample rolling average and a 5-second warning cooldown reduced false positives significantly.",
+      "Decoupling visual effects from audio processing prevents subtle timing bugs — early versions had the glitch overlay on the same render loop as the ASCII analyzer, causing glitch frames to drop when the FFT computation was expensive. Separating them eliminated the coupling.",
+      "Dynamic imports change the perceived load time significantly — adding loading skeletons for each visualization mode made the app feel instant even when Three.js was still downloading.",
+    ],
+    learningsPt: [
+      "O mapeamento logarítmico de frequências é inegociável para visualizações musicais — um mapeamento linear tornava as frequências de graves invisíveis e as agudas dominantes. Mudar para escala log transformou o analisador de um display tecnicamente correto mas musicalmente inútil em algo que realmente parece música.",
+      "Sistemas de qualidade adaptativa precisam de dados reais de uso para calibrar os limiares — os limiares iniciais de FPS eram muito agressivos, fazendo usuários em hardware decente verem avisos desnecessários. Uma média móvel de 10 amostras e um cooldown de 5 segundos para avisos reduziu significativamente os falsos positivos.",
+      "Desacoplar efeitos visuais do processamento de áudio evita bugs sutis de timing — versões iniciais tinham o overlay glitch no mesmo loop de renderização do analisador ASCII, causando drops de frames de glitch quando a computação FFT era custosa. Separar os dois eliminou o acoplamento.",
+      "Imports dinâmicos mudam significativamente o tempo de carga percebido — adicionar skeletons de carregamento para cada modo de visualização fez o app parecer instantâneo mesmo quando o Three.js ainda estava carregando.",
+    ],
+    status: "Live — deployed to GitHub Pages",
+    statusPt: "Ativo — publicado no GitHub Pages",
     githubUrl: "https://github.com/claytonbrgsdev/aacs-player",
     liveUrl: "https://claytonbrgsdev.github.io/aacs-player/",
     featured: true,
@@ -384,12 +445,64 @@ export const projects: Project[] = [
     nameEn: "Deep Ocean Explorer",
     namePt: "Deep Ocean Explorer",
     name: "Deep Ocean Explorer",
+    type: "Interactive 3D Experience / Real-Time WebGL",
     descriptionEn:
-      "Underwater shader playground with volumetric jellyfish visuals and real-time GLSL effects built with Three.js and WebGL.",
+      "Browser-based real-time underwater world with hand-written GLSL shaders for volumetric light shafts, caustics, and jellyfish bioluminescence. Depth-driven lighting system, 10 NPC jellyfish with 8 migration patterns, and a player-controlled jellyfish with 6-DOF movement.",
     descriptionPt:
-      "Playground de shaders subaquáticos com visuais volumétricos de água-viva e efeitos GLSL em tempo real construído com Three.js e WebGL.",
-    tech: ["Three.js", "GLSL", "WebGL", "JavaScript"],
+      "Mundo submarino em tempo real no navegador com shaders GLSL escritos à mão para feixes de luz volumétricos, cáusticas e bioluminescência de medusas. Sistema de iluminação guiado por profundidade, 10 águas-vivas NPC com 8 padrões de migração e uma água-viva controlada pelo jogador com movimento 6-DOF.",
+    tech: ["Next.js 15", "React 19", "TypeScript", "Three.js", "React Three Fiber", "GLSL", "Tailwind CSS"],
     categories: ["3d-visualization"],
+    highlights: [
+      "All atmospheric effects are hand-written GLSL ShaderMaterials inlined in TypeScript — no post-processing library",
+      "Volumetric light shafts use multi-octave 3D fractal noise (4 octaves) + Mie-phase-function approximation for realistic scattering",
+      "Caustics simulated via dFdx/dFdy GPU derivatives of a procedural water surface — physically motivated, no texture lookups",
+      "Depth-based lighting state machine with 5 named zones (surface → abyss), each with target color/intensity lerped per frame",
+      "10 NPC jellyfish with independent 8-pattern behavior FSMs (vertical drift, circular float, seasonal migration, thermal layers…)",
+    ],
+    overview:
+      "Deep Ocean Explorer is an ambient interactive 3D underwater world running entirely in the browser. The player navigates as a jellyfish through a procedurally lit ocean populated by NPC jellyfish swarms, fish schools, coral, seaweed, and layered atmospheric effects. Every visual effect — volumetric light shafts, caustics, bioluminescence, depth-based fog — is a hand-written GLSL ShaderMaterial with no post-processing library dependencies. The project was built as a demonstration of real-time WebGL depth: how many independent shader systems can be composed coherently in a browser.",
+    overviewPt:
+      "Deep Ocean Explorer é um mundo 3D submarino interativo e ambiente rodando inteiramente no navegador. O jogador navega como uma água-viva por um oceano iluminado de forma procedural, populado por enxames de NPCs, cardumes, corais, algas e camadas de efeitos atmosféricos. Cada efeito visual — feixes de luz volumétricos, cáusticas, bioluminescência, névoa baseada em profundidade — é um ShaderMaterial GLSL escrito à mão sem dependências de biblioteca de pós-processamento. O projeto foi construído como uma demonstração de profundidade WebGL em tempo real.",
+    problem:
+      "Most browser-based 3D experiences rely on HDR environment maps and pre-baked lighting to look good. This approach looks photorealistic but is passive — lighting doesn't respond to the player's position or depth. The challenge was to build an underwater world where every atmospheric system (light scattering, caustics, fog, bioluminescence) is fully dynamic and depth-driven, while keeping the frame rate above 60fps on a mid-range laptop.",
+    problemPt:
+      "A maioria das experiências 3D no navegador usa mapas de ambiente HDR e iluminação pré-assada para parecer boa. Essa abordagem parece fotorrealista, mas é passiva — a iluminação não responde à posição ou profundidade do jogador. O desafio era construir um mundo submarino onde cada sistema atmosférico (espalhamento de luz, cáusticas, névoa, bioluminescência) fosse totalmente dinâmico e guiado pela profundidade, mantendo a taxa de frames acima de 60fps em um laptop de nível médio.",
+    goal:
+      "Build a real-time 3D underwater experience that demonstrates: (1) custom GLSL shader authorship without a post-processing pipeline; (2) a depth-driven dynamic lighting system with smooth zone transitions; (3) NPC entity behavior with a state machine; (4) player movement and interaction; (5) performance-aware rendering with documented tradeoffs.",
+    goalPt:
+      "Construir uma experiência 3D submarina em tempo real que demonstre: (1) autoria de shaders GLSL personalizados sem pipeline de pós-processamento; (2) sistema de iluminação dinâmica guiado por profundidade com transições suaves entre zonas; (3) comportamento de entidades NPC com máquina de estados; (4) movimento e interação do jogador; (5) renderização consciente de performance com tradeoffs documentados.",
+    role: ["Solo developer — shader authorship, scene architecture, NPC behavior, deployment"],
+    rolePt: ["Desenvolvedor solo — autoria de shaders, arquitetura de cena, comportamento NPC, deploy"],
+    technicalDecisions: [
+      "All shaders inlined as TypeScript template literals — no .glsl files, no shader loading pipeline, no compilation failures from missing assets on GitHub Pages. Every THREE.ShaderMaterial is defined inside useMemo() hooks, ensuring shaders are compiled once and cached by the GPU.",
+      "dFdx/dFdy derivatives for caustics — instead of a second noise sample to compute the water surface gradient, GPU screen-space derivatives give the exact gradient of the noise field for free. This is the approach used in production ocean renderers: 1/( 1 + dot(gradient, gradient) × 20) produces bright caustic lines at surface curvature peaks.",
+      "Depth-based lighting as a data structure — five named zones (surface, shallow, medium, deep, abyss) each define a target light color and intensity. Every frame, the system lerps current values toward the active zone target. Adding a new zone requires one object entry, not new conditional logic.",
+      "AdditiveBlending + depthWrite:false on all effect layers — volumetric shafts, caustics, god rays, and particles all use additive blending and skip depth writing. This allows unlimited layering of transparent effects without Z-fighting or overdraw artifacts, which is the correct approach for atmospheric effects that should accumulate light.",
+      "Player position as the single source of truth — the JellyfishCharacter component propagates its Three.js world position to Scene.tsx via onPositionChange callback, which distributes it to all 11 downstream components as props. This avoids global state while ensuring every depth-sensitive system receives the same ground truth.",
+      "HDR environment replaced with hand-rolled lighting — the @react-three/drei Environment component (which fetches HDR from a remote CDN) caused 429 rate-limit errors on GitHub Pages. Removing it and building DepthBasedLighting from scratch eliminated the external dependency and gave full control over the lighting grammar.",
+    ],
+    technicalDecisionsPt: [
+      "Todos os shaders inline como template literals TypeScript — sem arquivos .glsl, sem pipeline de carregamento de shaders, sem falhas de compilação por assets faltando no GitHub Pages. Cada THREE.ShaderMaterial é definido dentro de hooks useMemo(), garantindo que os shaders sejam compilados uma vez e cacheados pela GPU.",
+      "Derivadas dFdx/dFdy para cáusticas — em vez de uma segunda amostra de ruído para calcular o gradiente da superfície da água, as derivadas screen-space da GPU fornecem o gradiente exato do campo de ruído de graça. 1/(1 + dot(gradiente, gradiente) × 20) produz linhas de cáustica brilhantes nos picos de curvatura da superfície.",
+      "Iluminação por profundidade como estrutura de dados — cinco zonas nomeadas (superfície, rasa, média, profunda, abismo) definem cor e intensidade de luz alvo. A cada frame, o sistema faz lerp dos valores atuais em direção ao alvo da zona ativa. Adicionar uma nova zona requer uma entrada de objeto, não nova lógica condicional.",
+      "AdditiveBlending + depthWrite:false em todas as camadas de efeito — feixes volumétricos, cáusticas, raios divinos e partículas usam blending aditivo e pular a escrita de profundidade. Isso permite camadas ilimitadas de efeitos transparentes sem Z-fighting ou artefatos de overdraw.",
+      "Posição do jogador como única fonte de verdade — o componente JellyfishCharacter propaga sua posição Three.js para Scene.tsx via callback onPositionChange, que a distribui para todos os 11 componentes downstream como props. Isso evita estado global enquanto garante que cada sistema sensível à profundidade receba a mesma fonte de verdade.",
+      "Ambiente HDR substituído por iluminação customizada — o componente Environment do @react-three/drei (que busca HDR de um CDN remoto) causava erros 429 de rate-limit no GitHub Pages. Removê-lo e construir o DepthBasedLighting do zero eliminou a dependência externa e deu controle total sobre a gramática de iluminação.",
+    ],
+    learnings: [
+      "Remote CDN dependencies in static deployments are a reliability risk — the HDR fetch failure was a production bug that only appeared on GitHub Pages, not in local development. Replacing it with procedural lighting was both a fix and a feature: the lighting became richer and more controllable.",
+      "Screen-space derivatives (dFdx/dFdy) are underused in creative WebGL work — they provide mathematically precise gradients with no performance cost, enabling caustic simulation that would otherwise require a full ray-march.",
+      "NPC behavior state machines need randomization to feel alive — deterministic jellyfish patterns looked robotic. Adding ±20% random variation to timer durations and 15% probability of pattern mutation made the swarm feel organic.",
+      "Depth-driven systems need smooth transitions, not hard thresholds — early versions had abrupt lighting changes at zone boundaries. Switching to per-frame lerp eliminated the visual pop and made depth feel like a continuous variable rather than a step function.",
+    ],
+    learningsPt: [
+      "Dependências de CDN remoto em deploys estáticos são um risco de confiabilidade — a falha no fetch do HDR era um bug de produção que só aparecia no GitHub Pages, não no desenvolvimento local. Substituí-lo por iluminação procedural foi tanto uma correção quanto uma feature: a iluminação ficou mais rica e controlável.",
+      "As derivadas screen-space (dFdx/dFdy) são subutilizadas em trabalhos WebGL criativos — fornecem gradientes matematicamente precisos sem custo de performance, permitindo simulação de cáusticas que de outra forma exigiria um ray-march completo.",
+      "Máquinas de estado de comportamento NPC precisam de aleatoriedade para parecer vivas — padrões determinísticos de água-viva pareciam robóticos. Adicionar ±20% de variação aleatória nas durações dos timers e 15% de probabilidade de mutação de padrão fez o enxame parecer orgânico.",
+      "Sistemas guiados por profundidade precisam de transições suaves, não limiares rígidos — versões iniciais tinham mudanças abruptas de iluminação nas fronteiras de zona. Mudar para lerp por frame eliminou o pop visual e fez a profundidade parecer uma variável contínua em vez de uma função degrau.",
+    ],
+    status: "Live — deployed to GitHub Pages",
+    statusPt: "Ativo — publicado no GitHub Pages",
     githubUrl: "https://github.com/claytonbrgsdev/deep-ocean-explorer",
     liveUrl: "https://claytonbrgsdev.github.io/deep-ocean-explorer/",
     featured: true,
@@ -400,16 +513,69 @@ export const projects: Project[] = [
     nameEn: "3D Product Showcase",
     namePt: "Showcase de Produto 3D",
     name: "3D Product Showcase",
+    type: "Interactive 3D Configurator / WebGL Product Visualization",
     descriptionEn:
-      "Interactive 3D showroom with dynamic lighting controls and GLB asset viewer supporting custom shaders.",
+      "Professional-grade 3D product configurator for vehicle covers. Swappable showroom scenarios, per-region logo application via UV-mapped canvas compositing, cinematic camera automation with 'takes', and full lighting preset serialization — all in vanilla Three.js with no build step.",
     descriptionPt:
-      "Showroom 3D interativo com controles dinâmicos de iluminação e visualizador de assets GLB com suporte a shaders customizados.",
-    tech: ["Three.js", "JavaScript", "GLB", "Shaders"],
+      "Configurador 3D de nível profissional para capas veiculares. Cenários de showroom intercambiáveis, aplicação de logo por região via composição UV em canvas, automação de câmera cinemática com 'takes' e serialização completa de presets de iluminação — tudo em Three.js puro sem etapa de build.",
+    tech: ["Three.js r160", "JavaScript", "WebGL", "DRACO", "Meshopt", "GLB/glTF", "EffectComposer", "BokehPass"],
     categories: ["3d-visualization"],
+    highlights: [
+      "Per-region logo application: uploads PNG logo, composites it onto UV-mapped product surfaces via Canvas API with smart background estimation",
+      "Cinematic camera system with 'takes' — automated orbital sequences with configurable dwell time, azimuth drift, radius sway, and smooth user-override blend-back",
+      "4 swappable showroom environments (sci-fi, modern, VR, art gallery), each with independent lighting setup and floor-snap Y-offsets",
+      "Preset serialization to localStorage: saves full lighting + camera state per scenario as importable/exportable JSON",
+      "CDN-based Three.js via import maps — zero build tooling, instant reload during development, DRACO + Meshopt decoders loaded lazily",
+    ],
+    overview:
+      "The 3D Product Showcase is a browser-based product configurator built for Evolut Digital to visualize vehicle covers (Kosha4 product line) in photorealistic 3D environments. Sales teams can swap showroom scenarios, apply client logos to specific product regions, configure directional lighting and depth-of-field blur, and save/load lighting presets — then capture the result for presentations. The entire stack is vanilla Three.js with no build process, delivered as static files and served from a simple HTTP server.",
+    overviewPt:
+      "O 3D Product Showcase é um configurador de produto baseado em navegador criado para a Evolut Digital para visualizar capas veiculares (linha Kosha4) em ambientes 3D fotorrealistas. Equipes de vendas podem trocar cenários de showroom, aplicar logos de clientes em regiões específicas do produto, configurar iluminação direcional e desfoque de profundidade de campo, e salvar/carregar presets de iluminação — capturando o resultado para apresentações.",
+    problem:
+      "Product photography for custom vehicle covers requires physical samples and studio shoots for each client configuration — expensive and slow. A 3D configurator that lets the sales team show any logo placement, color, and environment in real time eliminates the need for physical mockups. The main technical challenge was per-region logo application: the product has distinct front, back, and lateral panels that must accept independent logo uploads without the materials interfering with each other.",
+    problemPt:
+      "A fotografia de produto para capas veiculares personalizadas exige amostras físicas e sessões de estúdio para cada configuração de cliente — caro e lento. Um configurador 3D que permite à equipe de vendas mostrar qualquer posicionamento de logo, cor e ambiente em tempo real elimina a necessidade de mockups físicos. O principal desafio técnico era a aplicação de logo por região: o produto tem painéis frontal, traseiro e lateral distintos que devem aceitar uploads de logo independentes sem que os materiais interfiram entre si.",
+    goal:
+      "Build a professional 3D product configurator that: (1) loads GLB models with DRACO/Meshopt compression; (2) applies logos to specific UV-mapped product regions via canvas compositing; (3) supports 4 swappable photorealistic environments; (4) provides cinematic camera automation for product reveals; (5) serializes the full scene state as presets.",
+    goalPt:
+      "Construir um configurador 3D profissional que: (1) carregue modelos GLB com compressão DRACO/Meshopt; (2) aplique logos em regiões específicas do produto via composição canvas; (3) suporte 4 ambientes fotorrealistas intercambiáveis; (4) forneça automação de câmera cinemática para apresentações do produto; (5) serialize o estado completo da cena como presets.",
+    role: ["Solo developer — Three.js architecture, material system, camera system, deployment"],
+    rolePt: ["Desenvolvedor solo — arquitetura Three.js, sistema de materiais, sistema de câmera, deploy"],
+    technicalDecisions: [
+      "Per-region logo application via material cloning — the product's named mesh regions (CUBE, CUBE002, CUBE003, CUBE004) each get a cloned instance of Material 003 flagged with userData._cloned markers to prevent re-cloning. An uploaded PNG is composited onto a Canvas with background color estimation, then applied as a texture update to the specific mesh's material without affecting other regions.",
+      "Canvas API UV compositing for logo placement — instead of a custom shader, the logo is rendered onto an HTML Canvas matching the texture UV space, then converted to a Three.js CanvasTexture. This approach works without GPU access and correctly respects the model's UV transforms and texture coordinate offsets.",
+      "CDN import maps with no build step — Three.js r160 is loaded from unpkg via ES module import maps. DRACOLoader and MeshoptDecoder are loaded from the same CDN lazily. Zero webpack/vite configuration; development workflow is edit-save-reload, not edit-save-bundle-reload.",
+      "Cinematic camera 'takes' system — each take defines an orbital path with configurable dwell time, azimuth drift speed, radius sway amplitude, and sway frequency. When the user interacts with OrbitControls, the take system smoothly blends back to automated motion after 5 seconds of inactivity using lerp on spherical coordinates.",
+      "Per-scenario light setups — rather than a global directional key light, each showroom environment defines its own RectAreaLights and DirectionalLights. Swapping scenarios disposes the previous lights and instantiates the new set, preventing light accumulation and ensuring each environment has its intended photographic look.",
+      "Preset JSON serialization to localStorage — a full preset captures all editable light positions/colors/intensities and camera position/target/FOV as a JSON object. Presets are keyed per scenario, enabling separate saved states for each environment. Export as .json files allows sharing between team members.",
+    ],
+    technicalDecisionsPt: [
+      "Aplicação de logo por região via clonagem de material — as regiões de mesh nomeadas do produto (CUBE, CUBE002, CUBE003, CUBE004) recebem cada uma uma instância clonada do Material 003 marcada com userData._cloned para evitar re-clonagem. Um PNG enviado é composto em um Canvas com estimativa de cor de fundo, depois aplicado como atualização de textura ao material do mesh específico sem afetar outras regiões.",
+      "Composição UV via Canvas API para posicionamento de logo — em vez de um shader customizado, o logo é renderizado em um Canvas HTML correspondendo ao espaço UV da textura, depois convertido para um CanvasTexture do Three.js. Essa abordagem funciona sem acesso à GPU e respeita corretamente os transforms UV e deslocamentos de coordenadas de textura do modelo.",
+      "Import maps CDN sem etapa de build — Three.js r160 carregado do unpkg via ES module import maps. DRACOLoader e MeshoptDecoder carregados do mesmo CDN de forma lazy. Zero configuração webpack/vite; fluxo de desenvolvimento é editar-salvar-recarregar, não editar-salvar-bundle-recarregar.",
+      "Sistema de 'takes' cinemáticos — cada take define um caminho orbital com tempo de permanência, velocidade de drift azimutal, amplitude de sway de raio e frequência de sway configuráveis. Quando o usuário interage com OrbitControls, o sistema de take volta suavemente ao movimento automatizado após 5 segundos de inatividade usando lerp em coordenadas esféricas.",
+      "Configurações de luz por cenário — em vez de uma luz key direcional global, cada ambiente de showroom define seus próprios RectAreaLights e DirectionalLights. Trocar cenários descarta as luzes anteriores e instancia o novo conjunto, evitando acumulação de luz e garantindo que cada ambiente tenha seu visual fotográfico pretendido.",
+      "Serialização JSON de presets para localStorage — um preset completo captura todas as posições/cores/intensidades de luzes editáveis e posição/alvo/FOV da câmera como objeto JSON. Presets são chaveados por cenário, permitindo estados salvos separados para cada ambiente. Exportar como arquivos .json permite compartilhamento entre membros da equipe.",
+    ],
+    learnings: [
+      "Material cloning must be carefully tracked — early versions re-cloned materials on every logo upload, creating an unbounded number of material instances. The _cloned flag pattern (userData._clonedLogo = true) prevents re-cloning without requiring a separate material registry.",
+      "CDN-based Three.js is viable for client deliverables — the absence of a build step meant the client's team could modify the showroom configuration file and see changes immediately without any toolchain knowledge. The tradeoff is longer initial load time vs. npm-bundled builds.",
+      "Cinematic camera automation significantly improves demo quality — static camera presets required the user to memorize positions. The takes system made product demos feel like directed video without requiring the presenter to operate the camera.",
+      "Per-scenario light setups prevent an 'overlit' accumulation bug — sharing a global directional light across scenarios caused it to compound with scenario-specific lights when switching environments. Disposing and recreating lights on scenario change was the correct isolation model.",
+    ],
+    learningsPt: [
+      "A clonagem de material deve ser rastreada cuidadosamente — versões iniciais re-clonavam materiais a cada upload de logo, criando um número ilimitado de instâncias. O padrão de flag _cloned (userData._clonedLogo = true) evita re-clonagem sem exigir um registro separado de materiais.",
+      "Three.js via CDN é viável para entregas a clientes — a ausência de etapa de build significava que a equipe do cliente podia modificar o arquivo de configuração do showroom e ver as mudanças imediatamente sem nenhum conhecimento de toolchain. O tradeoff é maior tempo de carregamento inicial vs. builds com npm.",
+      "A automação de câmera cinemática melhora significativamente a qualidade das demos — presets de câmera estáticos exigiam que o usuário memorizasse posições. O sistema de takes fez as demos de produto parecerem vídeos dirigidos sem exigir que o apresentador operasse a câmera.",
+      "Configurações de luz por cenário evitam um bug de acumulação 'superiluminada' — compartilhar uma luz direcional global entre cenários a fazia se acumular com luzes específicas do cenário ao trocar ambientes. Descartar e recriar luzes na troca de cenário foi o modelo de isolamento correto.",
+    ],
+    status: "Delivered to client — Evolut Digital",
+    statusPt: "Entregue ao cliente — Evolut Digital",
     githubUrl: "https://github.com/claytonbrgsdev/product-showcase-v2",
     liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
     featured: false,
     year: 2025,
+    client: "Evolut Digital",
   },
   {
     id: "reacto",
@@ -417,12 +583,64 @@ export const projects: Project[] = [
     image: "/projects/reacto/project-reacto.png",
     namePt: "REACTO – Experimentos Audio-Visuais Web",
     name: "REACTO",
+    type: "Creative Web Application / Audio-Visual Suite",
     descriptionEn:
-      "Collection of web audio-visual experiments with tweakable real-time parameters combining React, Web Audio API, and Three.js.",
+      "Suite of 10 distinct real-time audio-reactive 3D visualizations — from traditional spectrum bars to physics-inspired cymatics. Each experiment maps FFT frequency data to Three.js geometry in real time with 12 color schemes and tweakable parameters.",
     descriptionPt:
-      "Coleção de experimentos audiovisuais web com parâmetros ajustáveis em tempo real combinando React, Web Audio API e Three.js.",
-    tech: ["React", "Web Audio API", "Three.js"],
+      "Suíte de 10 visualizações 3D audio-reativas em tempo real distintas — de barras de espectro tradicionais à cimática inspirada em física. Cada experimento mapeia dados FFT de frequência para geometria Three.js em tempo real com 12 esquemas de cores e parâmetros ajustáveis.",
+    tech: ["Next.js 15", "React 19", "TypeScript", "Three.js", "React Three Fiber", "Web Audio API", "Tailwind CSS"],
     categories: ["audio", "3d-visualization"],
+    highlights: [
+      "Cymatics visualization implements standing-wave modal equations (Chladni patterns) with spectral peak detection mapping to resonant modes m, n, k, l",
+      "10 visualization types: Frequency bars, Waveform, Terrain, Rings, Orbit (4 variants), Orbit-Terrain, Cymatics — each sharing one AnalyserNode",
+      "12 color palettes with three generation strategies: spectrum (HSL), gradient (hue range blend), and static (primary/accent interpolation)",
+      "Adaptive rendering: DPR capped at 2×, geometry uses BufferAttribute direct mutation (needsUpdate) instead of cloning for GC efficiency",
+      "Fullscreen mode with cinematic camera adjustment (FOV 60→75°) and a persistent controls overlay",
+    ],
+    overview:
+      "REACTO is a web-based audio visualization suite that transforms uploaded audio or microphone input into 10 distinct real-time 3D experiments. Each visualization maps Web Audio API FFT data to Three.js geometry differently — from a circular spectrum analyzer to a physics-inspired cymatics simulation that implements actual Chladni standing-wave equations. The project was built as both a creative tool and a technical demonstration of audio-reactive real-time graphics in the browser.",
+    overviewPt:
+      "REACTO é uma suíte de visualização de áudio baseada em web que transforma áudio enviado ou entrada do microfone em 10 experimentos 3D distintos em tempo real. Cada visualização mapeia dados FFT da Web Audio API para geometria Three.js de forma diferente — de um analisador de espectro circular a uma simulação de cimática inspirada em física que implementa equações reais de ondas estacionárias de Chladni. O projeto foi criado como ferramenta criativa e demonstração técnica de gráficos em tempo real audio-reativos no navegador.",
+    problem:
+      "Audio visualization on the web rarely goes beyond bar charts. The goal was to explore how far real-time audio analysis could drive 3D geometry — not just height of bars, but topology of terrain, orbits of particles, and resonant modes of vibrating surfaces. Each experiment answers a different question: what does this sound look like when expressed through this particular physical or mathematical metaphor?",
+    problemPt:
+      "A visualização de áudio na web raramente vai além de gráficos de barras. O objetivo era explorar até onde a análise de áudio em tempo real poderia conduzir geometria 3D — não apenas a altura de barras, mas a topologia de terreno, as órbitas de partículas e os modos ressonantes de superfícies vibrantes. Cada experimento responde a uma pergunta diferente: como esse som parece quando expresso através desse metáfora física ou matemática particular?",
+    goal:
+      "Build a multi-visualization audio suite that: (1) shares one AnalyserNode across all experiments; (2) implements fundamentally different mapping strategies per visualization; (3) includes a physically-grounded simulation (cymatics); (4) supports 12 color schemes applicable to any visualization; (5) runs smoothly in fullscreen on mid-range hardware.",
+    goalPt:
+      "Construir uma suíte de visualização de áudio multi-experimento que: (1) compartilhe um AnalyserNode entre todos os experimentos; (2) implemente estratégias de mapeamento fundamentalmente diferentes por visualização; (3) inclua uma simulação fisicamente fundamentada (cimática); (4) suporte 12 esquemas de cores aplicáveis a qualquer visualização; (5) rode suavemente em fullscreen em hardware de nível médio.",
+    role: ["Solo developer — audio engineering, shader authorship, visualization design, frontend"],
+    rolePt: ["Desenvolvedor solo — engenharia de áudio, autoria de shaders, design de visualização, frontend"],
+    technicalDecisions: [
+      "Cymatics via spectral peak detection and modal equations — the Cymatics visualization detects the top 3 frequency peaks in the FFT and maps them to integer modal indices (m, n, k, l). It then computes sin(m×π×x) × sin(n×π×y) for rectangular modes and sin(k×π×r) × cos(l×θ) for polar modes, blending both. This produces mathematically correct Chladni patterns that actually change with the music's dominant frequencies.",
+      "BufferAttribute direct mutation for geometry updates — all visualizations update Three.js geometry by calling setX()/setY()/setZ() on existing BufferAttributes and setting needsUpdate=true, never creating new geometry. This eliminates GC pressure from per-frame geometry allocation, which would cause frame drops in longer sessions.",
+      "Single AnalyserNode shared via React context — all 10 visualizations read from the same AnalyserNode via a useAudio() hook. Audio setup (createMediaElementSource, connect) happens once in AudioProvider, preventing the Web Audio API graph from growing when switching visualizations.",
+      "Audio band splitting for semantic reactivity — frequency data is divided into bass (bins 0–24), mid (24–96), and high (96–192) ranges. Different visualization layers respond to different bands: terrain elevation responds to bass, particle orbit radius to mid, trail brightness to high. This creates musically coherent animations where visual layers respond to their corresponding sonic registers.",
+      "THREE.MathUtils.lerp for smooth transitions — raw FFT data is noisy and produces jittery visuals. Every value driving geometry (bar height, orbit radius, terrain elevation) is lerped toward the new FFT value with delta-scaled smoothing. This produces fluid motion without introducing perceptible lag.",
+      "Fullscreen-specific camera and lighting adjustments — entering fullscreen increases FOV from 60° to 75° and moves the camera back (Z: 18 → 25). Point light intensity increases by 40% to maintain visual balance at the larger viewport. These are computed deltas, not hardcoded values, so they work at any initial state.",
+    ],
+    technicalDecisionsPt: [
+      "Cimática via detecção de pico espectral e equações modais — a visualização Cymatics detecta os 3 maiores picos de frequência no FFT e os mapeia para índices modais inteiros (m, n, k, l). Então calcula sin(m×π×x) × sin(n×π×y) para modos retangulares e sin(k×π×r) × cos(l×θ) para modos polares, mesclando ambos. Isso produz padrões de Chladni matematicamente corretos que realmente mudam com as frequências dominantes da música.",
+      "Mutação direta de BufferAttribute para atualizações de geometria — todas as visualizações atualizam a geometria Three.js chamando setX()/setY()/setZ() em BufferAttributes existentes e definindo needsUpdate=true, nunca criando nova geometria. Isso elimina a pressão no GC por alocação de geometria por frame, que causaria quedas de frames em sessões mais longas.",
+      "Único AnalyserNode compartilhado via contexto React — todas as 10 visualizações leem do mesmo AnalyserNode via hook useAudio(). A configuração de áudio (createMediaElementSource, connect) acontece uma vez no AudioProvider, evitando que o grafo da Web Audio API cresça ao trocar visualizações.",
+      "Divisão de bandas de áudio para reatividade semântica — os dados de frequência são divididos em graves (bins 0–24), médios (24–96) e agudos (96–192). Diferentes camadas de visualização respondem a diferentes bandas: a elevação do terreno responde ao grave, o raio da órbita de partículas ao médio, o brilho do rastro ao agudo.",
+      "THREE.MathUtils.lerp para transições suaves — os dados FFT brutos são ruidosos e produzem visuais tremidos. Cada valor que conduz geometria (altura de barra, raio de órbita, elevação de terreno) é interpolado em direção ao novo valor FFT com suavização escalonada por delta.",
+      "Ajustes de câmera e iluminação específicos para fullscreen — entrar em fullscreen aumenta o FOV de 60° para 75° e afasta a câmera (Z: 18 → 25). A intensidade da luz pontual aumenta 40% para manter o equilíbrio visual no viewport maior.",
+    ],
+    learnings: [
+      "Cymatics is the most compelling visualization not because it looks best but because it's grounded in physics — users who know about Chladni patterns recognize the connection and engage differently. Mathematical legitimacy adds a layer of meaning that purely aesthetic choices don't.",
+      "BufferAttribute mutation requires careful dirty-flagging — forgetting needsUpdate=true causes the GPU to render stale geometry while JavaScript thinks it updated. The bug manifests as frozen geometry that ignores audio input, which looks like an audio connection failure.",
+      "Band splitting makes reactivity feel musical rather than mechanical — responding to total average frequency produces generic pulsing. Separating bass/mid/high and routing each to different geometric properties creates animations that feel compositionally aware.",
+      "Shared audio context across visualization switches is non-trivial — naively creating a new MediaElementSource on each switch causes the Web Audio API to throw 'already connected' errors. The AudioProvider pattern (create once, keep alive) solved this but required careful cleanup on component unmount.",
+    ],
+    learningsPt: [
+      "A cimática é a visualização mais convincente não porque parece melhor, mas porque é fundamentada em física — usuários que conhecem padrões de Chladni reconhecem a conexão e se engajam diferente. A legitimidade matemática adiciona uma camada de significado que escolhas puramente estéticas não têm.",
+      "A mutação de BufferAttribute requer marcação cuidadosa de dirty — esquecer needsUpdate=true faz a GPU renderizar geometria desatualizada enquanto o JavaScript pensa que atualizou. O bug se manifesta como geometria congelada que ignora entrada de áudio, parecendo uma falha de conexão de áudio.",
+      "A divisão de bandas faz a reatividade parecer musical em vez de mecânica — responder à frequência média total produz pulsação genérica. Separar grave/médio/agudo e rotear cada um para diferentes propriedades geométricas cria animações que parecem composicionalmente conscientes.",
+      "Contexto de áudio compartilhado entre trocas de visualização é não trivial — criar um novo MediaElementSource a cada troca faz a Web Audio API lançar erros 'already connected'. O padrão AudioProvider (criar uma vez, manter ativo) resolveu isso, mas exigiu limpeza cuidadosa no unmount do componente.",
+    ],
+    status: "Live — deployed to GitHub Pages",
+    statusPt: "Ativo — publicado no GitHub Pages",
     githubUrl: "https://github.com/claytonbrgsdev/reacto",
     liveUrl: "https://claytonbrgsdev.github.io/reacto/",
     featured: true,
@@ -433,12 +651,64 @@ export const projects: Project[] = [
     nameEn: "Medication Cycles Tracker",
     namePt: "Rastreador de Ciclos de Medicação",
     name: "Medication Cycles Tracker",
+    type: "Interactive 3D Web App / Personal Health Tool",
     descriptionEn:
-      "3D spiral timeline visualization for tracking medication cycles, built with Three.js and Next.js.",
+      "Browser-based pharmacokinetic tracker for Venvanse (ADHD medication). A 3D parametric helix spiral visualizes the 15-hour medication cycle across 5 phases, with dual concentration models (linear and exponential half-life), system notifications at phase transitions, and task recommendations based on energy level.",
     descriptionPt:
-      "Visualização de linha do tempo em espiral 3D para rastrear ciclos de medicação, construído com Three.js e Next.js.",
-    tech: ["Three.js", "Next.js", "TypeScript"],
+      "Rastreador farmacocinético para Venvanse (medicação para TDAH). Uma espiral helicoidal 3D paramétrica visualiza o ciclo de 15 horas em 5 fases, com dois modelos de concentração (linear e meia-vida exponencial), notificações do sistema nas transições de fase e recomendações de tarefas baseadas no nível de energia.",
+    tech: ["Three.js r158", "Vanilla JavaScript", "Web Audio API", "Canvas API", "Notification API", "localStorage"],
     categories: ["3d-visualization", "web-app"],
+    highlights: [
+      "Custom THREE.Curve subclass generates a parametric helix with subtle radius oscillation (0.9 + 0.1 × sin) for a 'breathing' organic feel",
+      "Dual pharmacokinetic models: linear model for intuitive prediction, exponential half-life model matching Venvanse XR extended-release behavior",
+      "Caustic-style pulsing heartbeat animation: double-peaked sinusoid every 1.8s mimics biological rhythm on active segment emissive intensity",
+      "Canvas sprites for all 3D labels — text rendered to HTML Canvas, converted to THREE.Sprite at runtime; countdown timers update without geometry recreation",
+      "Zero dependencies except Three.js from CDN — no build step, no framework; runs from a Python HTTP server",
+    ],
+    overview:
+      "Medication Cycles Tracker is a 3D pharmacokinetic visualizer that makes the invisible visible: it maps the 15-hour effect cycle of Venvanse (a stimulant ADHD medication) onto an interactive 3D helix, with the user's current position shown in real time as a glowing marker on the spiral. The five phases (onset, peak cycle 1–3, decay) are color-coded segments on the helix. Users start a cycle when they take their medication; the app calculates concentration percentage, suggests appropriate task types per phase, and sends system notifications at phase transitions.",
+    overviewPt:
+      "O Medication Cycles Tracker é um visualizador farmacocinético 3D que torna o invisível visível: mapeia o ciclo de efeito de 15 horas do Venvanse (medicação estimulante para TDAH) em uma hélice 3D interativa, com a posição atual do usuário mostrada em tempo real como um marcador brilhante na espiral. As cinco fases (início, pico ciclo 1–3, declínio) são segmentos codificados por cor na hélice. Os usuários iniciam um ciclo ao tomar a medicação; o app calcula a porcentagem de concentração, sugere tipos de tarefas apropriados por fase e envia notificações do sistema nas transições.",
+    problem:
+      "ADHD medication users often struggle to align demanding cognitive tasks with peak medication efficacy — they either start important work too early (medication not yet active) or too late (already in decay). Existing medication tracking apps show only timers and reminders; none visualize the pharmacokinetic curve or provide phase-aware task guidance. The challenge was to make pharmacokinetic data intuitive and actionable through spatial 3D metaphor.",
+    problemPt:
+      "Usuários de medicação para TDAH frequentemente têm dificuldade em alinhar tarefas cognitivas exigentes com o pico de eficácia da medicação — ou começam trabalho importante cedo demais (medicação ainda não ativa) ou tarde demais (já em declínio). Apps existentes de rastreamento de medicação mostram apenas timers e lembretes; nenhum visualiza a curva farmacocinética ou fornece orientação de tarefas por fase.",
+    goal:
+      "Build a browser-based pharmacokinetic visualizer that: (1) represents the 15-hour medication cycle as a navigable 3D helix; (2) shows the user's real-time position on the spiral; (3) computes concentration using two mathematical models; (4) sends system notifications at phase transitions; (5) runs as a zero-dependency vanilla JS app.",
+    goalPt:
+      "Construir um visualizador farmacocinético que: (1) represente o ciclo de 15 horas como uma hélice 3D navegável; (2) mostre a posição em tempo real do usuário na espiral; (3) calcule concentração usando dois modelos matemáticos; (4) envie notificações do sistema nas transições de fase; (5) rode como app JS puro sem dependências.",
+    role: ["Solo developer — 3D visualization, pharmacokinetic modeling, UI, notifications"],
+    rolePt: ["Desenvolvedor solo — visualização 3D, modelagem farmacocinética, UI, notificações"],
+    technicalDecisions: [
+      "Parametric helix over a 2D progress ring — a 3D spiral allows the user to zoom in on their current phase, zoom out to see the full 15-hour arc, and orbit the visualization for spatial context. The helix metaphor maps to time naturally (the spiral 'unwraps' into a timeline). A progress ring would show position but not the pharmacokinetic shape of each phase.",
+      "Custom THREE.Curve subclass for helix geometry — extending THREE.Curve allows TubeGeometry to sample the curve at arbitrary resolution. The getPoint(t) method adds subtle radius oscillation (r = radius × (0.9 + 0.1 × sin(t × 2π))) that makes the spiral feel organic rather than mechanical. Crucially, the curve can be sampled at any t for the progress marker position without re-computing the full geometry.",
+      "Canvas sprites for dynamic text — all labels (phase name, countdown, 'you are here' pill) are rendered to HTML Canvas elements, converted to THREE.CanvasTexture, and displayed as THREE.Sprites. This avoids loading a font loader or text geometry library; text updates only require canvas redraw + texture.needsUpdate=true, not geometry recreation.",
+      "Dual concentration models (linear vs. exponential half-life) — the linear model (concPct = elapsed/duration × 100) is intuitive for quick estimation. The exponential model (logistic sigmoid for onset, exponential decay with configurable half-life for decline) matches the pharmacological reality of Venvanse XR's extended-release mechanism. Users can toggle between them and configure the half-life parameter.",
+      "CSS variable for panel/canvas layout — the collapsible side panel uses a single --panel-left CSS custom property to animate both the panel position and the canvas offset. Toggling the panel updates one variable; both elements transition together. After the panel animation completes, a resize event forces WebGL to update the renderer dimensions.",
+      "Heartbeat pulsation using a double-peaked sinusoid — the active segment's emissive intensity follows: base + exp(-((r-0.12)/0.06)²) + 0.6×exp(-((r-0.34)/0.07)²), where r = (time mod 1.8s) / 1.8. The two Gaussian peaks create a physiologically accurate double-beat pattern that makes the active phase feel alive without being distracting.",
+    ],
+    technicalDecisionsPt: [
+      "Hélice paramétrica em vez de anel de progresso 2D — uma espiral 3D permite ao usuário dar zoom na fase atual, zoom out para ver o arco de 15 horas e orbitar a visualização para contexto espacial. A metáfora da hélice mapeia naturalmente para o tempo. Um anel de progresso mostraria posição, mas não a forma farmacocinética de cada fase.",
+      "Subclasse THREE.Curve personalizada para geometria helicoidal — estender THREE.Curve permite que o TubeGeometry amostre a curva em resolução arbitrária. O método getPoint(t) adiciona oscilação sutil de raio (r = raio × (0,9 + 0,1 × sin(t × 2π))) que faz a espiral parecer orgânica. A curva pode ser amostrada em qualquer t para a posição do marcador de progresso sem recomputar toda a geometria.",
+      "Canvas sprites para texto dinâmico — todos os labels são renderizados em elementos Canvas HTML, convertidos para THREE.CanvasTexture e exibidos como THREE.Sprites. Atualizações de texto requerem apenas redesenho do canvas + texture.needsUpdate=true, não recriação de geometria.",
+      "Modelos de concentração duais (linear vs. meia-vida exponencial) — o modelo linear é intuitivo para estimativa rápida. O modelo exponencial (sigmóide logístico para início, decaimento exponencial com meia-vida configurável para declínio) corresponde à realidade farmacológica do mecanismo de liberação estendida do Venvanse XR.",
+      "Variável CSS para layout painel/canvas — o painel lateral retrátil usa uma única propriedade customizada CSS --panel-left para animar tanto a posição do painel quanto o deslocamento do canvas. Alternar o painel atualiza uma variável; ambos os elementos transitam juntos.",
+      "Pulsação de batimento cardíaco usando sinusóide de duplo pico — a intensidade emissiva do segmento ativo segue: base + exp(-((r-0,12)/0,06)²) + 0,6×exp(-((r-0,34)/0,07)²), onde r = (tempo mod 1,8s) / 1,8. Os dois picos gaussianos criam um padrão de duplo batimento fisiologicamente preciso.",
+    ],
+    learnings: [
+      "3D metaphor adds meaning when the geometry encodes the data — the helix is not decorative. Its spatial structure (longer segments = longer phases, marker position = elapsed time) means users can read pharmacokinetic state spatially without reading numbers. The metaphor earns its complexity.",
+      "Parametric curves enable marker-on-curve positioning without extra data structures — given a t value (elapsed/total), the curve's getPoint(t) returns the exact 3D world position for the marker. No lookup table or interpolation needed; the math is the data structure.",
+      "Zero-dependency vanilla JS is a valid production target for single-purpose tools — the app has no npm, no bundler, no framework. This made iterating on 3D geometry and pharmacokinetic math extremely fast: save, reload, see. For a personal health tool used by one person, the simplicity tradeoff is clearly correct.",
+      "System notifications require careful deduplication — early versions sent duplicate notifications when the user reloaded the page near a phase boundary. Comparing g.at - now > 0 before scheduling each notification (rather than scheduling all on page load) eliminated duplicates without requiring persistent notification state.",
+    ],
+    learningsPt: [
+      "A metáfora 3D adiciona significado quando a geometria codifica os dados — a hélice não é decorativa. Sua estrutura espacial (segmentos mais longos = fases mais longas, posição do marcador = tempo decorrido) significa que os usuários podem ler o estado farmacocinético espacialmente sem ler números.",
+      "Curvas paramétricas permitem posicionamento marcador-na-curva sem estruturas de dados extras — dado um valor t (decorrido/total), getPoint(t) da curva retorna a posição 3D exata para o marcador. Sem tabela de lookup ou interpolação necessária; a matemática é a estrutura de dados.",
+      "JS puro sem dependências é um alvo de produção válido para ferramentas de propósito único — sem npm, sem bundler, sem framework. Isso tornou a iteração em geometria 3D e matemática farmacocinética extremamente rápida.",
+      "Notificações do sistema requerem deduplicação cuidadosa — versões iniciais enviavam notificações duplicadas quando o usuário recarregava a página próximo a um limite de fase. Comparar g.at - now > 0 antes de agendar cada notificação eliminou duplicatas sem exigir estado persistente de notificação.",
+    ],
+    status: "Live — deployed to GitHub Pages",
+    statusPt: "Ativo — publicado no GitHub Pages",
     githubUrl: "https://github.com/claytonbrgsdev/medication-cycles-tracker",
     liveUrl: "https://claytonbrgsdev.github.io/medication-cycles-tracker/",
     featured: false,
@@ -614,12 +884,64 @@ export const projects: Project[] = [
     nameEn: "Audio Transcription App",
     namePt: "App de Transcrição de Áudio",
     name: "Audio Transcription App",
+    type: "AI-Powered Desktop Tool / Audio ML Pipeline",
     descriptionEn:
-      "Streamlit app with OpenAI Whisper transcription and pyannote.audio speaker diarization. Supports multiple formats, auto-segmentation, and PDF/DOCX export.",
+      "Local-first audio transcription and speaker diarization pipeline. Whisper (6 model tiers) converts speech to text; pyannote.audio 3.1 identifies speakers. Supports files up to 1GB via FFmpeg auto-segmentation with timestamp offset tracking, and exports to PDF/DOCX. Bilingual UI (EN/PT-BR).",
     descriptionPt:
-      "App Streamlit com transcrição OpenAI Whisper e diarização de falantes com pyannote.audio. Suporta múltiplos formatos, auto-segmentação e exportação PDF/DOCX.",
-    tech: ["Python", "Streamlit", "OpenAI Whisper", "pyannote.audio", "FFmpeg"],
+      "Pipeline de transcrição de áudio e diarização de falantes local-first. Whisper (6 tiers de modelo) converte fala em texto; pyannote.audio 3.1 identifica falantes. Suporta arquivos até 1GB via segmentação automática FFmpeg com rastreamento de offset de timestamp, e exporta para PDF/DOCX. UI bilíngue (EN/PT-BR).",
+    tech: ["Python 3.10+", "Streamlit 1.43", "OpenAI Whisper", "pyannote.audio 3.3", "PyTorch 2.6", "FFmpeg", "ReportLab", "python-docx"],
     categories: ["ai-ml", "audio"],
+    highlights: [
+      "Proportional audio segmentation: total_duration / num_segments keeps each FFmpeg chunk balanced; chunk_start offsets track global timeline for diarization alignment",
+      "dFdx-style midpoint matching for speaker assignment: each Whisper segment's midpoint is checked against diarization timeline to assign speaker — handles speaker changes mid-segment",
+      "Hardware-adaptive device detection: tries MPS (Apple Silicon), falls back to CPU silently; fp16=False for full precision over speed",
+      "6 Whisper model tiers (tiny → large-v3): ~1GB RAM to 10GB VRAM; users trade accuracy for speed based on available hardware",
+      "Bilingual UI: full EN/PT-BR localization via LANG_DICT; all labels, buttons, and help text switch language without page reload",
+    ],
+    overview:
+      "Audio Transcription App is a local-first speech-to-text pipeline built with Streamlit that combines two state-of-the-art models: OpenAI Whisper for transcription and pyannote.audio for speaker diarization. Users upload audio (up to 1GB, any FFmpeg-supported format), select a Whisper model tier, and get a speaker-labeled transcript exported as PDF or DOCX. All inference runs locally — no audio leaves the machine. The app handles large files via proportional FFmpeg segmentation with timestamp offsets so the diarization timeline stays aligned across segments.",
+    overviewPt:
+      "O Audio Transcription App é um pipeline de fala-para-texto local-first construído com Streamlit que combina dois modelos state-of-the-art: OpenAI Whisper para transcrição e pyannote.audio para diarização de falantes. Usuários fazem upload de áudio (até 1GB, qualquer formato suportado pelo FFmpeg), selecionam um tier de modelo Whisper, e recebem uma transcrição com labels de falantes exportada como PDF ou DOCX. Toda a inferência roda localmente — nenhum áudio sai da máquina.",
+    problem:
+      "Transcription services like Otter.ai and Rev send audio to cloud servers — unacceptable for confidential interviews, medical consultations, or legal recordings. Local Whisper deployments handle transcription but not speaker identification. pyannote.audio handles diarization but requires aligning its output with Whisper's timestamps. The challenge was integrating both models into a pipeline where large files don't exhaust memory and speaker labels stay aligned after segmented transcription.",
+    problemPt:
+      "Serviços de transcrição como Otter.ai e Rev enviam áudio para servidores na nuvem — inaceitável para entrevistas confidenciais, consultas médicas ou gravações jurídicas. Implantações locais do Whisper lidam com transcrição, mas não com identificação de falantes. O pyannote.audio lida com diarização, mas requer alinhar sua saída com os timestamps do Whisper. O desafio era integrar ambos os modelos em um pipeline onde arquivos grandes não esgotam a memória e os labels de falante permanecem alinhados após transcrição segmentada.",
+    goal:
+      "Build a local-first transcription pipeline that: (1) runs entirely on-device with no cloud API calls; (2) handles audio files up to 1GB via segmentation; (3) assigns speaker labels to each Whisper segment using pyannote diarization; (4) exports labeled transcripts as PDF and DOCX; (5) provides a user-friendly Streamlit UI with bilingual support.",
+    goalPt:
+      "Construir um pipeline de transcrição local-first que: (1) rode inteiramente on-device sem chamadas a APIs na nuvem; (2) lide com arquivos de áudio até 1GB via segmentação; (3) atribua labels de falante a cada segmento Whisper usando diarização pyannote; (4) exporte transcrições com labels como PDF e DOCX; (5) forneça UI Streamlit amigável com suporte bilíngue.",
+    role: ["Solo developer — ML pipeline architecture, audio processing, UI, export formats"],
+    rolePt: ["Desenvolvedor solo — arquitetura do pipeline ML, processamento de áudio, UI, formatos de exportação"],
+    technicalDecisions: [
+      "Proportional FFmpeg segmentation for large files — instead of fixed-duration chunks (which can cut mid-sentence), total_duration is divided by the number of required segments to produce balanced chunks. Each chunk is resampled to 16kHz mono WAV (Whisper's expected input) and its start offset tracked. After transcription, segment timestamps are shifted by chunk_start to restore global timeline position.",
+      "Midpoint matching for speaker assignment — for each Whisper segment, the speaker is determined by finding which diarization interval contains the segment's midpoint: (segment_start + segment_end) / 2. This handles the common case where a speaker changes mid-segment — the segment is assigned to whoever was speaking at the center, not the start.",
+      "fp16=False for transcription quality — Whisper supports half-precision (fp16) inference which is faster but reduces accuracy, especially for non-English speech and noisy audio. Deliberately using full 32-bit float precision prioritizes transcription quality over speed. Users who need speed select a smaller model tier instead.",
+      "pyannote/speaker-diarization-3.1 as gated model — pyannote's model requires Hugging Face account approval before download. This is intentional: it filters for serious use cases and reduces abuse. The app handles the HF token via environment variable; the gated access adds one setup step but ensures a production-grade diarization model.",
+      "Streamlit session_state for speaker renaming — diarization returns generic labels (SPEAKER_00, SPEAKER_01). Streamlit's session_state persists the user's custom name mappings (e.g., 'Interviewer', 'Candidate') across interactions without re-running the pipeline. The transcript re-renders with updated names immediately when the mapping changes.",
+      "Queue-based audio delivery for robustness — audio chunks are pushed to a Python queue between FFmpeg extraction and Whisper transcription. This decouples the extraction pace from the inference pace, allowing the pipeline to handle variable-length chunks without backpressure blocking FFmpeg.",
+    ],
+    technicalDecisionsPt: [
+      "Segmentação FFmpeg proporcional para arquivos grandes — em vez de chunks de duração fixa (que podem cortar no meio de uma frase), total_duration é dividido pelo número de segmentos necessários para produzir chunks balanceados. Cada chunk é resampleado para 16kHz mono WAV e seu offset de início rastreado. Após a transcrição, os timestamps são deslocados por chunk_start para restaurar a posição global.",
+      "Correspondência por ponto médio para atribuição de falante — para cada segmento Whisper, o falante é determinado encontrando qual intervalo de diarização contém o ponto médio do segmento: (início + fim) / 2. Isso lida com o caso comum onde um falante muda no meio do segmento.",
+      "fp16=False para qualidade de transcrição — Whisper suporta inferência em meia-precisão (fp16) que é mais rápida, mas reduz a acurácia, especialmente para fala em línguas não-inglesas e áudio com ruído. Usar propositalmente precisão 32-bit prioriza qualidade de transcrição sobre velocidade.",
+      "pyannote/speaker-diarization-3.1 como modelo restrito — o modelo do pyannote requer aprovação de conta no Hugging Face antes do download. O app lida com o token HF via variável de ambiente; o acesso restrito adiciona uma etapa de configuração, mas garante um modelo de diarização de nível de produção.",
+      "session_state do Streamlit para renomear falantes — a diarização retorna labels genéricos (SPEAKER_00, SPEAKER_01). O session_state do Streamlit persiste os mapeamentos de nomes customizados do usuário (ex: 'Entrevistador', 'Candidato') entre interações sem re-executar o pipeline.",
+      "Entrega de áudio via fila para robustez — chunks de áudio são empurrados para uma fila Python entre a extração FFmpeg e a transcrição Whisper. Isso desacopla o ritmo de extração do ritmo de inferência, permitindo que o pipeline lide com chunks de duração variável sem backpressure bloqueando o FFmpeg.",
+    ],
+    learnings: [
+      "Midpoint matching is more robust than start-time matching for speaker assignment — early versions assigned speaker by checking which diarization interval contained segment_start. This failed when a speaker change happened 0.1s into a segment. Using the midpoint reduced misattributions significantly.",
+      "Proportional segmentation requires tracking segment offsets explicitly — the first version concatenated Whisper outputs without offset correction. Diarization ran on the full file but transcription timestamps were relative to each chunk, causing speaker labels to be applied to the wrong sentences. Adding chunk_start offset to every segment timestamp fixed the alignment.",
+      "Local LLM inference hardware matters enormously — the large-v3 model that produces best-quality transcripts runs in real time on a GPU but takes 3× wall-clock time on CPU for a 30-minute file. Exposing model selection to users with clear performance guidelines (tiny for quick drafts, large-v3 for final output on GPU) was more practical than picking one tier.",
+      "Streamlit session_state is the right tool for multi-step ML workflows — the pipeline has 4 stages (upload, transcribe, diarize, label). Each stage is expensive. session_state caches each stage's output so editing speaker names doesn't re-run transcription. This pattern (stage → cache → next stage) is the correct Streamlit architecture for ML pipelines.",
+    ],
+    learningsPt: [
+      "A correspondência por ponto médio é mais robusta que a correspondência por tempo de início para atribuição de falante — versões iniciais atribuíam falante verificando qual intervalo de diarização continha segment_start. Isso falhava quando uma mudança de falante ocorria 0,1s dentro do segmento.",
+      "A segmentação proporcional requer rastreamento explícito de offsets — a primeira versão concatenava saídas do Whisper sem correção de offset. A diarização rodava no arquivo completo, mas os timestamps de transcrição eram relativos a cada chunk, causando labels de falante aplicados às frases erradas.",
+      "O hardware para inferência ML local importa enormemente — o modelo large-v3 roda em tempo real em GPU, mas leva 3× o tempo real em CPU para um arquivo de 30 minutos. Expor a seleção de modelo para usuários com diretrizes claras de desempenho foi mais prático que escolher um tier.",
+      "O session_state do Streamlit é a ferramenta certa para workflows ML em múltiplas etapas — o pipeline tem 4 estágios (upload, transcrição, diarização, label). O session_state cacheia a saída de cada estágio para que editar nomes de falantes não re-execute a transcrição.",
+    ],
+    status: "Functional — local desktop tool for private transcription workflows",
+    statusPt: "Funcional — ferramenta desktop local para workflows de transcrição privados",
     featured: false,
     year: 2025,
   },
@@ -628,13 +950,65 @@ export const projects: Project[] = [
     nameEn: "SPECtations – Audio Visualizer",
     namePt: "SPECtations – Visualizador de Áudio",
     name: "SPECtations",
+    type: "Native macOS Desktop App / Real-Time Audio Analysis",
     descriptionEn:
-      "Real-time macOS audio visualization tool with waveform display and spectrogram using system audio capture via BlackHole.",
+      "macOS desktop app for real-time system audio visualization via BlackHole loopback. Dual FFT pipeline: np.fft.rfft at 15fps for live waveform; scipy.signal.spectrogram at n_fft=2048 for a scrolling 5-second time-frequency heatmap. OpenGL-accelerated via PyQtGraph. Distributable as a .app bundle via PyInstaller.",
     descriptionPt:
-      "Ferramenta de visualização de áudio macOS em tempo real com exibição de forma de onda e espectrograma usando captura de áudio do sistema via BlackHole.",
-    tech: ["Python", "PySide6", "PyQtGraph", "NumPy FFT", "sounddevice"],
+      "App desktop macOS para visualização de áudio do sistema em tempo real via loopback BlackHole. Pipeline FFT duplo: np.fft.rfft a 15fps para forma de onda ao vivo; scipy.signal.spectrogram com n_fft=2048 para heatmap tempo-frequência deslizante de 5 segundos. Acelerado por OpenGL via PyQtGraph. Distribuível como bundle .app via PyInstaller.",
+    tech: ["Python 3.10+", "PySide6 6.5", "PyQtGraph 0.13", "sounddevice", "NumPy", "SciPy", "BlackHole", "PyInstaller"],
     categories: ["audio"],
     image: "/projects/SPECtations/project-spectogram.jpeg",
+    highlights: [
+      "BlackHole 2ch loopback: only way to capture macOS system audio output as input — routes all output back as a virtual input device without muting speakers",
+      "Dual FFT resolution: 1024-point rfft for real-time waveform (low latency); 2048-point STFT with 75% overlap for spectrogram (higher frequency resolution)",
+      "Drop-oldest queue policy: PortAudio callback pushes 1024-frame blocks to a maxsize=10 Queue; full queue discards oldest chunk over blocking — prevents memory growth on processing lag",
+      "Split timers: 15fps QTimer for audio+visualization updates; 60fps QTimer for particle overlay animation — decouples audio processing from visual effects",
+      "PyInstaller .spec file for standalone .app distribution — no Python environment required on target machine",
+    ],
+    overview:
+      "SPECtations is a macOS desktop application for real-time visualization of system audio output. It captures all audio playing through the Mac (music, video, any app) using BlackHole, a virtual audio loopback driver, processes it with two independent FFT pipelines, and renders synchronized waveform and spectrogram views. The app was built for continuous background use during music production and media work — designed to sit on a second monitor, always on, with a rich preset system (colormap, sensitivity, persistence effects) and an output window for presentation display.",
+    overviewPt:
+      "SPECtations é um aplicativo desktop macOS para visualização em tempo real do áudio de saída do sistema. Captura todo o áudio sendo reproduzido no Mac (música, vídeo, qualquer app) usando o BlackHole, um driver de loopback de áudio virtual, processa com dois pipelines FFT independentes e renderiza visualizações sincronizadas de forma de onda e espectrograma. O app foi criado para uso contínuo em segundo plano durante produção musical e trabalho com mídia.",
+    problem:
+      "macOS does not expose system audio output as a capturable input device (unlike Windows WASAPI loopback). Existing audio visualizers either require routing audio through a DAW or only visualize microphone input. The engineering challenge was both at the OS level (BlackHole workaround) and the signal processing level: a single FFT size produces a tradeoff between time resolution (good for real-time waveform) and frequency resolution (good for spectrogram). Two sizes were needed simultaneously.",
+    problemPt:
+      "O macOS não expõe a saída de áudio do sistema como um dispositivo de entrada capturável (ao contrário do loopback WASAPI do Windows). Os visualizadores de áudio existentes exigem roteamento pelo DAW ou só visualizam entrada do microfone. O desafio de engenharia era tanto no nível do SO (workaround BlackHole) quanto no nível de processamento de sinal: um único tamanho FFT produz um tradeoff entre resolução temporal (boa para forma de onda) e resolução de frequência (boa para espectrograma).",
+    goal:
+      "Build a macOS native audio visualizer that: (1) captures system audio output via BlackHole without muting speakers; (2) runs two FFT pipelines with different resolutions simultaneously; (3) renders a scrolling spectrogram heatmap and real-time waveform; (4) supports rich preset configuration (35 colormaps, sensitivity, persistence); (5) distributes as a standalone .app without requiring Python installation.",
+    goalPt:
+      "Construir um visualizador de áudio nativo para macOS que: (1) capture a saída de áudio do sistema via BlackHole sem silenciar os alto-falantes; (2) execute dois pipelines FFT com resoluções diferentes simultaneamente; (3) renderize um heatmap de espectrograma deslizante e forma de onda em tempo real; (4) suporte configuração rica de presets (35 colormaps, sensibilidade, persistência); (5) distribua como .app standalone sem exigir instalação do Python.",
+    role: ["Solo developer — audio pipeline, signal processing, Qt UI, macOS packaging"],
+    rolePt: ["Desenvolvedor solo — pipeline de áudio, processamento de sinal, UI Qt, empacotamento macOS"],
+    technicalDecisions: [
+      "BlackHole 2ch as the only viable macOS loopback solution — macOS's privacy model prevents direct capture of audio output. BlackHole acts as a virtual output device that simultaneously exposes itself as an input. A Multi-Output Device in Audio MIDI Setup routes audio to both real speakers and BlackHole simultaneously, so the user hears audio normally while SPECtations captures it.",
+      "Dual FFT sizes: 1024 for waveform, 2048 for spectrogram — the waveform needs low latency (1024 samples ≈ 23ms per chunk at 44.1kHz) with acceptable frequency resolution. The spectrogram needs higher frequency resolution (2048-point FFT gives 21.5Hz per bin) but can be computed at a lower rate. Using scipy.signal.spectrogram with 75% overlap for the historical view vs. np.fft.rfft for the real-time view gives each visualization its optimal parameters.",
+      "Drop-oldest queue policy for the producer/consumer boundary — PortAudio calls the audio callback on a real-time thread; Qt runs on the main thread. The Queue(maxsize=10) decouples them. When processing lags (e.g., slow spectrogram computation), the queue fills up. Dropping the oldest chunk (rather than blocking the audio thread or growing unbounded) accepts occasional visual glitches over memory exhaustion or audio thread stalls.",
+      "15fps update rate for readability — an initial 30fps update rate made waveforms move too fast to read in real time. Reducing to 15fps (≈3 audio chunks per GUI frame at 44.1kHz/1024) makes movements readable. The 60fps particle animation timer runs independently so visual overlay effects remain fluid.",
+      "PySide6 6.5.0 pinned exactly — PyQtGraph had version-specific integration issues with Qt 6.4–6.6. The exact 6.5.0 pin resolved a rendering bug in PyQtGraph's ImageItem update path that caused spectrogram frames to occasionally drop. Version range (>=6.5) was insufficient; exact pinning was required.",
+      "PyInstaller for .app distribution — the app was intended for use without a Python environment. PyInstaller bundles Python interpreter, all dependencies (PyTorch included), and the app entry point into a self-contained macOS .app. The .spec file handles Apple Silicon ARM64-specific binary inclusions and excludes test files to reduce bundle size.",
+    ],
+    technicalDecisionsPt: [
+      "BlackHole 2ch como única solução de loopback macOS viável — o modelo de privacidade do macOS impede a captura direta da saída de áudio. O BlackHole age como um dispositivo de saída virtual que simultaneamente se expõe como entrada. Um Multi-Output Device no Audio MIDI Setup roteia o áudio tanto para os alto-falantes reais quanto para o BlackHole.",
+      "Tamanhos FFT duais: 1024 para forma de onda, 2048 para espectrograma — a forma de onda precisa de baixa latência (1024 amostras ≈ 23ms). O espectrograma precisa de maior resolução de frequência (FFT de 2048 pontos dá 21,5Hz por bin). scipy.signal.spectrogram com 75% de sobreposição para a visão histórica vs. np.fft.rfft para a visão em tempo real dá a cada visualização seus parâmetros ótimos.",
+      "Política drop-oldest na fronteira produtor/consumidor — o PortAudio chama o callback de áudio em uma thread em tempo real; o Qt roda na thread principal. A Queue(maxsize=10) os desacopla. Quando o processamento fica para trás, a fila enche. Descartar o chunk mais antigo aceita glitches visuais ocasionais sobre esgotamento de memória ou travamento da thread de áudio.",
+      "Taxa de atualização de 15fps para legibilidade — uma taxa inicial de 30fps fazia as formas de onda se moverem rápido demais para leitura em tempo real. Reduzir para 15fps torna os movimentos legíveis. O timer de animação de partículas de 60fps roda independentemente.",
+      "PySide6 6.5.0 fixado exatamente — o PyQtGraph tinha problemas de integração específicos de versão com Qt 6.4–6.6. O fix exato de 6.5.0 resolveu um bug de renderização no caminho de atualização do ImageItem do PyQtGraph.",
+      "PyInstaller para distribuição .app — bundlea o interpretador Python, todas as dependências (incluindo PyTorch) e o ponto de entrada do app em um .app macOS autocontido.",
+    ],
+    learnings: [
+      "BlackHole routing requires a Multi-Output Device setup that is non-obvious — the user must create a combined device in Audio MIDI Setup that sends audio to both real speakers and BlackHole. Without this, audio is routed exclusively to BlackHole and the speakers are silent. This is now documented prominently in the README.",
+      "Dual FFT resolution is worth the code complexity — early versions used a single 1024-point FFT for both views. The waveform was fine, but the spectrogram looked smeared with poor frequency distinction between close pitches. Adding a second scipy.signal.spectrogram computation at 2048 points dramatically improved spectrogram quality at minimal performance cost.",
+      "ARM64-native Python matters for PortAudio on Apple Silicon — Rosetta-translated x86_64 Python worked for computation but caused PortAudio to misidentify audio devices and occasionally crash on M1/M2 machines. Requiring ARM64 Homebrew Python eliminated these issues.",
+      "PyQtGraph is significantly faster than matplotlib for real-time visualization — an early matplotlib prototype with blitting ran at 8fps before dropping frames. Switching to PyQtGraph (OpenGL-backed) achieved stable 15fps with the same data volume and better color accuracy.",
+    ],
+    learningsPt: [
+      "O roteamento BlackHole exige uma configuração Multi-Output Device não óbvia — o usuário deve criar um dispositivo combinado no Audio MIDI Setup que envie áudio tanto para alto-falantes reais quanto para o BlackHole. Sem isso, o áudio é roteado exclusivamente para o BlackHole e os alto-falantes ficam silenciosos.",
+      "Resolução FFT dupla vale a complexidade de código — versões iniciais usavam um único FFT de 1024 pontos para ambas as visões. O espectrograma parecia borrado com baixa distinção de frequência. Adicionar um segundo cálculo scipy.signal.spectrogram em 2048 pontos melhorou dramaticamente a qualidade.",
+      "Python nativo ARM64 importa para o PortAudio no Apple Silicon — o Python x86_64 traduzido por Rosetta funcionava para computação, mas causava o PortAudio a identificar incorretamente dispositivos de áudio e ocasionalmente travar em máquinas M1/M2.",
+      "PyQtGraph é significativamente mais rápido que matplotlib para visualização em tempo real — um protótipo matplotlib rodava a 8fps antes de perder frames. Mudar para PyQtGraph (com backend OpenGL) alcançou 15fps estável.",
+    ],
+    status: "Functional — personal desktop tool, distributable as macOS .app",
+    statusPt: "Funcional — ferramenta desktop pessoal, distribuível como .app macOS",
     githubUrl: "https://github.com/claytonbrgsdev/SPECtations",
     featured: false,
     year: 2025,
@@ -644,12 +1018,64 @@ export const projects: Project[] = [
     nameEn: "Data Engineering Pipelines",
     namePt: "Pipelines de Engenharia de Dados",
     name: "Data Engineering Pipelines",
+    type: "Data Engineering / Closed-Loop Attribution Pipeline",
     descriptionEn:
-      "ETL pipelines with Apache Airflow orchestration, DBT data transformations, and PostgreSQL for Google Ads integration.",
+      "Google Ads closed-loop attribution ETL: hourly dbt VIEW transforms raw PostgreSQL conversion events into the Google Ads API schema; daily Airflow DAG uploads click conversions via OAuth2. Built on Astronomer Runtime with Docker, dbt-postgres, and pytest DAG validation.",
     descriptionPt:
-      "Pipelines ETL com orquestração Apache Airflow, transformações de dados DBT e PostgreSQL para integração com Google Ads.",
-    tech: ["Apache Airflow", "DBT", "PostgreSQL", "Docker", "Google Ads API", "Python"],
+      "ETL de atribuição fechada para Google Ads: VIEW dbt horária transforma eventos de conversão brutos do PostgreSQL para o schema da API do Google Ads; DAG Airflow diário faz upload de conversões de clique via OAuth2. Construído no Astronomer Runtime com Docker, dbt-postgres e validação de DAGs com pytest.",
+    tech: ["Apache Airflow 2.x", "dbt 1.7", "PostgreSQL 13", "Docker", "Google Ads API v1", "Python", "Astronomer Runtime 10.6"],
     categories: ["data-engineering"],
+    highlights: [
+      "Closed-loop attribution: purchase events from PostgreSQL are uploaded back to Google Ads as click conversions via GCLID, enabling bid optimization based on real conversion data",
+      "Separate scheduling: dbt runs hourly (keeps VIEW fresh), Airflow DAG runs daily (respects Google Ads API quota batching)",
+      "dbt model as VIEW (not materialized table) — lightweight transformation layer; changes in source data reflected immediately without manual refresh",
+      "pytest DAG validation suite: enforces no import errors, tags present, retries ≥ 2 per Astronomer best practices",
+      "Astronomer Runtime base image — pre-configured Airflow with dbt-core, providers, and Astro CLI for one-command local dev stack",
+    ],
+    overview:
+      "This data engineering project implements a closed-loop Google Ads attribution pipeline: web conversion events (purchases with GCLIDs) stored in PostgreSQL are transformed by a dbt model and uploaded back to Google Ads via the Conversion Upload API, enabling the ad platform to see which clicks led to real purchases. Two Airflow DAGs run on separate schedules — dbt refreshes hourly, the upload job runs daily. The entire stack is containerized with Docker using Astronomer's production-ready Airflow runtime.",
+    overviewPt:
+      "Este projeto de engenharia de dados implementa um pipeline de atribuição fechada para Google Ads: eventos de conversão web (compras com GCLIDs) armazenados no PostgreSQL são transformados por um modelo dbt e enviados de volta ao Google Ads via API de Upload de Conversões, permitindo que a plataforma de anúncios veja quais cliques geraram compras reais. Dois DAGs do Airflow rodam em cronogramas separados — o dbt atualiza de hora em hora, o job de upload roda diariamente.",
+    problem:
+      "Google Ads campaigns optimize for clicks by default. Without conversion data sent back to the platform, bid algorithms have no signal about which clicks actually produce revenue. The engineering challenge was building a reliable pipeline that: (1) correctly maps internal event data to Google Ads' conversion schema; (2) handles OAuth2 authentication in a containerized environment; (3) separates transformation from upload so each can fail and retry independently.",
+    problemPt:
+      "As campanhas do Google Ads otimizam para cliques por padrão. Sem dados de conversão enviados de volta à plataforma, os algoritmos de lance não têm sinal sobre quais cliques realmente geram receita. O desafio de engenharia era construir um pipeline confiável que: (1) mapeie corretamente dados de eventos internos para o schema de conversão do Google Ads; (2) lide com autenticação OAuth2 em ambiente containerizado; (3) separe transformação de upload para que cada um possa falhar e tentar novamente independentemente.",
+    goal:
+      "Build a production-ready ETL pipeline that: (1) extracts purchase events from PostgreSQL; (2) transforms them into Google Ads conversion format using dbt; (3) uploads to Google Ads Conversion API daily; (4) orchestrates with Airflow on separate schedules for transformation vs. upload; (5) runs reproducibly in Docker with pytest-validated DAGs.",
+    goalPt:
+      "Construir um pipeline ETL pronto para produção que: (1) extraia eventos de compra do PostgreSQL; (2) transforme-os no formato de conversão do Google Ads usando dbt; (3) faça upload para a API de Conversão do Google Ads diariamente; (4) orquestre com Airflow em cronogramas separados para transformação vs. upload; (5) rode de forma reproduzível no Docker com DAGs validados por pytest.",
+    role: ["Solo data engineer — pipeline architecture, dbt modeling, Airflow DAG authorship, Docker deployment"],
+    rolePt: ["Engenheiro de dados solo — arquitetura do pipeline, modelagem dbt, criação de DAGs Airflow, deploy Docker"],
+    technicalDecisions: [
+      "Separate DAG schedules for dbt (hourly) and upload (daily) — transformation and upload have different optimal frequencies. dbt runs hourly to keep the VIEW fresh as new conversion events arrive. The Google Ads upload runs daily to batch conversions efficiently and stay within API quota limits. Separating them means a dbt failure doesn't block the upload, and vice versa.",
+      "dbt model materialized as VIEW not TABLE — the purchase_clicks model is a SELECT with a WHERE event_name = 'purchase' filter. Materializing as a VIEW means no storage overhead and the source data is always reflected without running dbt refresh explicitly. The upload DAG queries the view directly; if source data changes, the view is automatically up-to-date.",
+      "BashOperator for dbt invocation instead of DbtOperator — gives full control over dbt flags and allows sourcing the virtual environment explicitly. The command structure (source venv + dbt run --project-dir) is more portable than a custom operator and easier to debug when dbt errors need to be read from Airflow logs.",
+      "OAuth2 InstalledAppFlow for Google Ads auth in a container — credentials (client_secret JSON + service account JSON) are copied into the container at build time and their paths set as environment variables. This avoids interactive OAuth flows at runtime while keeping credentials out of the DAG code.",
+      "Astronomer Runtime 10.6.0 as the base image — Astronomer's pre-built runtime includes Airflow providers, dbt-core, and common dependencies. Using it as the base (FROM quay.io/astronomer/astro-runtime:10.6.0) reduces the Dockerfile to ~10 lines and ensures the local dev environment matches production exactly.",
+      "pytest DAG validation as CI gate — three invariants enforced: no import errors (the DAG file must be parseable), tags present (required for Airflow UI filtering in production), retries ≥ 2 (any production DAG that calls an external API must have retry logic). This runs in CI before any DAG is deployed.",
+    ],
+    technicalDecisionsPt: [
+      "Cronogramas separados para dbt (horário) e upload (diário) — transformação e upload têm frequências ótimas diferentes. O dbt roda de hora em hora para manter a VIEW atualizada. O upload do Google Ads roda diariamente para fazer lotes eficientes e respeitar os limites de cota da API. Separar os dois significa que uma falha do dbt não bloqueia o upload.",
+      "Modelo dbt materializado como VIEW em vez de TABLE — o modelo purchase_clicks é um SELECT com filtro WHERE event_name = 'purchase'. Materializar como VIEW não tem overhead de armazenamento e a VIEW reflete automaticamente mudanças nos dados de origem sem executar refresh explicitamente.",
+      "BashOperator para invocação dbt em vez de DbtOperator — dá controle total sobre os flags do dbt e permite fazer source do ambiente virtual explicitamente. A estrutura do comando é mais portável que um operador customizado e mais fácil de depurar.",
+      "InstalledAppFlow OAuth2 para auth do Google Ads em container — credenciais copiadas para o container em tempo de build e seus caminhos definidos como variáveis de ambiente. Evita fluxos OAuth interativos em runtime mantendo credenciais fora do código do DAG.",
+      "Astronomer Runtime 10.6.0 como imagem base — o runtime pré-construído do Astronomer inclui providers do Airflow, dbt-core e dependências comuns. Usá-lo como base reduz o Dockerfile a ~10 linhas e garante que o ambiente de dev local corresponda exatamente ao de produção.",
+      "Validação de DAG com pytest como gate de CI — três invariantes aplicados: sem erros de import, tags presentes, retries ≥ 2. Roda no CI antes de qualquer DAG ser implantado.",
+    ],
+    learnings: [
+      "Separation of concerns between transformation and loading DAGs is essential for reliability — a monolithic DAG that runs dbt then uploads failed atomically when either step had a transient error. Separate DAGs with independent retry policies mean a Google Ads API 429 doesn't re-run the dbt transformation.",
+      "GCLID-based attribution requires careful data freshness management — GCLIDs expire after 90 days. Uploading conversions older than 90 days silently fails in the Google Ads API without an error response. Adding a WHERE conversion_datetime >= NOW() - INTERVAL '90 days' guard to the dbt model prevents silent attribution loss.",
+      "Astronomer's Astro CLI significantly reduces local Airflow setup complexity — astro dev start spins up 4 containers (webserver, scheduler, triggerer, Postgres) with one command. Without it, a vanilla docker-compose setup for Airflow requires 20+ environment variable configurations. The CLI is the right abstraction for iterating on DAGs.",
+      "pytest DAG validation catches import errors that would otherwise surface only in production — one DAG had a typo in an import path that only appeared when Airflow tried to parse the file at runtime. The pytest import-level test catches this in the local dev cycle before the DAG is deployed.",
+    ],
+    learningsPt: [
+      "A separação de responsabilidades entre DAGs de transformação e carregamento é essencial para confiabilidade — um DAG monolítico que roda dbt depois faz upload falha atomicamente quando qualquer etapa tem um erro transitório. DAGs separados com políticas de retry independentes significam que um 429 da API do Google Ads não re-executa a transformação dbt.",
+      "A atribuição baseada em GCLID requer gerenciamento cuidadoso de frescor dos dados — GCLIDs expiram após 90 dias. Fazer upload de conversões mais antigas que 90 dias falha silenciosamente na API do Google Ads sem resposta de erro.",
+      "O Astro CLI do Astronomer reduz significativamente a complexidade de configuração local do Airflow — astro dev start inicializa 4 containers com um único comando. Sem ele, uma configuração docker-compose vanilla para Airflow requer 20+ configurações de variáveis de ambiente.",
+      "A validação de DAG com pytest captura erros de import que de outra forma só apareceriam em produção — um DAG tinha um erro de digitação em um caminho de import que só aparecia quando o Airflow tentava analisar o arquivo em runtime.",
+    ],
+    status: "Functional — ETL pipeline for Google Ads conversion attribution",
+    statusPt: "Funcional — pipeline ETL para atribuição de conversões no Google Ads",
     featured: false,
     year: 2024,
   },
@@ -658,12 +1084,64 @@ export const projects: Project[] = [
     nameEn: "ESP32 Digital Synthesizer",
     namePt: "Sintetizador Digital ESP32",
     name: "ESP32 Synthesizer",
+    type: "Embedded Hardware / Digital Audio Synthesizer",
     descriptionEn:
-      "Digital audio synthesizer on ESP32 microcontroller using the Mozzi library for real-time audio synthesis.",
+      "Polyphonic step sequencer synthesizer on ESP32. Subtractive synthesis pipeline: SAW2048 wavetable → resonant lowpass filter → ADSR envelope → soft clipping → DAC. Tick-based 8-step sequencer with swing, randomization, and dual CD4051 multiplexers for 8 analog pots + 5 buttons. Modular C++ firmware with AudioEngine, Sequencer, Controls, and UI layers.",
     descriptionPt:
-      "Sintetizador de áudio digital em microcontrolador ESP32 usando a biblioteca Mozzi para síntese de áudio em tempo real.",
-    tech: ["C++", "ESP32", "Arduino", "Mozzi"],
+      "Sintetizador sequenciador de passos polifônico no ESP32. Pipeline de síntese subtrativa: tabela de onda SAW2048 → filtro passa-baixas ressonante → envelope ADSR → soft clipping → DAC. Sequenciador de 8 passos baseado em tick com swing, randomização e dois multiplexadores CD4051 para 8 pots analógicos + 5 botões. Firmware C++ modular com camadas AudioEngine, Sequencer, Controls e UI.",
+    tech: ["C++", "ESP32", "Arduino", "Mozzi", "CD4051 MUX", "TM1638", "OLED I2C"],
     categories: ["audio", "embedded"],
+    highlights: [
+      "Tick-based sequencer: baseTicksPerStep = (CONTROL_RATE × 60) / BPM — deterministic jitter-free timing with no millis() drift",
+      "IIR smoothing on all analog reads: new = old + (raw − old) >> 3 — single-instruction low-pass, no ring buffers or divisions",
+      "Soft clipping: if (x > 30000) x = 30000 + (x − 30000) / 4 — prevents digital saturation artifacts without hard truncation",
+      "Round-robin MUX scanning: 1 analog channel per control tick — eliminates ADC contention across 8 simultaneous pots",
+      "Modular architecture: AudioEngine, Sequencer, Controls, Events, UI headers — enables unit testing sequencer timing independently of Mozzi",
+    ],
+    overview:
+      "The ESP32 Synthesizer is a hardware digital audio synthesizer built on an ESP32 microcontroller. It implements a complete subtractive synthesis signal chain — wavetable oscillator, resonant lowpass filter, ADSR envelope, and soft clipping — driven by an 8-step tick-based sequencer with swing timing and per-step randomization. The instrument is controlled by 8 analog potentiometers (cutoff, resonance, ADSR, swing) read via CD4051 multiplexers, displayed on both an OLED screen and a TM1638 LED/7-segment module. The firmware is refactored into modular C++ headers for AudioEngine, Sequencer, Controls, and UI layers.",
+    overviewPt:
+      "O ESP32 Synthesizer é um sintetizador de áudio digital em hardware construído em um microcontrolador ESP32. Implementa uma cadeia completa de síntese subtrativa — oscilador de tabela de ondas, filtro passa-baixas ressonante, envelope ADSR e soft clipping — conduzida por um sequenciador de 8 passos baseado em ticks com timing de swing e randomização por passo. O instrumento é controlado por 8 potenciômetros analógicos lidos via multiplexadores CD4051, exibidos tanto em uma tela OLED quanto em um módulo LED/7-segmentos TM1638.",
+    problem:
+      "Commercial synthesizers in the accessible price range offer limited programmability and no hardware customization. Building a synthesizer from microcontroller primitives requires solving three simultaneous constraints: deterministic audio timing (Mozzi's 16.384kHz audio rate cannot be disrupted by control logic), noise-free analog input (8 pots on a shared ADC bus with settling time issues), and real-time display updates that don't steal CPU from audio rendering.",
+    problemPt:
+      "Sintetizadores comerciais na faixa de preço acessível oferecem programabilidade limitada e nenhuma personalização de hardware. Construir um sintetizador a partir de primitivas de microcontrolador requer resolver três restrições simultâneas: timing de áudio determinístico, entrada analógica sem ruído (8 pots em um barramento ADC compartilhado), e atualizações de display em tempo real que não roubem CPU do rendering de áudio.",
+    goal:
+      "Build a playable hardware synthesizer that: (1) implements subtractive synthesis with real-time filter and envelope control; (2) runs a swing-capable 8-step sequencer with deterministic timing; (3) reads 8 analog pots + 5 buttons via multiplexers without ADC contention; (4) displays real-time parameter state on dual displays; (5) uses modular firmware architecture for maintainability.",
+    goalPt:
+      "Construir um sintetizador de hardware tocável que: (1) implemente síntese subtrativa com controle de filtro e envelope em tempo real; (2) execute um sequenciador de 8 passos capaz de swing com timing determinístico; (3) leia 8 pots analógicos + 5 botões via multiplexadores sem contenda no ADC; (4) exiba estado de parâmetros em tempo real em displays duplos; (5) use arquitetura de firmware modular para manutenibilidade.",
+    role: ["Solo embedded developer — hardware design, firmware architecture, synthesis algorithm, UI"],
+    rolePt: ["Desenvolvedor embedded solo — design de hardware, arquitetura de firmware, algoritmo de síntese, UI"],
+    technicalDecisions: [
+      "Mozzi library with SAW2048 wavetable — Mozzi provides a pre-computed 2048-sample 8-bit sawtooth wavetable that the oscillator plays back at any frequency via table interpolation. This avoids real-time waveform computation (which would require trigonometric functions at 16.384kHz — unachievable on ESP32). Mozzi's control-rate/audio-rate split (128Hz/16384Hz) enforces a clean architecture: all parameter updates happen at control rate, audio synthesis at audio rate.",
+      "Tick-based sequencer timing — instead of millis()-based step transitions (which drift under load), the sequencer counts Mozzi control ticks: ticksPerStep = (CONTROL_RATE × 60) / BPM. Each tick is exactly 1/128s. Swing is applied by adjusting odd step counts: even steps get baseTicksPerStep + swingOffsetTicks, odd steps get baseTicksPerStep − swingOffsetTicks. This is mathematically equivalent to traditional hardware sequencer swing with no timing jitter.",
+      "Round-robin CD4051 multiplexer scanning — a single CD4051 8-channel analog multiplexer connects 8 potentiometers to one ESP32 ADC pin. The control loop reads one channel per tick (round-robin), cycling through all 8 pots over 8 ticks. This eliminates ADC settling time problems that occur when switching channels rapidly, and ensures no two pots share an ADC read in the same tick.",
+      "IIR smoothing on all analog inputs — raw ADC reads are noisy (±5-15 LSB). Rather than a ring-buffer moving average, each pot uses a single-instruction IIR: new = old + (raw − old) >> 3. This is equivalent to a 1-pole IIR lowpass at fc ≈ 128Hz/16 = 8Hz — sufficient to eliminate audio-rate noise from pot readings without introducing noticeable lag.",
+      "Soft clipping to prevent digital saturation — the final output stage applies asymmetric soft clipping: if (x > 30000) x = 30000 + (x − 30000) / 4; if (x < -30000) x = -30000 + (x + 30000) / 4. This gently rolls off peaks above ±30000 (out of ±32767 int16 range) rather than hard-truncating, which would introduce harsh aliasing artifacts audible as digital distortion.",
+      "Modular C++ firmware headers — the original firmware was a monolithic .ino file. Refactoring into AudioEngine.h, Sequencer.h, Controls.h, Events.h, UI.h, and Types.h enables testing the sequencer's tick logic independently of Mozzi, isolates the MUX scanning code from synthesis, and makes future features (MIDI, multiple oscillators, scale quantization) addable without touching unrelated code.",
+    ],
+    technicalDecisionsPt: [
+      "Biblioteca Mozzi com tabela de ondas SAW2048 — o Mozzi fornece uma tabela de onda sawtooth de 2048 amostras 8-bit que o oscilador reproduz em qualquer frequência via interpolação de tabela. Isso evita computação de forma de onda em tempo real (que exigiria funções trigonométricas a 16.384kHz — inatingível no ESP32). A divisão control-rate/audio-rate do Mozzi (128Hz/16384Hz) aplica uma arquitetura limpa.",
+      "Timing do sequenciador baseado em ticks — em vez de transições de passos baseadas em millis() (que derivam sob carga), o sequenciador conta ticks de controle Mozzi: ticksPerStep = (CONTROL_RATE × 60) / BPM. Cada tick é exatamente 1/128s. O swing é aplicado ajustando contagens de passos ímpares.",
+      "Varredura round-robin do multiplexador CD4051 — um único multiplexador analógico de 8 canais CD4051 conecta 8 potenciômetros a um pino ADC do ESP32. O loop de controle lê um canal por tick (round-robin), ciclando por todos os 8 pots em 8 ticks. Isso elimina problemas de tempo de assentamento do ADC.",
+      "Suavização IIR em todas as entradas analógicas — em vez de uma média móvel em buffer circular, cada pot usa um IIR de instrução única: novo = antigo + (bruto − antigo) >> 3. Equivalente a um IIR passa-baixas de 1 polo em fc ≈ 8Hz — suficiente para eliminar ruído sem introduzir lag perceptível.",
+      "Soft clipping para evitar saturação digital — a etapa de saída final aplica soft clipping assimétrico: se (x > 30000) x = 30000 + (x − 30000) / 4. Isso suavemente reduz picos acima de ±30000 em vez de truncar bruscamente.",
+      "Headers C++ modulares — o firmware original era um arquivo .ino monolítico. Refatorar em AudioEngine.h, Sequencer.h, Controls.h, Events.h, UI.h e Types.h permite testar a lógica de tick do sequenciador independentemente do Mozzi.",
+    ],
+    learnings: [
+      "Tick-based timing is the correct architecture for embedded sequencers — an early millis()-based version had timing drift that accumulated over minutes, making the sequencer gradually go out of sync with external audio. Switching to Mozzi control ticks (which are hardware-interrupt driven) eliminated drift completely.",
+      "ADC multiplexer settling time is a real problem — the first hardware revision read all 8 pots in rapid succession in a single control tick. The ADC couldn't settle between channel switches, producing cross-talk where rotating pot 3 affected pot 4's reading. Round-robin (one pot per tick) gave the ADC 8 full ticks (~62ms) to settle between readings of the same channel.",
+      "IIR smoothing is the right tool for analog noise, not moving averages — a 4-sample moving average added 4 ticks of lag (~31ms) to every pot movement, making the cutoff feel sluggish during live playing. The IIR approach eliminates the lag feeling while still filtering tick-to-tick noise.",
+      "Modular firmware unlocks testability — the original monolithic .ino couldn't be unit tested because Mozzi's audio interrupt would run during test execution. Extracting the Sequencer into a pure C++ header with no Mozzi dependencies allowed running sequencer timing tests on a host machine without hardware.",
+    ],
+    learningsPt: [
+      "O timing baseado em ticks é a arquitetura correta para sequenciadores embedded — uma versão inicial baseada em millis() tinha deriva de timing que se acumulava ao longo de minutos. Mudar para ticks de controle Mozzi (que são acionados por interrupção de hardware) eliminou a deriva completamente.",
+      "O tempo de assentamento do multiplexador ADC é um problema real — a primeira revisão de hardware lia todos os 8 pots em rápida sucessão em um único tick de controle. O ADC não conseguia se estabilizar entre trocas de canal, produzindo crosstalk. Round-robin (um pot por tick) deu ao ADC 8 ticks completos (~62ms) para estabilizar.",
+      "A suavização IIR é a ferramenta certa para ruído analógico — uma média móvel de 4 amostras adicionava 4 ticks de lag (~31ms) a cada movimento de pot, fazendo o cutoff parecer lento durante a performance ao vivo. A abordagem IIR elimina a sensação de lag enquanto ainda filtra o ruído.",
+      "O firmware modular desbloqueia a testabilidade — o .ino monolítico original não podia ser testado unitariamente porque a interrupção de áudio do Mozzi rodaria durante a execução do teste. Extrair o Sequencer para um header C++ puro sem dependências Mozzi permitiu testes de timing em uma máquina host sem hardware.",
+    ],
+    status: "Built — playable hardware instrument",
+    statusPt: "Construído — instrumento de hardware tocável",
     featured: false,
     year: 2024,
   },
@@ -844,9 +1322,9 @@ export const projects: Project[] = [
     name: "EKO",
     type: "AI Application / Narrative Game",
     descriptionEn:
-      "Two-phase AI project: a deployed mystical chatbot (Python + Streamlit + local Ollama) where users consult EKO — a sarcastic, timeless oracular entity — with full 78-card Tarot reading support; and Ekonsulta, a satirical narrative game that profiles players' environmental behavior across 50 dilemmas into 6 behavioral archetypes, using hidden scoring to prevent gaming the result.",
+      "Two-phase AI project developed within EKO – Residência Artística, funded by FAC – Fundo de Apoio à Cultura do Distrito Federal (GDF). A deployed mystical chatbot (Python + Streamlit + local Ollama) where users consult EKO — a sarcastic, timeless oracular entity — with full 78-card Tarot reading support; and Ekonsulta, a satirical narrative game that profiles players' environmental behavior across 50 dilemmas into 6 behavioral archetypes, using hidden scoring to prevent gaming the result.",
     descriptionPt:
-      "Projeto de IA em duas fases: um chatbot místico implantado (Python + Streamlit + Ollama local) onde usuários consultam EKO — uma entidade oracular sarcástica e atemporal — com suporte completo a leitura de Tarô com 78 cartas; e Ekonsulta, um jogo narrativo satírico que classifica o comportamento ambiental dos jogadores em 6 arquétipos a partir de 50 dilemas, com pontuação oculta para evitar manipulação do resultado.",
+      "Projeto de IA em duas fases desenvolvido dentro da EKO – Residência Artística, financiado pelo FAC – Fundo de Apoio à Cultura do Distrito Federal (GDF). Um chatbot místico implantado (Python + Streamlit + Ollama local) onde usuários consultam EKO — uma entidade oracular sarcástica e atemporal — com suporte completo a leitura de Tarô com 78 cartas; e Ekonsulta, um jogo narrativo satírico que classifica o comportamento ambiental dos jogadores em 6 arquétipos a partir de 50 dilemas, com pontuação oculta para evitar manipulação do resultado.",
     tech: [
       "Python",
       "Streamlit",
@@ -869,9 +1347,9 @@ export const projects: Project[] = [
       "Multi-strategy Ollama connectivity: DNS monkey-patching + ngrok + Cloudflare Tunnel to bypass VPN routing failures",
     ],
     overview:
-      "EKO is a two-phase AI project built by Clayton Borges and Raphael Palmer. Phase 1 is a production chatbot: users interact with EKO — a mystical, sarcastic oracular character — via a Streamlit web UI styled with a full-bleed mystical aesthetic. EKO answers questions, detects topic categories to shift tone, and draws from a full 78-card Tarot deck when requested. The LLM is a local Ollama instance (llama3.1:8b), with no external API keys. Phase 2 is Ekonsulta, a satirical narrative game about environmental behavior: players make binary choices across 50 dilemmas spanning food, fashion, transportation, water, and technology. Hidden scoring maps each choice to one of 6 behavioral archetypes — EKO delivers the final verdict with sarcastic precision.",
+      "EKO is a two-phase AI project built by Clayton Borges and Raphael Palmer as part of EKO – Residência Artística, a cultural residency funded by FAC – Fundo de Apoio à Cultura do Distrito Federal, Secretaria de Cultura e Economia Criativa / GDF. The residency brought together artists, technologists, and environmental institutions — including ICMBio/Parque Nacional de Brasília, SesiLab, Ateliê Ecoarte, and Centro Tradicional de Invenção Cultural — to explore the intersection of AI, ecology, and culture in Brasília. Phase 1 is a production chatbot: users interact with EKO — a mystical, sarcastic oracular character — via a Streamlit web UI styled with a full-bleed mystical aesthetic. EKO answers questions, detects topic categories to shift tone, and draws from a full 78-card Tarot deck when requested. The LLM is a local Ollama instance (llama3.1:8b), with no external API keys. Phase 2 is Ekonsulta, a satirical narrative game about environmental behavior: players make binary choices across 50 dilemmas spanning food, fashion, transportation, water, and technology. Hidden scoring maps each choice to one of 6 behavioral archetypes — EKO delivers the final verdict with sarcastic precision.",
     overviewPt:
-      "EKO é um projeto de IA em duas fases construído por Clayton Borges e Raphael Palmer. A Fase 1 é um chatbot em produção: usuários interagem com EKO — um personagem oracular místico e sarcástico — via uma UI web Streamlit com estética mística total. EKO responde perguntas, detecta categorias de tópico para mudar o tom e sorteia de um baralho completo de 78 cartas de Tarô quando solicitado. O LLM é uma instância Ollama local (llama3.1:8b), sem chaves de API externas. A Fase 2 é o Ekonsulta, um jogo narrativo satírico sobre comportamento ambiental: jogadores fazem escolhas binárias em 50 dilemas abrangendo alimentação, moda, transporte, água e tecnologia. Uma pontuação oculta mapeia cada escolha para um de 6 arquétipos comportamentais — EKO entrega o veredicto final com precisão sarcástica.",
+      "EKO é um projeto de IA em duas fases construído por Clayton Borges e Raphael Palmer como parte da EKO – Residência Artística, uma residência cultural financiada pelo FAC – Fundo de Apoio à Cultura do Distrito Federal, Secretaria de Cultura e Economia Criativa / GDF. A residência reuniu artistas, tecnólogos e instituições ambientais — incluindo ICMBio/Parque Nacional de Brasília, SesiLab, Ateliê Ecoarte e Centro Tradicional de Invenção Cultural — para explorar a interseção entre IA, ecologia e cultura em Brasília. A Fase 1 é um chatbot em produção: usuários interagem com EKO — um personagem oracular místico e sarcástico — via uma UI web Streamlit com estética mística total. EKO responde perguntas, detecta categorias de tópico para mudar o tom e sorteia de um baralho completo de 78 cartas de Tarô quando solicitado. O LLM é uma instância Ollama local (llama3.1:8b), sem chaves de API externas. A Fase 2 é o Ekonsulta, um jogo narrativo satírico sobre comportamento ambiental: jogadores fazem escolhas binárias em 50 dilemas abrangendo alimentação, moda, transporte, água e tecnologia. Uma pontuação oculta mapeia cada escolha para um de 6 arquétipos comportamentais — EKO entrega o veredicto final com precisão sarcástica.",
     problem:
       "Environmental awareness campaigns typically address users didactically — presenting facts and expecting behavioral change. This approach fails to reach people who already know what they should do but don't act on it. Ekonsulta targets a specific audience: people who engage in 'green performance' — virtue signaling about sustainability while their actual choices contradict their stated values. Sarcasm and uncomfortable self-recognition are more effective tools than information for this audience.",
     problemPt:
@@ -924,7 +1402,15 @@ export const projects: Project[] = [
     ],
     status: "Phase 1 deployed — Phase 2 (Ekonsulta) prototype complete, full game in design",
     statusPt: "Fase 1 implantada — Fase 2 (Ekonsulta) protótipo completo, jogo completo em design",
+    image: "/projects/EKO/eko-residencia-poster.jpeg",
+    gallery: [
+      "/projects/EKO/eko-residencia-poster.jpeg",
+      "/projects/EKO/eko-residencia-apoiadores.jpeg",
+    ],
     githubUrl: "https://github.com/drama-ai/chatbot",
+    liveUrl: "https://eko-ai.streamlit.app",
+    grant: "EKO – Residência Artística · FAC – Fundo de Apoio à Cultura do Distrito Federal / GDF",
+    grantPt: "EKO – Residência Artística · FAC – Fundo de Apoio à Cultura do Distrito Federal / GDF",
     featured: false,
     year: 2025,
   },
@@ -935,9 +1421,9 @@ export const projects: Project[] = [
     name: "Novo Rio",
     type: "Web Game / Simulation / AI-Assisted",
     descriptionEn:
-      "Browser-based agroforestry simulation RPG set in Rio de Janeiro, built on sintropic agriculture principles. Players restore degraded land through planting, soil management, and seasonal adaptation. A real-time tick engine drives plant lifecycles, climate events, and soil health scoring. EKO — a local Ollama LLM — acts as an AI guide, and players can manage their farm via WhatsApp commands.",
+      "Browser-based agroforestry simulation RPG developed within EKO – Residência Artística, funded by FAC / GDF. Set in Rio de Janeiro and built on sintropic agriculture principles. Players restore degraded land through planting, soil management, and seasonal adaptation. A real-time tick engine drives plant lifecycles, climate events, and soil health scoring. EKO — a local Ollama LLM — acts as an AI guide, and players can manage their farm via WhatsApp commands.",
     descriptionPt:
-      "RPG de simulação de agrofloresta baseado em navegador ambientado no Rio de Janeiro, construído sobre princípios da agricultura sintrópioa. Jogadores restauram terras degradadas através de plantio, gestão do solo e adaptação sazonal. Um motor de ticks em tempo real impulsiona ciclos de vida de plantas, eventos climáticos e pontuação de saúde do solo. EKO — um LLM Ollama local — atua como guia IA, e jogadores podem gerenciar sua fazenda por comandos via WhatsApp.",
+      "RPG de simulação de agrofloresta baseado em navegador desenvolvido dentro da EKO – Residência Artística, financiado pelo FAC / GDF. Ambientado no Rio de Janeiro e construído sobre princípios da agricultura sintrópioa. Jogadores restauram terras degradadas através de plantio, gestão do solo e adaptação sazonal. Um motor de ticks em tempo real impulsiona ciclos de vida de plantas, eventos climáticos e pontuação de saúde do solo. EKO — um LLM Ollama local — atua como guia IA, e jogadores podem gerenciar sua fazenda por comandos via WhatsApp.",
     tech: [
       "FastAPI",
       "Python",
@@ -963,9 +1449,9 @@ export const projects: Project[] = [
       "WhatsApp integration: players can plant, water, and harvest by texting commands",
     ],
     overview:
-      "Novo Rio is a browser-based agroforestry simulation RPG built around the principles of sintropic agriculture — the Brazilian regenerative farming philosophy associated with Ernst Götsch. Players manage degraded terrain in a Rio de Janeiro setting, restoring it by planting real Brazilian species (Feijão Guandu, Banana, Cajuzinho, Ipê-roxo, Milho, Abacaxi), managing soil health parameters, and adapting to a realistic climate system with drought, heavy rain, heat waves, and seasonal multipliers. The backend runs a real-time tick engine (APScheduler, 6-hour cycle) that drives plant growth, applies climate events, and evaluates soil health. EKO, powered by a local Ollama LLM with Redis-backed conversation history, acts as the player's AI farming advisor.",
+      "Novo Rio is a browser-based agroforestry simulation RPG developed as part of EKO – Residência Artística, a cultural residency funded by FAC – Fundo de Apoio à Cultura do Distrito Federal, Secretaria de Cultura e Economia Criativa / GDF. The game is built around the principles of sintropic agriculture — the Brazilian regenerative farming philosophy associated with Ernst Götsch. Players manage degraded terrain in a Rio de Janeiro setting, restoring it by planting real Brazilian species (Feijão Guandu, Banana, Cajuzinho, Ipê-roxo, Milho, Abacaxi), managing soil health parameters, and adapting to a realistic climate system with drought, heavy rain, heat waves, and seasonal multipliers. The backend runs a real-time tick engine (APScheduler, 6-hour cycle) that drives plant growth, applies climate events, and evaluates soil health. EKO, powered by a local Ollama LLM with Redis-backed conversation history, acts as the player's AI farming advisor.",
     overviewPt:
-      "Novo Rio é um RPG de simulação de agrofloresta baseado em navegador construído em torno dos princípios da agricultura sintrópioa — a filosofia de agricultura regenerativa brasileira associada a Ernst Götsch. Jogadores gerenciam terrenos degradados em um cenário do Rio de Janeiro, restaurando-os plantando espécies brasileiras reais (Feijão Guandu, Banana, Cajuzinho, Ipê-roxo, Milho, Abacaxi), gerenciando parâmetros de saúde do solo e adaptando-se a um sistema climático realista com seca, chuva forte, ondas de calor e multiplicadores sazonais. O backend executa um motor de ticks em tempo real (APScheduler, ciclo de 6 horas) que impulsiona o crescimento das plantas, aplica eventos climáticos e avalia a saúde do solo. EKO, alimentado por um LLM Ollama local com histórico de conversa no Redis, atua como conselheiro agrícola IA do jogador.",
+      "Novo Rio é um RPG de simulação de agrofloresta baseado em navegador desenvolvido como parte da EKO – Residência Artística, uma residência cultural financiada pelo FAC – Fundo de Apoio à Cultura do Distrito Federal, Secretaria de Cultura e Economia Criativa / GDF. O jogo é construído em torno dos princípios da agricultura sintrópioa — a filosofia de agricultura regenerativa brasileira associada a Ernst Götsch. Jogadores gerenciam terrenos degradados em um cenário do Rio de Janeiro, restaurando-os plantando espécies brasileiras reais (Feijão Guandu, Banana, Cajuzinho, Ipê-roxo, Milho, Abacaxi), gerenciando parâmetros de saúde do solo e adaptando-se a um sistema climático realista com seca, chuva forte, ondas de calor e multiplicadores sazonais. O backend executa um motor de ticks em tempo real (APScheduler, ciclo de 6 horas) que impulsiona o crescimento das plantas, aplica eventos climáticos e avalia a saúde do solo. EKO, alimentado por um LLM Ollama local com histórico de conversa no Redis, atua como conselheiro agrícola IA do jogador.",
     problem:
       "Sintropic agroforestry is a proven regenerative land-restoration technique with limited public awareness and no gamified entry point. Most environmental games either abstract away the technical complexity of real agriculture or focus on punishment mechanics. Novo Rio aims to teach real planting logic — actual species tolerances, soil parameter interdependencies, seasonal growth multipliers — through gameplay, making the learning curve invisible.",
     problemPt:
@@ -1014,6 +1500,12 @@ export const projects: Project[] = [
     ],
     status: "Functional prototype — active development paused, resuming planned",
     statusPt: "Protótipo funcional — desenvolvimento ativo pausado, retomada planejada",
+    gallery: [
+      "/projects/EKO/eko-residencia-poster.jpeg",
+      "/projects/EKO/eko-residencia-apoiadores.jpeg",
+    ],
+    grant: "EKO – Residência Artística · FAC – Fundo de Apoio à Cultura do Distrito Federal / GDF",
+    grantPt: "EKO – Residência Artística · FAC – Fundo de Apoio à Cultura do Distrito Federal / GDF",
     featured: false,
     year: 2025,
   },
