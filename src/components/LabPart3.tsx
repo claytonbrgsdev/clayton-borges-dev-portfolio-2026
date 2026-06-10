@@ -102,7 +102,6 @@ const SECTIONS_P3 = [
   [5, "I",  0.670, 0.695, 0.760, 0.785],
   [5, "II", 0.785, 0.810, 0.825, 0.840],
   [6, "I",  0.840, 0.880, 0.920, 0.960],
-  [6, "II", 0.930, 0.950, 0.975, 1.000],
 ] as const;
 
 // ── Translations ───────────────────────────────────────────────────────────────
@@ -124,7 +123,6 @@ const TRANSLATIONS = {
       ["THE WEAVE",    "every orbit eventually returns"],
       ["EVERY CURVE",  "is a sum of simpler curves"],
       ["THIS DOT",     "was running a rule this whole time."],
-      ["so were you.", ""],
     ] as [string, string][],
   },
   pt: {
@@ -144,7 +142,6 @@ const TRANSLATIONS = {
       ["O TECIDO",     "toda órbita eventualmente retorna"],
       ["TODA CURVA",   "é soma de curvas mais simples"],
       ["ESTE PONTO",   "seguia uma regra o tempo todo."],
-      ["você também.", ""],
     ] as [string, string][],
   },
 } as const satisfies Record<LabLocale, {
@@ -365,7 +362,7 @@ function buildSketch(
         }
 
         // ── Text overlays ──────────────────────────────────────────────────────
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 11; i++) {
           const [,, i0, i1, o0, o1] = SECTIONS_P3[i];
           const alpha = secAlpha(sp, i0, i1, o0, o1);
           const secEl = sectionEls[i];
@@ -393,7 +390,7 @@ export function LabPart3() {
 
   const scrollRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(12).fill(null));
+  const sectionEls   = useRef<Array<HTMLDivElement | null>>(Array(11).fill(null));
 
   useEffect(() => {
     const container = containerRef.current, scroll = scrollRef.current;
@@ -418,8 +415,7 @@ export function LabPart3() {
     { top: "50%",    right: "7%", textAlign: "right", transform: "translateY(-50%)" },
     { bottom: "14%", left:  "6%" },
     { top: "12%",    right: "7%", textAlign: "right" },
-    { top: "35%",    left:  "50%", transform: "translate(-50%,-50%)", textAlign: "center" },
-    { top: "58%",    left:  "50%", transform: "translate(-50%,-50%)", textAlign: "center" },
+    { top: "50%",    left:  "50%", transform: "translate(-50%,-50%)", textAlign: "center" },
   ];
 
   const base: React.CSSProperties = {
@@ -438,34 +434,29 @@ export function LabPart3() {
           const chIdx  = (sec[0] as number) - 1;
           const t = TRANSLATIONS[locale];
           const [headline, sub] = t.headings[i];
-          const isLast = i === 11;
 
           return (
             <div key={i} ref={el => { sectionEls.current[i] = el; }} style={{ ...base, ...positions[i] }}>
-              {!isLast && (
-                <span style={{
-                  display: "block", fontSize: "0.55rem", letterSpacing: "0.38em",
-                  color: ACCENT, textTransform: "uppercase", marginBottom: 10,
-                }}>
-                  {`${t.chapter}${chIdx + 1} · ${t.chNames[chIdx]}`}
-                </span>
-              )}
+              <span style={{
+                display: "block", fontSize: "0.55rem", letterSpacing: "0.38em",
+                color: ACCENT, textTransform: "uppercase", marginBottom: 10,
+              }}>
+                {`${t.chapter}${chIdx + 1} · ${t.chNames[chIdx]}`}
+              </span>
 
               <h2 style={{
                 margin: 0,
-                fontSize: isLast
-                  ? "clamp(2.4rem,5.5vw,4.8rem)"
-                  : "clamp(1.7rem,3.8vw,3.2rem)",
-                fontWeight:    isLast ? 300 : 700,
-                lineHeight:    1.05,
-                letterSpacing: isLast ? "0.12em" : "-0.01em",
-                textTransform: isLast ? "lowercase" : "uppercase",
-                color:         isLast ? ACCENT : PRIMARY,
+                fontSize: "clamp(1.7rem,3.8vw,3.2rem)",
+                fontWeight: 700,
+                lineHeight: 1.05,
+                letterSpacing: "-0.01em",
+                textTransform: "uppercase",
+                color: PRIMARY,
               }}>
                 {headline}
               </h2>
 
-              {!isLast && sub && (
+              {sub && (
                 <span style={{
                   display: "block", marginTop: "0.35rem", fontWeight: 300,
                   fontSize: "clamp(0.9rem,2vw,1.7rem)", letterSpacing: "0.09em",

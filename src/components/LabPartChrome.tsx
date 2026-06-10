@@ -51,7 +51,7 @@ export function LabPartChrome({ partNumber, nextRoute }: Props) {
   useEffect(() => {
     const check = () => {
       const sp = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      setNearEnd(sp >= 0.88);
+      setNearEnd(sp >= 0.94);
     };
     window.addEventListener("scroll", check, { passive: true });
     check();
