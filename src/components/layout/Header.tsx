@@ -64,7 +64,7 @@ export function Header({ dict }: HeaderProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 28px",
+        padding: "0 clamp(12px, 4vw, 28px)",
         background: "transparent",
       }}>
 
@@ -168,8 +168,8 @@ export function Header({ dict }: HeaderProps) {
 
         {/* Mobile: hamburger */}
         <button
-          className="md:hidden"
-          style={{ display: "flex", flexDirection: "column", gap: 5, padding: 6, background: "none", border: "none", cursor: "pointer" }}
+          className="flex flex-col md:hidden"
+          style={{ gap: 5, padding: 6, background: "none", border: "none", cursor: "pointer" }}
           onClick={() => setMenuOpen(v => !v)}
           aria-label="Toggle menu"
         >

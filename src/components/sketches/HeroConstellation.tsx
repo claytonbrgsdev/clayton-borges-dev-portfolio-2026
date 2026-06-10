@@ -105,7 +105,7 @@ export function HeroConstellation() {
     });
 
     p.setup = () => {
-      w = p.windowWidth; h = p.windowHeight;
+      w = document.documentElement.clientWidth; h = p.windowHeight;
       const c = p.createCanvas(w, h);
       c.elt.style.display = "block";
       p.pixelDensity(1);
@@ -126,7 +126,7 @@ export function HeroConstellation() {
     };
 
     p.windowResized = () => {
-      w = p.windowWidth; h = p.windowHeight;
+      w = document.documentElement.clientWidth; h = p.windowHeight;
       p.resizeCanvas(w, h);
     };
 

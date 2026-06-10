@@ -430,13 +430,14 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           </div>
 
           {/* ── Name + secondary — 2-col grid ── */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "clamp(24px, 4vw, 64px)",
-            alignItems: "flex-end",
-            marginBottom: "clamp(24px, 3vh, 40px)",
-          }}>
+          <div
+            className="grid grid-cols-1 sm:grid-cols-[1fr_auto]"
+            style={{
+              gap: "clamp(16px, 4vw, 64px)",
+              alignItems: "flex-end",
+              marginBottom: "clamp(24px, 3vh, 40px)",
+            }}
+          >
             {/* Name */}
             <h1 style={{
               fontFamily: "var(--font-geist-sans)",
@@ -455,12 +456,14 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
             </h1>
 
             {/* Secondary: ticker + title */}
-            <div style={{
-              textAlign: "right",
-              paddingBottom: 6,
-              opacity: 0,
-              animation: "fadeIn 0.5s ease-out 0.75s forwards",
-            }}>
+            <div
+              className="sm:text-right"
+              style={{
+                paddingBottom: 6,
+                opacity: 0,
+                animation: "fadeIn 0.5s ease-out 0.75s forwards",
+              }}
+            >
               <div style={{
                 fontFamily: "var(--font-geist-sans)",
                 fontSize: "var(--fs-sm)",
@@ -495,14 +498,15 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
           }} />
 
           {/* ── Bottom: hook + CTAs ── */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "clamp(24px, 4vw, 64px)",
-            alignItems: "flex-end",
-            opacity: 0,
-            animation: "fadeIn 0.5s ease-out 1s forwards",
-          }}>
+          <div
+            className="grid grid-cols-1 sm:grid-cols-[1fr_auto]"
+            style={{
+              gap: "clamp(16px, 4vw, 64px)",
+              alignItems: "flex-end",
+              opacity: 0,
+              animation: "fadeIn 0.5s ease-out 1s forwards",
+            }}
+          >
             <p style={{
               fontFamily: "var(--font-geist-sans)",
               fontSize: "var(--fs-md)",
@@ -770,7 +774,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 fontWeight: 800,
                 letterSpacing: "-0.03em",
                 lineHeight: 1,
-                marginBottom: 80,
+                marginBottom: "clamp(32px, 8vh, 80px)",
                 textTransform: "uppercase",
               }}
             />
@@ -793,7 +797,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 {home.contact_cta.cta} →
               </Link>
             </div>
-            <div className="flex items-center gap-6 font-sans text-xs" style={{ letterSpacing: "0.1em" }}>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:gap-x-6 font-sans text-xs" style={{ letterSpacing: "0.1em" }}>
               <a href={contactInfo.github} target="_blank" rel="noopener noreferrer"
                 className="hover:opacity-70 transition-opacity" style={{ opacity: 0.32 }}>GitHub</a>
               <span style={{ opacity: 0.18 }}>·</span>

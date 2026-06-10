@@ -113,7 +113,7 @@ export function LabShowcase({ locale }: Props) {
     }
 
     p.setup = () => {
-      const w = p.windowWidth;
+      const w = document.documentElement.clientWidth;
       const h = Math.round(p.windowHeight * 0.82);
       p.createCanvas(w, h);
       p.colorMode(p.RGB, 255, 255, 255, 1);
@@ -190,7 +190,7 @@ export function LabShowcase({ locale }: Props) {
     };
 
     p.windowResized = () => {
-      p.resizeCanvas(p.windowWidth, Math.round(p.windowHeight * 0.82));
+      p.resizeCanvas(document.documentElement.clientWidth, Math.round(p.windowHeight * 0.82));
       p.background(10, 9, 9);
     };
   }, []); // stable — reads from refs

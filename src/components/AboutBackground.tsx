@@ -529,7 +529,7 @@ export function AboutBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let W = window.innerWidth, H = window.innerHeight;
+    let W = document.documentElement.clientWidth, H = window.innerHeight;
     canvas.width = W; canvas.height = H;
 
     const renderers: Renderer[] = [
@@ -588,7 +588,7 @@ export function AboutBackground() {
     const onResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        W = window.innerWidth; H = window.innerHeight;
+        W = document.documentElement.clientWidth; H = window.innerHeight;
         canvas.width = W; canvas.height = H;
         renderers.forEach(r => r.init(W, H));
       }, 150);

@@ -28,6 +28,14 @@ export function HorizontalLabFlow({ locale }: Props) {
   const progressRef  = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const isPt = locale === "pt";
 
@@ -189,6 +197,64 @@ export function HorizontalLabFlow({ locale }: Props) {
     transform: active === panelIdx ? "translateY(0)" : "translateY(20px)",
     transition: `opacity 0.5s ease ${delayMs}ms, transform 0.5s ease ${delayMs}ms`,
   });
+
+  /* ── Mobile: vertical stack of all panels ── */
+  if (isMobile) {
+    const allPanels = [
+      ...textPanels,
+      {
+        tag: isPt ? "Lado Criativo" : "Creative Side",
+        heading: isPt ? "Explore os\nexperimentos." : "Explore the\nexperiments.",
+        body: isPt
+          ? "Abaixo você encontra os experimentos que preparei. Física, matemática, arte generativa — tudo interativo."
+          : "Below you'll find the experiments I've built. Physics, math, generative art — all interactive.",
+      },
+    ];
+    return (
+      <div
+        id="creative-lab"
+        style={{ background: "#0A0909", borderTop: "1px solid var(--rule)" }}
+      >
+        {allPanels.map((p, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "clamp(40px,8vh,72px) clamp(20px,5vw,48px)",
+              borderBottom: i < allPanels.length - 1 ? "1px solid var(--rule)" : undefined,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ ...SANS, fontSize: 9, color: "var(--accent-orange)", marginBottom: 20 }}>
+              {p.tag}
+            </div>
+            <h2 style={{
+              fontFamily: "var(--font-geist-sans)",
+              fontSize: "clamp(32px, 8vw, 72px)",
+              fontWeight: 800,
+              letterSpacing: "-0.04em",
+              lineHeight: 0.9,
+              textTransform: "uppercase",
+              margin: "0 0 clamp(16px, 4vw, 28px)",
+              whiteSpace: "pre-line",
+            }}>
+              {p.heading}
+            </h2>
+            <p style={{
+              ...SANS,
+              fontSize: "clamp(11px, 3.5vw, 13px)",
+              color: "rgba(255,255,255,0.45)",
+              maxWidth: 420,
+              lineHeight: 1.85,
+              margin: 0,
+            }}>
+              {p.body}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div

@@ -44,11 +44,11 @@ export function ContactSection({ dict }: ContactSectionProps) {
         <span className="font-sans text-xs tracking-widest uppercase opacity-40 block mb-4">
           Get in touch
         </span>
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">{contact.heading}</h1>
-        <p className="font-sans text-lg opacity-50">{contact.subheading}</p>
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-3 sm:mb-4">{contact.heading}</h1>
+        <p className="font-sans text-base sm:text-lg opacity-50">{contact.subheading}</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
@@ -123,27 +123,27 @@ export function ContactSection({ dict }: ContactSectionProps) {
           <div className="flex flex-col gap-4">
             <a
               href={`mailto:${contactInfo.email}`}
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
+              className="group flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-sans text-xs opacity-40 w-16">Email</span>
-              <span>{contactInfo.email}</span>
+              <span className="font-sans text-xs opacity-40 min-w-[4rem]">Email</span>
+              <span className="break-all">{contactInfo.email}</span>
             </a>
             <a
               href={contactInfo.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
+              className="group flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-sans text-xs opacity-40 w-16">GitHub</span>
+              <span className="font-sans text-xs opacity-40 min-w-[4rem]">GitHub</span>
               <span>claytonbrgsdev</span>
             </a>
             <a
               href={contactInfo.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
+              className="group flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 text-sm opacity-60 hover:opacity-100 transition-opacity"
             >
-              <span className="font-sans text-xs opacity-40 w-16">LinkedIn</span>
+              <span className="font-sans text-xs opacity-40 min-w-[4rem]">LinkedIn</span>
               <span>clayton-borges-web-dev</span>
             </a>
           </div>

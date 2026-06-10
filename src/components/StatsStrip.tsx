@@ -36,7 +36,7 @@ export function StatsStrip({ locale }: { locale: string }) {
 
   const CELL: React.CSSProperties = {
     background: "var(--bg)",
-    padding: "28px 32px",
+    padding: "clamp(16px,4vw,28px) clamp(16px,5vw,32px)",
     display: "flex",
     flexDirection: "column",
     gap: 10,
@@ -52,7 +52,7 @@ export function StatsStrip({ locale }: { locale: string }) {
 
   const BIG: React.CSSProperties = {
     fontFamily: "var(--font-geist-sans)",
-    fontSize: "clamp(40px,6vw,80px)",
+    fontSize: "clamp(28px,6vw,80px)",
     fontWeight: 800,
     letterSpacing: "-0.025em",
     lineHeight: 1,
@@ -79,9 +79,8 @@ export function StatsStrip({ locale }: { locale: string }) {
   return (
     <div
       ref={stripRef}
+      className="grid grid-cols-1 sm:grid-cols-3"
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
         gap: "1px",
         background: "var(--rule)",
         borderTop: "1px solid var(--rule)",

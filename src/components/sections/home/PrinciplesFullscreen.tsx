@@ -70,7 +70,7 @@ export function PrinciplesFullscreen({ dict, locale }: Props) {
       {/* ── Editorial header ── */}
       <div style={{
         borderBottom: "1px solid var(--rule)",
-        padding: "0 clamp(20px, 4vw, 60px)",
+        padding: "0 clamp(12px, 3vw, 60px)",
         display: "flex",
         alignItems: "stretch",
         overflow: "hidden",

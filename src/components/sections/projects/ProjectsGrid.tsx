@@ -54,7 +54,7 @@ function FeaturedCard({ project, locale, dict }: { project: Project; locale: Loc
       </div>
 
       {/* Body */}
-      <div className="p-6 flex flex-col flex-1">
+      <div className="p-3 sm:p-4 md:p-6 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-3">
           <span className="font-sans text-xs text-white/30">{project.year}</span>
           {project.client && (
@@ -121,7 +121,7 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
         </div>
       )}
 
-      <div className="p-5 flex flex-col flex-1">
+      <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-2">
           <span className="font-sans text-xs text-white/28">{project.year}</span>
           {project.client && (
@@ -204,12 +204,12 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
   return (
     <div>
       {/* ── Filter bar ───────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap gap-2 mb-10">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-8 sm:mb-10">
         {FILTERS.map(({ key, labelKey }) => (
           <button
             key={key}
             onClick={() => setActive(key)}
-            className={`font-sans text-xs tracking-wide px-4 py-2 border transition-colors ${
+            className={`font-sans text-xs tracking-wide px-2.5 sm:px-4 py-1.5 sm:py-2 border transition-colors ${
               active === key
                 ? "border-white bg-white text-black"
                 : "border-white/18 text-white/45 hover:text-white/80 hover:border-white/40"
@@ -231,7 +231,7 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
           <span className="font-sans text-xs tracking-widest uppercase text-white/25 block mb-5">
             {isPt ? "Case Studies" : "Case Studies"}
           </span>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5">
             {featured.map((project) => (
               <FeaturedCard key={project.id} project={project} locale={locale} dict={dict} />
             ))}
@@ -247,7 +247,7 @@ export function ProjectsGrid({ dict, locale, projects }: ProjectsGridProps) {
               {isPt ? "Outros Projetos" : "Other Work"}
             </span>
           )}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {regular.map((project) => (
               <RegularCard key={project.id} project={project} locale={locale} dict={dict} />
             ))}

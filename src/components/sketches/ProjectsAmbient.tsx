@@ -19,7 +19,7 @@ export function ProjectsAmbient() {
     let w = 0, h = 0;
 
     p.setup = () => {
-      w = p.windowWidth; h = p.windowHeight;
+      w = document.documentElement.clientWidth; h = p.windowHeight;
       p.createCanvas(w, h);
       p.pixelDensity(1);
       p.noStroke();
@@ -35,7 +35,7 @@ export function ProjectsAmbient() {
     };
 
     p.windowResized = () => {
-      w = p.windowWidth; h = p.windowHeight;
+      w = document.documentElement.clientWidth; h = p.windowHeight;
       p.resizeCanvas(w, h);
     };
 

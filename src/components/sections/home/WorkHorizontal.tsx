@@ -18,15 +18,13 @@ export function WorkHorizontal({ locale }: { locale: string }) {
   const name    = locale === "pt" ? project.namePt    : project.nameEn;
   const desc    = locale === "pt" ? project.descriptionPt : project.descriptionEn;
 
-  const lastRowStart = featuredProjects.length - (featuredProjects.length % COLS || COLS);
-
   return (
     <section id="work" style={{ background: "#0A0909", borderTop: "1px solid var(--rule)" }}>
 
       {/* ── Editorial header ── */}
       <div style={{
         borderBottom: "1px solid var(--rule)",
-        padding: "0 clamp(20px, 4vw, 60px)",
+        padding: "0 clamp(12px, 3vw, 60px)",
         display: "flex",
         alignItems: "stretch",
       }}>
@@ -75,21 +73,18 @@ export function WorkHorizontal({ locale }: { locale: string }) {
       </div>
 
       {/* ── Body: mosaic left + detail right ── */}
-      {/* 1fr 1fr: equal split — panoramic mosaic balances against the detail panel */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+      {/* desktop: 1fr 1fr split; mobile: stacked */}
+      <div className="grid grid-cols-1 md:grid-cols-2">
 
-        {/* ── Left: 4-col contact-sheet mosaic ── */}
-        {/* COLS=4 → 8 projects fill exactly 2 rows, eliminating the need to scroll */}
-        <div style={{
-          borderRight: "1px solid var(--rule)",
-          display: "grid",
-          gridTemplateColumns: `repeat(${COLS}, 1fr)`,
-        }}>
+        {/* ── Left: contact-sheet mosaic ── */}
+        {/* COLS=4 on desktop, 2 on mobile via CSS grid. Gap + container bg = 1px rule lines */}
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 md:border-r border-[var(--rule)]"
+          style={{ gap: "1px", background: "var(--rule)" }}
+        >
           {featuredProjects.map((p, i) => {
             const pName    = locale === "pt" ? p.namePt : p.nameEn;
             const isActive = active === i;
-            const isRightCol = (i + 1) % COLS === 0;
-            const isLastRow  = i >= lastRowStart;
 
             return (
               <button
@@ -97,7 +92,7 @@ export function WorkHorizontal({ locale }: { locale: string }) {
                 onClick={() => setActive(i)}
                 onMouseEnter={() => setActive(i)}
                 style={{
-                  background: "none",
+                  background: "var(--bg)",
                   border: "none",
                   padding: 0,
                   cursor: "pointer",
@@ -105,8 +100,6 @@ export function WorkHorizontal({ locale }: { locale: string }) {
                   overflow: "hidden",
                   aspectRatio: "4 / 3",
                   display: "block",
-                  borderRight: !isRightCol ? "1px solid var(--rule)" : "none",
-                  borderBottom: !isLastRow ? "1px solid var(--rule)" : "none",
                 }}
               >
                 {/* Orange active left bar */}
