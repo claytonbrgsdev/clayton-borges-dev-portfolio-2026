@@ -22,14 +22,24 @@ const PRIMARY_RGB  = [212, 200, 240] as const;
 const ACCENT_RGB   = [128, 64,  192] as const;
 
 // ── Lissajous parameters per chapter ──────────────────────────────────────────
-// [a, b, delta, speed] — a=1,b=1 is a circle; complexity grows each CH
-const CH_LISSA: [number, number, number, number][] = [
-  [1, 1, Math.PI / 2, 0.018],   // SEED    — circle; Mandelbrot fills it
-  [1, 2, Math.PI / 2, 0.013],   // GRAMMAR — figure-8; L-system in BG
-  [2, 3, Math.PI / 4, 0.008],   // FLOW    — 2:3 braid
-  [3, 4, Math.PI / 6, 0.005],   // SIGNAL  — 3:4 discrete dots
-  [5, 7, Math.PI / 8, 0.002],   // CURVE   — dense weave
-  [1, 1, Math.PI / 2, 0.012],   // QUESTION — back to circle, then stops
+// [a, b, delta] — a=1,b=1 is a circle; complexity grows each CH
+const CH_LISSA: [number, number, number][] = [
+  [1, 1, Math.PI / 2],   // SEED    — circle; Mandelbrot fills it
+  [1, 2, Math.PI / 2],   // GRAMMAR — figure-8; L-system in BG
+  [2, 3, Math.PI / 4],   // FLOW    — 2:3 braid
+  [3, 4, Math.PI / 6],   // SIGNAL  — 3:4 discrete dots
+  [5, 7, Math.PI / 8],   // CURVE   — dense weave
+  [1, 1, Math.PI / 2],   // QUESTION — back to circle, ease-out stop
+];
+
+// Total phase range per chapter (scroll 0→1 maps to 0→TOTAL_PHASE)
+const TOTAL_PHASE = [
+  Math.PI *  8,   // CH1: SEED
+  Math.PI * 14,   // CH2: GRAMMAR
+  Math.PI * 22,   // CH3: FLOW
+  Math.PI * 28,   // CH4: SIGNAL
+  Math.PI * 46,   // CH5: CURVE
+  Math.PI *  5,   // CH6: QUESTION — ease-out, ends at circle
 ];
 
 // ── CH1: Mandelbrot (background fill for SEED) ─────────────────────────────────
@@ -120,9 +130,9 @@ function buildSketch(
     let traceCanvas: HTMLCanvasElement, traceCtx: CanvasRenderingContext2D;
     let mbCanvas:    HTMLCanvasElement, mbCtx: CanvasRenderingContext2D, mbImg: ImageData;
     let grammarCanvas: HTMLCanvasElement | null = null;
-    let lastMbZoom = -1;
-    let lissPhase  = 0;
-    let lastChIdx  = -1;
+    let lastMbZoom   = -1;
+    let prevLissPhase = 0;   // last lissPhase drawn to traceCanvas
+    let lastChIdx     = -1;
 
     const sketch = (p: p5Type) => {
       let W = 0, H = 0;
@@ -159,10 +169,10 @@ function buildSketch(
 
         // Chapter enter
         if (chIdx !== lastChIdx) {
-          lissPhase = 0;
           traceCtx.clearRect(0, 0, W, H);
-          lastMbZoom = -1;
-          lastChIdx  = chIdx;
+          prevLissPhase = 0;
+          lastMbZoom    = -1;
+          lastChIdx     = chIdx;
           grammarCanvas = null;
         }
 
@@ -177,15 +187,13 @@ function buildSketch(
         if (chT < 0.12)      amp = ss(0.0, 0.12, chT);
         else if (chT > 0.88) amp = 1 - ss(0.88, 1.0, chT);
 
-        const [la, lb, ld, baseSpeed] = CH_LISSA[chIdx];
+        const [la, lb, ld] = CH_LISSA[chIdx];
 
-        // QUESTION decelerates: speed → 0 as chT → 0.95
-        const spd = chIdx === 5
-          ? baseSpeed * (1 - ss(0.55, 0.92, chT))
-          : baseSpeed;
-
-        // Advance phase
-        lissPhase += spd;
+        // Scroll-driven phase — replaces time-based lissPhase accumulation.
+        // QUESTION (CH6) uses ease-out so the head decelerates as chT → 1.
+        const lissPhase = chIdx === 5
+          ? ss(0, 1, chT) * TOTAL_PHASE[5]
+          : chT * TOTAL_PHASE[chIdx];
 
         // ── Background elements ───────────────────────────────────────────────
         if (chIdx === 0) {
@@ -240,39 +248,52 @@ function buildSketch(
           }
         }
 
-        // ── Trace accumulation ────────────────────────────────────────────────
-        // Draw the Lissajous from 0 → lissPhase on the persistent trace canvas
-        const nPts  = Math.max(400, Math.ceil(la * lb * 80));
-        const drawT = lissPhase; // grows over time → trace "unrolls"
+        // ── Scroll-scrubbed trace ─────────────────────────────────────────────
+        // Forward scroll  → append new segment at low alpha (accumulates density).
+        // Backward scroll → clear canvas and repaint 0→lissPhase in 4 passes
+        //                   to approximate the accumulated density.
+        const nPts = Math.max(400, Math.ceil(la * lb * 80));
+        const totalP = TOTAL_PHASE[chIdx];
 
-        if (chIdx === 3) {
-          // SIGNAL: discrete ACCENT dots (digital / circuit feel)
-          const dotAlpha = 0.22;
-          traceCtx.fillStyle = `rgba(${ACCENT_RGB[0]},${ACCENT_RGB[1]},${ACCENT_RGB[2]},${dotAlpha})`;
-          // Only draw the newest segment (last 20% of phase)
-          const segStart = Math.max(0, drawT - drawT * 0.04);
-          const segPts   = 30;
-          for (let i = 0; i <= segPts; i++) {
-            const t2 = lerp(segStart, drawT, i / segPts);
-            const hx = cx + R * Math.sin(la * t2 + ld);
-            const hy = cy + R * Math.sin(lb * t2);
-            traceCtx.beginPath(); traceCtx.arc(hx, hy, 1.8, 0, Math.PI * 2); traceCtx.fill();
+        const drawTraceRange = (fromP: number, toP: number, passes: number) => {
+          if (toP <= fromP + 0.0001) return;
+          for (let pass = 0; pass < passes; pass++) {
+            if (chIdx === 3) {
+              // SIGNAL: discrete ACCENT dots
+              const nDots = Math.max(4, Math.ceil((toP - fromP) / 0.04));
+              traceCtx.fillStyle = `rgba(${ACCENT_RGB[0]},${ACCENT_RGB[1]},${ACCENT_RGB[2]},0.22)`;
+              for (let i = 0; i <= nDots; i++) {
+                const t2 = fromP + (i / nDots) * (toP - fromP);
+                const hx = cx + R * Math.sin(la * t2 + ld);
+                const hy = cy + R * Math.sin(lb * t2);
+                traceCtx.beginPath(); traceCtx.arc(hx, hy, 1.8, 0, Math.PI * 2); traceCtx.fill();
+              }
+            } else {
+              const segPts = Math.max(40, Math.ceil(nPts * (toP - fromP) / totalP));
+              const traceAlpha = chIdx === 4 ? 0.04 : 0.07;
+              traceCtx.strokeStyle = `rgba(${PRIMARY_RGB[0]},${PRIMARY_RGB[1]},${PRIMARY_RGB[2]},${traceAlpha})`;
+              traceCtx.lineWidth   = chIdx === 4 ? 0.55 : 0.85;
+              traceCtx.lineJoin    = "round";
+              traceCtx.beginPath();
+              for (let i = 0; i <= segPts; i++) {
+                const t2 = fromP + (i / segPts) * (toP - fromP);
+                const hx = cx + R * Math.sin(la * t2 + ld);
+                const hy = cy + R * Math.sin(lb * t2);
+                if (i === 0) traceCtx.moveTo(hx, hy); else traceCtx.lineTo(hx, hy);
+              }
+              traceCtx.stroke();
+            }
           }
+        };
+
+        const wentBack = lissPhase < prevLissPhase - 0.05;
+        if (wentBack) {
+          traceCtx.clearRect(0, 0, W, H);
+          drawTraceRange(0, lissPhase, 4);
         } else {
-          // Smooth continuous trace
-          const traceAlpha = chIdx === 4 ? 0.04 : 0.07;
-          traceCtx.strokeStyle = `rgba(${PRIMARY_RGB[0]},${PRIMARY_RGB[1]},${PRIMARY_RGB[2]},${traceAlpha})`;
-          traceCtx.lineWidth   = chIdx === 4 ? 0.55 : 0.85;
-          traceCtx.lineJoin    = "round";
-          traceCtx.beginPath();
-          for (let i = 0; i <= nPts; i++) {
-            const t2 = (i / nPts) * drawT;
-            const hx = cx + R * Math.sin(la * t2 + ld);
-            const hy = cy + R * Math.sin(lb * t2);
-            if (i === 0) traceCtx.moveTo(hx, hy); else traceCtx.lineTo(hx, hy);
-          }
-          traceCtx.stroke();
+          drawTraceRange(prevLissPhase, lissPhase, 1);
         }
+        prevLissPhase = lissPhase;
 
         // Blit trace to main canvas, modulated by amp
         dc.save(); dc.globalAlpha = amp * 0.95;

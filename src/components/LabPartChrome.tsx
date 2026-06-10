@@ -36,7 +36,12 @@ export function LabPartChrome({ partNumber, nextRoute }: Props) {
   const [visible, setVisible]   = useState(false);
   const [nearEnd, setNearEnd]   = useState(false);
   const [locale, setLocale]     = useLabLocale();
-  const toggleLocale = () => setLocale(locale === "pt" ? "en" : "pt");
+  const toggleLocale = () => {
+    const next = locale === "pt" ? "en" : "pt";
+    setLocale(next);
+    // Reload so the experiment component picks up the new locale
+    window.location.reload();
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 700);
