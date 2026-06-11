@@ -399,7 +399,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       <section
         ref={el => { sectionsRef.current[0] = el; }}
         style={{
-          minHeight: "100vh",
+          minHeight: "100svh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
@@ -522,7 +522,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 href={`/${locale}/projects`}
                 style={{
                   fontFamily: "var(--font-geist-sans)",
-                  fontSize: "var(--fs-sm)",
+                  fontSize: 11,
                   letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   textDecoration: "none",
@@ -540,7 +540,7 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
                 href={`/${locale}/contact`}
                 style={{
                   fontFamily: "var(--font-geist-sans)",
-                  fontSize: "var(--fs-sm)",
+                  fontSize: 11,
                   letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   textDecoration: "none",
@@ -622,8 +622,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       {/* ── SECTION 2 — About + Stack ─────────────────────────────────────── */}
       <section
         ref={el => { sectionsRef.current[2] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}
+        className="flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
+        style={{ opacity: 0, minHeight: "100svh" }}
       >
         <div className="max-w-5xl mx-auto w-full">
 
@@ -703,7 +703,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       {/* ── SECTION 3 — How I Work ────────────────────────────────────────── */}
       <section
         ref={el => { sectionsRef.current[3] = el; }}
-        className="min-h-screen flex flex-col justify-center relative z-20"
+        className="flex flex-col justify-center relative z-20"
+        style={{ minHeight: "100svh" }}
       >
         <PrinciplesFullscreen dict={dict} locale={locale} />
       </section>
@@ -719,8 +720,8 @@ export function PortfolioExperience({ dict, locale }: PortfolioExperienceProps) 
       {/* ── SECTION 4 — Lab + Hardware + Contact ─────────────────────────── */}
       <section
         ref={el => { sectionsRef.current[4] = el; }}
-        className="min-h-screen flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
-        style={{ opacity: 0 }}
+        className="flex flex-col justify-center px-8 md:px-20 py-20 relative z-20"
+        style={{ opacity: 0, minHeight: "100svh" }}
       >
         <div className="max-w-5xl mx-auto w-full">
 

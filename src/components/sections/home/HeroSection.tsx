@@ -123,7 +123,7 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
 
   return (
     <section
-      className="relative flex min-h-screen flex-col items-start justify-center overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col items-start justify-center overflow-hidden"
       style={{ paddingLeft: "clamp(32px, 5vw, 80px)", paddingRight: "clamp(32px, 5vw, 80px)" }}
     >
       {/* Scanner vignette */}

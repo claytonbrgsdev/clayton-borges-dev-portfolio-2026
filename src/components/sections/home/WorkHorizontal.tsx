@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { featuredProjects } from "@/lib/data/projects";
+import { WorkMobile } from "./WorkMobile";
 
 const MONO: React.CSSProperties = {
   fontFamily: "var(--font-geist-mono)",
@@ -14,9 +15,22 @@ const COLS = 4;
 
 export function WorkHorizontal({ locale }: { locale: string }) {
   const [active, setActive] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const project = featuredProjects[active];
   const name    = locale === "pt" ? project.namePt    : project.nameEn;
   const desc    = locale === "pt" ? project.descriptionPt : project.descriptionEn;
+
+  if (isMobile) {
+    return <WorkMobile locale={locale} />;
+  }
 
   return (
     <section id="work" style={{ background: "#0A0909", borderTop: "1px solid var(--rule)" }}>

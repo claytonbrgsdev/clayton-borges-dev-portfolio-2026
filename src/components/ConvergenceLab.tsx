@@ -1079,8 +1079,9 @@ function ProjectsPanel({ vis }: { vis: number }) {
                    style={{
                      border:         "1px solid rgba(255,255,255,0.07)",
                      background:     "rgba(0,0,0,0.55)",
-                     backdropFilter: "blur(6px)",
-                     opacity:        Math.min(1, vis * 3.5 - i * 0.22),
+                     backdropFilter:       "blur(6px)",
+                     WebkitBackdropFilter: "blur(6px)",
+                     opacity:              Math.min(1, vis * 3.5 - i * 0.22),
                      transform:      `translateY(${(1 - Math.min(1, vis * 3.5 - i * 0.22)) * 12}px)`,
                    }}>
                 <div className="flex justify-between items-start mb-2.5">

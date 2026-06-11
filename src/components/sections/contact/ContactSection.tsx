@@ -59,7 +59,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               name="name"
               type="text"
               required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
+              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-base"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -70,7 +70,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               name="email"
               type="email"
               required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
+              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-base"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -81,7 +81,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               name="subject"
               type="text"
               required
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm"
+              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-base"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -92,7 +92,7 @@ export function ContactSection({ dict }: ContactSectionProps) {
               name="message"
               required
               rows={5}
-              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-sm resize-none"
+              className="bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white/60 transition-colors text-base resize-none"
             />
           </div>
 
