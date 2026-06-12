@@ -10,14 +10,25 @@ import { contactInfo } from "@/lib/data/contact";
 import { gsap, ScrollTrigger, SplitText, EASE_OUT } from "@/lib/gsap";
 
 /**
- * ScrollPortfolio — same sober structure as SimplePortfolio, but the whole page
- * reveals itself on scroll via GSAP ScrollTrigger (synced to Lenis through the
- * GSAP ticker, wired in LenisProvider). Initial hidden state is set in CSS
- * (class `.r`) so there is no flash before hydration, and a reduced-motion
- * media query reveals everything instantly for accessibility.
+ * ScrollPortfolio — sober structure, but the whole page reveals on scroll via
+ * GSAP ScrollTrigger (synced to Lenis through the GSAP ticker). This variant is
+ * "subtly bolder": character-level hero reveal with a wiping accent underline,
+ * a gentle hero parallax on exit, oversized ghost section watermarks that drift
+ * on scroll, and project cards that rise + scale in with parallaxing thumbnails.
+ *
+ * Initial hidden state lives in a scoped `.r` class (no flash); a
+ * prefers-reduced-motion override reveals everything instantly.
  */
 
 const mono = "font-mono uppercase tracking-[0.16em]";
+
+const ghostStyle: React.CSSProperties = {
+  position: "absolute", right: "-2vw", bottom: "-4vw", zIndex: 0,
+  fontFamily: "var(--font-geist-sans)", fontWeight: 800,
+  fontSize: "clamp(140px, 26vw, 460px)", lineHeight: 0.8, letterSpacing: "-0.05em",
+  color: "#fff", opacity: 0.03, userSelect: "none", pointerEvents: "none",
+  textTransform: "uppercase", whiteSpace: "nowrap",
+};
 
 export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const isPt = locale === "pt";
@@ -46,35 +57,50 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
     const splits: SplitText[] = [];
     let ctx: ReturnType<typeof gsap.context> | undefined;
 
-    // Defer one macrotask so LenisProvider (a parent effect, runs AFTER this
-    // child effect) has wired Lenis into the GSAP ticker and ScrollTrigger.update
-    // before we build any animations. This is the same pattern HorizontalLabFlow
-    // uses — without it, the load timeline never advances.
+    // Defer one macrotask so LenisProvider (a parent effect) has wired Lenis
+    // into the GSAP ticker before we build animations (same pattern as
+    // HorizontalLabFlow); otherwise the load timeline never advances.
     const timer = setTimeout(() => {
       ctx = gsap.context(() => {
-        // ── Scroll progress bar (scrubbed to page scroll) ────────────────
+        // ── Scroll progress bar ──────────────────────────────────────────
         gsap.fromTo("[data-progress]", { scaleX: 0 }, {
           scaleX: 1, ease: "none", transformOrigin: "left center",
           scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 },
         });
 
-        // ── Hero — reveal on load ────────────────────────────────────────
+        // ── Hero — reveal on load (character-level) ──────────────────────
         const tl = gsap.timeline({ defaults: { ease: EASE_OUT, duration: 0.85 } });
         tl.fromTo("[data-hero-meta]", { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.6 });
 
         const nameEl = root.querySelector<HTMLElement>("[data-hero-name]");
         if (nameEl) {
-          const split = new SplitText(nameEl, { type: "lines", mask: "lines" });
+          const split = new SplitText(nameEl, { type: "chars", mask: "chars" });
           splits.push(split);
           gsap.set(nameEl, { opacity: 1 });
-          tl.fromTo(split.lines, { yPercent: 120 }, { yPercent: 0, duration: 1.05, stagger: 0.12, ease: "power4.out" }, "-=0.25");
+          tl.fromTo(split.chars, { yPercent: 120 }, { yPercent: 0, duration: 0.9, stagger: 0.03, ease: "power4.out" }, "-=0.25");
         }
 
-        tl.fromTo("[data-hero-title]", { opacity: 0, y: 18 }, { opacity: 1, y: 0 }, "-=0.6")
+        tl.fromTo("[data-hero-underline]", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.inOut", transformOrigin: "left center" }, "-=0.55")
+          .fromTo("[data-hero-title]", { opacity: 0, y: 18 }, { opacity: 1, y: 0 }, "-=0.5")
           .fromTo("[data-hero-hook]", { opacity: 0, y: 18 }, { opacity: 1, y: 0 }, "-=0.65")
           .fromTo("[data-hero-tech]", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.65")
           .fromTo("[data-hero-cta]", { opacity: 0, y: 14 }, { opacity: 1, y: 0, stagger: 0.07, duration: 0.6 }, "-=0.55")
           .fromTo("[data-hero-scrollcue]", { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.2");
+
+        // Gentle hero parallax as it leaves the viewport
+        gsap.to("[data-hero-inner]", {
+          yPercent: -14, opacity: 0, ease: "none",
+          scrollTrigger: { trigger: "[data-hero]", start: "top top", end: "bottom top", scrub: true },
+        });
+
+        // ── Oversized ghost watermarks drift on scroll ───────────────────
+        gsap.utils.toArray<HTMLElement>("[data-ghost]").forEach((el) => {
+          const section = el.closest("section");
+          gsap.fromTo(el, { yPercent: -9 }, {
+            yPercent: 9, ease: "none",
+            scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: true },
+          });
+        });
 
         // ── Generic "rise + fade" reveals on enter ───────────────────────
         gsap.utils.toArray<HTMLElement>("[data-up]").forEach((el) => {
@@ -92,12 +118,20 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
           });
         });
 
-        // ── Project cards — staggered batch reveal ───────────────────────
-        gsap.set("[data-card]", { opacity: 0, y: 40 });
+        // ── Project cards — rise + scale stagger ─────────────────────────
+        gsap.set("[data-card]", { opacity: 0, y: 54, scale: 0.965, transformOrigin: "center top" });
         ScrollTrigger.batch("[data-card]", {
-          start: "top 90%",
+          start: "top 92%",
           onEnter: (batch) =>
-            gsap.to(batch, { opacity: 1, y: 0, duration: 0.7, ease: EASE_OUT, stagger: 0.09, overwrite: true }),
+            gsap.to(batch, { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: "expo.out", stagger: 0.08, overwrite: true }),
+        });
+
+        // ── Thumbnail parallax inside each card frame ────────────────────
+        gsap.utils.toArray<HTMLElement>("[data-card-img]").forEach((img) => {
+          gsap.fromTo(img, { yPercent: -6 }, {
+            yPercent: 6, ease: "none",
+            scrollTrigger: { trigger: img.closest("[data-card]"), start: "top bottom", end: "bottom top", scrub: true },
+          });
         });
 
         // ── Tech-stack chip groups — stagger per group ───────────────────
@@ -140,6 +174,7 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
         .r { opacity: 0; will-change: transform, opacity; }
         @media (prefers-reduced-motion: reduce) {
           .r { opacity: 1 !important; transform: none !important; }
+          [data-hero-underline] { transform: scaleX(1) !important; }
         }
       ` }} />
 
@@ -149,8 +184,8 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
       </div>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section data-hero className="px-6 md:px-12 lg:px-16 pt-28 md:pt-32 pb-16 border-b" style={{ borderColor: "var(--rule)" }}>
-        <div data-hero-inner className="max-w-6xl mx-auto">
+      <section data-hero className="relative overflow-hidden px-6 md:px-12 lg:px-16 pt-28 md:pt-32 pb-16 border-b" style={{ borderColor: "var(--rule)" }}>
+        <div data-hero-inner className="relative z-[1] max-w-6xl mx-auto">
 
           <div data-hero-meta className="r flex items-center justify-between mb-10 pb-3 border-b" style={{ borderColor: "var(--rule)" }}>
             <span className={mono} style={{ fontSize: 10, color: "var(--text-muted)" }}>CB · 2025 — Portfolio</span>
@@ -158,12 +193,14 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
           </div>
 
           <h1 data-hero-name className="r font-sans font-extrabold" style={{
-            fontSize: "clamp(2.6rem, 8vw, 6rem)", letterSpacing: "-0.03em", lineHeight: 0.92, margin: 0,
+            fontSize: "clamp(2.8rem, 9vw, 7rem)", letterSpacing: "-0.035em", lineHeight: 0.9, margin: 0,
           }}>
             {hero.name}
           </h1>
+          {/* Accent underline that wipes in under the name */}
+          <div data-hero-underline style={{ height: 3, width: "min(280px, 60%)", background: "var(--accent-orange)", transform: "scaleX(0)", transformOrigin: "left center", marginTop: 18 }} />
 
-          <p data-hero-title className="r font-sans mt-5" style={{
+          <p data-hero-title className="r font-sans mt-6" style={{
             fontSize: "clamp(0.95rem, 1.6vw, 1.15rem)", letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--accent-orange)",
           }}>
             {hero.title}
@@ -201,8 +238,9 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
       </section>
 
       {/* ── Selected Work ────────────────────────────────────────────────── */}
-      <section id="work" className="px-6 md:px-12 lg:px-16 py-16 md:py-20 border-b" style={{ borderColor: "var(--rule)" }}>
-        <div className="max-w-6xl mx-auto">
+      <section id="work" className="relative overflow-hidden px-6 md:px-12 lg:px-16 py-16 md:py-20 border-b" style={{ borderColor: "var(--rule)" }}>
+        <span data-ghost style={ghostStyle}>{t.work}</span>
+        <div className="relative z-[1] max-w-6xl mx-auto">
 
           <div className="flex items-end justify-between mb-3">
             <div className="flex items-center gap-4">
@@ -227,7 +265,7 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
                     <div className="relative overflow-hidden" style={{ aspectRatio: "16 / 10", background: "var(--bg-elevated)" }}>
                       {p.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.image} alt={name} className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.04]" style={{ opacity: 0.62 }} />
+                        <img data-card-img src={p.image} alt={name} className="absolute object-cover transition-all duration-500 group-hover:scale-[1.06]" style={{ left: 0, width: "100%", top: "-9%", height: "118%", opacity: 0.62 }} />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                           <span aria-hidden className="font-sans font-extrabold" style={{ fontSize: "clamp(64px, 16vw, 128px)", lineHeight: 1, letterSpacing: "-0.05em", color: "#fff", opacity: 0.05, userSelect: "none", textTransform: "uppercase" }}>
@@ -279,8 +317,9 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
       </section>
 
       {/* ── About + Stack ────────────────────────────────────────────────── */}
-      <section id="about" className="px-6 md:px-12 lg:px-16 py-16 md:py-20 border-b" style={{ borderColor: "var(--rule)" }}>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20">
+      <section id="about" className="relative overflow-hidden px-6 md:px-12 lg:px-16 py-16 md:py-20 border-b" style={{ borderColor: "var(--rule)" }}>
+        <span data-ghost style={{ ...ghostStyle, left: "-2vw", right: "auto" }}>{t.about}</span>
+        <div className="relative z-[1] max-w-6xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20">
 
           <div>
             <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--accent-orange)" }}>02 — {t.about}</span>
@@ -318,8 +357,9 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
       </section>
 
       {/* ── Contact ──────────────────────────────────────────────────────── */}
-      <section id="contact" className="px-6 md:px-12 lg:px-16 py-20 md:py-28">
-        <div className="max-w-6xl mx-auto">
+      <section id="contact" className="relative overflow-hidden px-6 md:px-12 lg:px-16 py-20 md:py-28">
+        <span data-ghost style={ghostStyle}>{t.contact}</span>
+        <div className="relative z-[1] max-w-6xl mx-auto">
           <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--accent-orange)" }}>03 — {t.contact}</span>
           <h2 data-contact-heading className="r font-sans font-extrabold mt-4" style={{
             fontSize: "clamp(2.2rem, 6vw, 4.5rem)", letterSpacing: "-0.03em", lineHeight: 1, margin: "16px 0 0",
