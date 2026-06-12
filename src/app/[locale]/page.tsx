@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
-import { SimplePortfolio } from "@/components/SimplePortfolio";
+import { ScrollPortfolio } from "@/components/ScrollPortfolio";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -17,5 +17,5 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
   const dict = getDictionary(locale as Locale);
 
-  return <SimplePortfolio dict={dict} locale={locale as Locale} />;
+  return <ScrollPortfolio dict={dict} locale={locale as Locale} />;
 }
