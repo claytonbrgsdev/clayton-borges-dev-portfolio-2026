@@ -6,6 +6,7 @@ import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/types";
 import { featuredProjects, projects, type Project } from "@/lib/data/projects";
 import { stack } from "@/lib/data/stack";
+import { experiments, featuredExperiments, type LabFocus } from "@/lib/data/experiments";
 import { contactInfo } from "@/lib/data/contact";
 import { gsap, ScrollTrigger, SplitText, EASE_OUT } from "@/lib/gsap";
 
@@ -30,6 +31,13 @@ const ghostStyle: React.CSSProperties = {
   fontSize: "clamp(140px, 26vw, 460px)", lineHeight: 0.8, letterSpacing: "-0.05em",
   color: "#fff", opacity: 0.03, userSelect: "none", pointerEvents: "none",
   textTransform: "uppercase", whiteSpace: "nowrap",
+};
+
+const FOCUS_LABEL: Record<LabFocus, { en: string; pt: string }> = {
+  Generative: { en: "Generative", pt: "Generativo" },
+  Mathematics: { en: "Mathematics", pt: "Matemática" },
+  Simulation: { en: "Simulation", pt: "Simulação" },
+  Physics: { en: "Physics", pt: "Física" },
 };
 
 const MARQUEE = [
@@ -168,6 +176,12 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
     contact: isPt ? "Contato" : "Contact",
     viewProjects: isPt ? "Ver projetos" : "View projects",
     drag: isPt ? "Role para percorrer" : "Scroll to travel",
+    lab: "Lab",
+    labHeading: isPt ? "O Lab" : "The Lab",
+    labLead: isPt
+      ? "Um universo paralelo de experimentos guiados por scroll — arte generativa, matemática, física e simulação."
+      : "A parallel universe of scroll-driven experiments — generative art, math, physics, and simulation.",
+    enterLab: isPt ? "Entrar no Lab" : "Enter the Lab",
   };
 
   // Desktop ↔ mobile switch (horizontal gallery vs vertical grid)
@@ -277,6 +291,13 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
             scrollTrigger: { trigger: group, start: "top 88%", once: true },
           });
         });
+        // ── Lab cards — stagger reveal ───────────────────────────────────
+        gsap.set("[data-lab-card]", { opacity: 0, y: 36 });
+        ScrollTrigger.batch("[data-lab-card]", {
+          start: "top 90%",
+          onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.08, overwrite: true }),
+        });
+
         const contactEl = root.querySelector<HTMLElement>("[data-contact-heading]");
         if (contactEl) {
           const split = new SplitText(contactEl, { type: "lines", mask: "lines" });
@@ -467,11 +488,62 @@ export function ScrollPortfolio({ dict, locale }: { dict: Dictionary; locale: Lo
           </div>
         </section>
 
+        {/* ── Lab ────────────────────────────────────────────────────────── */}
+        <section id="lab" className="relative overflow-hidden px-6 md:px-12 lg:px-16 py-16 md:py-20 border-b" style={{ borderColor: "var(--rule)" }}>
+          <span data-ghost style={ghostStyle}>Lab</span>
+          <div className="relative z-[1] max-w-6xl mx-auto">
+            <div className="flex items-end justify-between mb-3">
+              <div className="flex items-center gap-4">
+                <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--accent-orange)" }}>03 — {t.lab}</span>
+                <h2 data-up className="r font-sans font-extrabold" style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.4rem)", letterSpacing: "-0.02em", margin: 0 }}>{t.labHeading}</h2>
+              </div>
+              <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--text-muted)" }}>{String(experiments.length).padStart(2, "0")}</span>
+            </div>
+            <div data-rule className="mb-8" style={{ height: 1, background: "var(--rule)" }} />
+            <p data-up className="r font-sans max-w-2xl mb-10" style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>{t.labLead}</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {featuredExperiments.map((e) => {
+                const title = isPt ? e.titlePt : e.title;
+                const focus = FOCUS_LABEL[e.focus][isPt ? "pt" : "en"];
+                return (
+                  <Link key={e.route} href={e.route} data-lab-card className="r group relative overflow-hidden flex flex-col justify-between" style={{ border: "1px solid var(--rule)", minHeight: 184, padding: 18 }}>
+                    <div aria-hidden style={{ position: "absolute", inset: 0, background: `linear-gradient(140deg, ${e.gradient.from}, ${e.gradient.to})`, opacity: 0.6 }} />
+                    <div aria-hidden style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(10,9,9,0.82), rgba(10,9,9,0.25))" }} />
+                    <div aria-hidden className="absolute inset-x-0 top-0 h-[2px] opacity-0 group-hover:opacity-100" style={{ background: "var(--accent-orange)", transition: "opacity 200ms" }} />
+                    <div className="relative z-[1] flex items-center justify-between">
+                      <span className={mono} style={{ fontSize: 9, color: "var(--accent-orange)" }}>P{e.phase}</span>
+                      <span className={mono} style={{ fontSize: 8, color: "rgba(255,255,255,0.55)" }}>{focus}</span>
+                    </div>
+                    <div className="relative z-[1]">
+                      <h3 className="font-sans font-bold" style={{ fontSize: "1rem", letterSpacing: "-0.01em", lineHeight: 1.15, margin: 0 }}>{title}</h3>
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {e.tech.slice(0, 2).map((tch) => (
+                            <span key={tch} className={mono} style={{ fontSize: 8, color: "rgba(255,255,255,0.5)", padding: "3px 6px", border: "1px solid rgba(255,255,255,0.14)" }}>{tch}</span>
+                          ))}
+                        </div>
+                        <span className={`${mono} transition-transform group-hover:translate-x-1`} style={{ fontSize: 12, color: "var(--accent-orange)" }}>→</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div data-up className="r mt-10">
+              <Link href="/lab" className={`${mono} inline-flex items-center transition-colors hover:text-[var(--accent-orange)]`} style={{ fontSize: 11, color: "var(--text)", borderBottom: "1px solid var(--accent-orange)", paddingBottom: 4 }}>
+                {t.enterLab} →
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* ── Contact ────────────────────────────────────────────────────── */}
         <section id="contact" className="relative overflow-hidden px-6 md:px-12 lg:px-16 py-20 md:py-28">
           <span data-ghost style={ghostStyle}>{t.contact}</span>
           <div className="relative z-[1] max-w-6xl mx-auto">
-            <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--accent-orange)" }}>03 — {t.contact}</span>
+            <span data-up className={`${mono} r`} style={{ fontSize: 10, color: "var(--accent-orange)" }}>04 — {t.contact}</span>
             <h2 data-contact-heading className="r font-sans font-extrabold mt-4" style={{ fontSize: "clamp(2.2rem, 6vw, 4.5rem)", letterSpacing: "-0.03em", lineHeight: 1, margin: "16px 0 0" }}>{contact_cta.heading}</h2>
             <p data-up className="r font-sans mt-5" style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.55)" }}>{contact_cta.body}</p>
             <div data-up className="r flex flex-wrap items-center gap-3 mt-8">

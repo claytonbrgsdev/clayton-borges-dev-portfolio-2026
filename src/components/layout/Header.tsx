@@ -49,6 +49,7 @@ export function Header({ dict }: HeaderProps) {
   const navLinks = [
     { label: dict.nav.home,     href: `/${locale}`         },
     { label: dict.nav.projects, href: `/${locale}/projects` },
+    { label: "Lab",             href: `/lab`                },
     // { label: dict.nav.hardware, href: `/${locale}/hardware` }, // temporarily hidden
     { label: dict.nav.about,    href: `/${locale}/about`    },
     { label: dict.nav.contact,  href: `/${locale}/contact`  },
