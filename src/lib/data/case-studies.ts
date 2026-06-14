@@ -59,7 +59,7 @@ export const caseStudies: CaseStudy[] = [
       "/projects/MOVEO/moveo-film-misterio.png",
       "/projects/MOVEO/moveo-film-credits.png",
     ],
-    demoVideo: "/videos/MOVEO/moveo_2.mp4",
+    demoVideo: "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/moveo/moveo.mp4",
     sections: [
       {
         heading: "Overview",
@@ -174,7 +174,7 @@ export const caseStudies: CaseStudy[] = [
       "/projects/Vitrine_3D/vitrine3d-vintage.png",
       "/projects/Vitrine_3D/vitrine3d-moto.png",
     ],
-    demoVideo: "/videos/Vitrine_3D/vitrine3d-demo.mp4",
+    demoVideo: "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/vitrine/vitrine.mp4",
     sections: [
       {
         heading: "Overview",
