@@ -73,6 +73,8 @@ function ProjectPanel({ p, i, locale, isPt, caseLabel, liveLabel }: {
         {p.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img data-panel-img src={p.image} alt={name} className="absolute object-cover transition-transform duration-500 group-hover:scale-[1.05]" style={{ left: 0, width: "100%", top: "-8%", height: "116%", opacity: 0.6 }} />
+        ) : p.videos && p.videos.length > 0 ? (
+          <video src={p.videos[0]} autoPlay loop muted playsInline preload="metadata" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.72 }} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <span aria-hidden className="font-sans font-extrabold" style={{ fontSize: "clamp(72px,12vw,150px)", lineHeight: 1, letterSpacing: "-0.05em", color: "#fff", opacity: 0.05, textTransform: "uppercase" }}>
@@ -123,6 +125,8 @@ function ProjectCard({ p, locale, isPt, caseLabel, liveLabel }: {
           {p.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={p.image} alt={name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" style={{ opacity: 0.62 }} />
+          ) : p.videos && p.videos.length > 0 ? (
+            <video src={p.videos[0]} autoPlay loop muted playsInline preload="metadata" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.72 }} />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
               <span aria-hidden className="font-sans font-extrabold" style={{ fontSize: "clamp(64px,16vw,128px)", lineHeight: 1, letterSpacing: "-0.05em", color: "#fff", opacity: 0.05, textTransform: "uppercase" }}>

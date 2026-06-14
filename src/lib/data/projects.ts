@@ -35,6 +35,8 @@ export interface Project {
   statusPt?: string;
   image?: string;
   gallery?: string[];
+  /** Web-optimized MP4s hosted on Vercel Blob (not bundled in the repo). */
+  videos?: string[];
   githubUrl?: string;
   liveUrl?: string;
   featured: boolean;
@@ -183,6 +185,8 @@ export const projects: Project[] = [
     namePt: "Metanova Labs – Dashboard Bittensor",
     name: "Metanova Labs",
     type: "Data Dashboard / Product",
+    image: "/projects/metanova/metanova-1.png",
+    gallery: ["/projects/metanova/metanova-1.png", "/projects/metanova/metanova-2.png"],
     descriptionEn:
       "Dashboard for Bittensor subnet 68 — an on-chain AI drug-discovery network. Implemented the Algorithms tab frontend/backend integration. Tracks molecular competitions, miner leaderboards, and protein data across epochs.",
     descriptionPt:
@@ -243,6 +247,11 @@ export const projects: Project[] = [
     namePt: "DSRPTV Records – Plataforma de Música",
     name: "DSRPTV Records",
     type: "Creative Commerce Platform",
+    videos: [
+      "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/dsrptv/dsrptv-1.mp4",
+      "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/dsrptv/dsrptv-2.mp4",
+      "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/dsrptv/dsrptv-3.mp4",
+    ],
     descriptionEn:
       "Music e-commerce and streaming platform. Stripe + Mercado Pago dual checkout, Spotify API, AWS S3 asset storage, Three.js visuals. Built with Raphael Palmer (DISCLAYMER).",
     descriptionPt:
@@ -1420,6 +1429,9 @@ export const projects: Project[] = [
     namePt: "Novo Rio – RPG de Simulação de Agrofloresta",
     name: "Novo Rio",
     type: "Web Game / Simulation / AI-Assisted",
+    videos: [
+      "https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/novo-rio/novo-rio-1.mp4",
+    ],
     descriptionEn:
       "Browser-based agroforestry simulation RPG developed within EKO – Residência Artística, funded by FAC / GDF. Set in Rio de Janeiro and built on sintropic agriculture principles. Players restore degraded land through planting, soil management, and seasonal adaptation. A real-time tick engine drives plant lifecycles, climate events, and soil health scoring. EKO — a local Ollama LLM — acts as an AI guide, and players can manage their farm via WhatsApp commands.",
     descriptionPt:

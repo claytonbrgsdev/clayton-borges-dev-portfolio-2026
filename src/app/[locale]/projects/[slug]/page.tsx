@@ -101,6 +101,32 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               </p>
             </div>
             <div className="space-y-12">
+              {((project.gallery && project.gallery.length > 0) || (project.videos && project.videos.length > 0)) && (
+                <Section label={locale === "pt" ? "Mídia" : "Media"}>
+                  <div className="space-y-4">
+                    {project.videos?.map((src, i) => (
+                      <div key={`v${i}`} className="w-full overflow-hidden border border-white/10">
+                        <video
+                          src={src}
+                          controls
+                          loop
+                          muted
+                          playsInline
+                          preload="metadata"
+                          className="w-full h-auto block"
+                          style={{ maxHeight: 520, objectFit: "cover" }}
+                        />
+                      </div>
+                    ))}
+                    {project.gallery?.map((src, i) => (
+                      <div key={`g${i}`} className="w-full overflow-hidden border border-white/10">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt={`${name} ${i + 1}`} className="w-full h-auto block" />
+                      </div>
+                    ))}
+                  </div>
+                </Section>
+              )}
               {overview && (
                 <Section label={p.case_study_overview}>
                   <p className="font-sans text-sm opacity-55 leading-relaxed">{overview}</p>
