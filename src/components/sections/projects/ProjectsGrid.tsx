@@ -33,7 +33,17 @@ function FeaturedCard({ project, locale, dict }: { project: Project; locale: Loc
     <div className="border border-white/10 flex flex-col hover:border-white/30 transition-all duration-300 group">
       {/* Thumbnail */}
       <div className="relative overflow-hidden border-b border-white/[0.08]" style={{ aspectRatio: "16/9" }}>
-        {project.image ? (
+        {project.videos && project.videos.length > 0 ? (
+          <video
+            src={project.videos[0]}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+          />
+        ) : project.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={project.image}
@@ -109,8 +119,20 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
 
   return (
     <div className="border border-white/10 flex flex-col hover:border-white/25 transition-all duration-300 group hover:-translate-y-0.5">
-      {/* Thumbnail — only if image exists */}
-      {project.image && (
+      {/* Thumbnail — video preferred, then image */}
+      {(project.videos && project.videos.length > 0) ? (
+        <div className="relative overflow-hidden border-b border-white/[0.08]" style={{ aspectRatio: "4/3" }}>
+          <video
+            src={project.videos[0]}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500"
+          />
+        </div>
+      ) : project.image ? (
         <div className="relative overflow-hidden border-b border-white/[0.08]" style={{ aspectRatio: "4/3" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -119,7 +141,7 @@ function RegularCard({ project, locale, dict }: { project: Project; locale: Loca
             className="w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity duration-500"
           />
         </div>
-      )}
+      ) : null}
 
       <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-2">
