@@ -523,75 +523,6 @@ export const projects: Project[] = [
     year: 2025,
   },
   {
-    id: "product-showcase-3d",
-    nameEn: "3D Product Showcase",
-    namePt: "Showcase de Produto 3D",
-    name: "3D Product Showcase",
-    type: "Interactive 3D Configurator / WebGL Product Visualization",
-    descriptionEn:
-      "Professional-grade 3D product configurator for vehicle covers. Swappable showroom scenarios, per-region logo application via UV-mapped canvas compositing, cinematic camera automation with 'takes', and full lighting preset serialization — all in vanilla Three.js with no build step.",
-    descriptionPt:
-      "Configurador 3D de nível profissional para capas veiculares. Cenários de showroom intercambiáveis, aplicação de logo por região via composição UV em canvas, automação de câmera cinemática com 'takes' e serialização completa de presets de iluminação — tudo em Three.js puro sem etapa de build.",
-    tech: ["Three.js r160", "JavaScript", "WebGL", "DRACO", "Meshopt", "GLB/glTF", "EffectComposer", "BokehPass"],
-    categories: ["3d-visualization"],
-    highlights: [
-      "Per-region logo application: uploads PNG logo, composites it onto UV-mapped product surfaces via Canvas API with smart background estimation",
-      "Cinematic camera system with 'takes' — automated orbital sequences with configurable dwell time, azimuth drift, radius sway, and smooth user-override blend-back",
-      "4 swappable showroom environments (sci-fi, modern, VR, art gallery), each with independent lighting setup and floor-snap Y-offsets",
-      "Preset serialization to localStorage: saves full lighting + camera state per scenario as importable/exportable JSON",
-      "CDN-based Three.js via import maps — zero build tooling, instant reload during development, DRACO + Meshopt decoders loaded lazily",
-    ],
-    overview:
-      "The 3D Product Showcase is a browser-based product configurator built for Evolut Digital to visualize vehicle covers (Kosha4 product line) in photorealistic 3D environments. Sales teams can swap showroom scenarios, apply client logos to specific product regions, configure directional lighting and depth-of-field blur, and save/load lighting presets — then capture the result for presentations. The entire stack is vanilla Three.js with no build process, delivered as static files and served from a simple HTTP server.",
-    overviewPt:
-      "O 3D Product Showcase é um configurador de produto baseado em navegador criado para a Evolut Digital para visualizar capas veiculares (linha Kosha4) em ambientes 3D fotorrealistas. Equipes de vendas podem trocar cenários de showroom, aplicar logos de clientes em regiões específicas do produto, configurar iluminação direcional e desfoque de profundidade de campo, e salvar/carregar presets de iluminação — capturando o resultado para apresentações.",
-    problem:
-      "Product photography for custom vehicle covers requires physical samples and studio shoots for each client configuration — expensive and slow. A 3D configurator that lets the sales team show any logo placement, color, and environment in real time eliminates the need for physical mockups. The main technical challenge was per-region logo application: the product has distinct front, back, and lateral panels that must accept independent logo uploads without the materials interfering with each other.",
-    problemPt:
-      "A fotografia de produto para capas veiculares personalizadas exige amostras físicas e sessões de estúdio para cada configuração de cliente — caro e lento. Um configurador 3D que permite à equipe de vendas mostrar qualquer posicionamento de logo, cor e ambiente em tempo real elimina a necessidade de mockups físicos. O principal desafio técnico era a aplicação de logo por região: o produto tem painéis frontal, traseiro e lateral distintos que devem aceitar uploads de logo independentes sem que os materiais interfiram entre si.",
-    goal:
-      "Build a professional 3D product configurator that: (1) loads GLB models with DRACO/Meshopt compression; (2) applies logos to specific UV-mapped product regions via canvas compositing; (3) supports 4 swappable photorealistic environments; (4) provides cinematic camera automation for product reveals; (5) serializes the full scene state as presets.",
-    goalPt:
-      "Construir um configurador 3D profissional que: (1) carregue modelos GLB com compressão DRACO/Meshopt; (2) aplique logos em regiões específicas do produto via composição canvas; (3) suporte 4 ambientes fotorrealistas intercambiáveis; (4) forneça automação de câmera cinemática para apresentações do produto; (5) serialize o estado completo da cena como presets.",
-    role: ["Solo developer — Three.js architecture, material system, camera system, deployment"],
-    rolePt: ["Desenvolvedor solo — arquitetura Three.js, sistema de materiais, sistema de câmera, deploy"],
-    technicalDecisions: [
-      "Per-region logo application via material cloning — the product's named mesh regions (CUBE, CUBE002, CUBE003, CUBE004) each get a cloned instance of Material 003 flagged with userData._cloned markers to prevent re-cloning. An uploaded PNG is composited onto a Canvas with background color estimation, then applied as a texture update to the specific mesh's material without affecting other regions.",
-      "Canvas API UV compositing for logo placement — instead of a custom shader, the logo is rendered onto an HTML Canvas matching the texture UV space, then converted to a Three.js CanvasTexture. This approach works without GPU access and correctly respects the model's UV transforms and texture coordinate offsets.",
-      "CDN import maps with no build step — Three.js r160 is loaded from unpkg via ES module import maps. DRACOLoader and MeshoptDecoder are loaded from the same CDN lazily. Zero webpack/vite configuration; development workflow is edit-save-reload, not edit-save-bundle-reload.",
-      "Cinematic camera 'takes' system — each take defines an orbital path with configurable dwell time, azimuth drift speed, radius sway amplitude, and sway frequency. When the user interacts with OrbitControls, the take system smoothly blends back to automated motion after 5 seconds of inactivity using lerp on spherical coordinates.",
-      "Per-scenario light setups — rather than a global directional key light, each showroom environment defines its own RectAreaLights and DirectionalLights. Swapping scenarios disposes the previous lights and instantiates the new set, preventing light accumulation and ensuring each environment has its intended photographic look.",
-      "Preset JSON serialization to localStorage — a full preset captures all editable light positions/colors/intensities and camera position/target/FOV as a JSON object. Presets are keyed per scenario, enabling separate saved states for each environment. Export as .json files allows sharing between team members.",
-    ],
-    technicalDecisionsPt: [
-      "Aplicação de logo por região via clonagem de material — as regiões de mesh nomeadas do produto (CUBE, CUBE002, CUBE003, CUBE004) recebem cada uma uma instância clonada do Material 003 marcada com userData._cloned para evitar re-clonagem. Um PNG enviado é composto em um Canvas com estimativa de cor de fundo, depois aplicado como atualização de textura ao material do mesh específico sem afetar outras regiões.",
-      "Composição UV via Canvas API para posicionamento de logo — em vez de um shader customizado, o logo é renderizado em um Canvas HTML correspondendo ao espaço UV da textura, depois convertido para um CanvasTexture do Three.js. Essa abordagem funciona sem acesso à GPU e respeita corretamente os transforms UV e deslocamentos de coordenadas de textura do modelo.",
-      "Import maps CDN sem etapa de build — Three.js r160 carregado do unpkg via ES module import maps. DRACOLoader e MeshoptDecoder carregados do mesmo CDN de forma lazy. Zero configuração webpack/vite; fluxo de desenvolvimento é editar-salvar-recarregar, não editar-salvar-bundle-recarregar.",
-      "Sistema de 'takes' cinemáticos — cada take define um caminho orbital com tempo de permanência, velocidade de drift azimutal, amplitude de sway de raio e frequência de sway configuráveis. Quando o usuário interage com OrbitControls, o sistema de take volta suavemente ao movimento automatizado após 5 segundos de inatividade usando lerp em coordenadas esféricas.",
-      "Configurações de luz por cenário — em vez de uma luz key direcional global, cada ambiente de showroom define seus próprios RectAreaLights e DirectionalLights. Trocar cenários descarta as luzes anteriores e instancia o novo conjunto, evitando acumulação de luz e garantindo que cada ambiente tenha seu visual fotográfico pretendido.",
-      "Serialização JSON de presets para localStorage — um preset completo captura todas as posições/cores/intensidades de luzes editáveis e posição/alvo/FOV da câmera como objeto JSON. Presets são chaveados por cenário, permitindo estados salvos separados para cada ambiente. Exportar como arquivos .json permite compartilhamento entre membros da equipe.",
-    ],
-    learnings: [
-      "Material cloning must be carefully tracked — early versions re-cloned materials on every logo upload, creating an unbounded number of material instances. The _cloned flag pattern (userData._clonedLogo = true) prevents re-cloning without requiring a separate material registry.",
-      "CDN-based Three.js is viable for client deliverables — the absence of a build step meant the client's team could modify the showroom configuration file and see changes immediately without any toolchain knowledge. The tradeoff is longer initial load time vs. npm-bundled builds.",
-      "Cinematic camera automation significantly improves demo quality — static camera presets required the user to memorize positions. The takes system made product demos feel like directed video without requiring the presenter to operate the camera.",
-      "Per-scenario light setups prevent an 'overlit' accumulation bug — sharing a global directional light across scenarios caused it to compound with scenario-specific lights when switching environments. Disposing and recreating lights on scenario change was the correct isolation model.",
-    ],
-    learningsPt: [
-      "A clonagem de material deve ser rastreada cuidadosamente — versões iniciais re-clonavam materiais a cada upload de logo, criando um número ilimitado de instâncias. O padrão de flag _cloned (userData._clonedLogo = true) evita re-clonagem sem exigir um registro separado de materiais.",
-      "Three.js via CDN é viável para entregas a clientes — a ausência de etapa de build significava que a equipe do cliente podia modificar o arquivo de configuração do showroom e ver as mudanças imediatamente sem nenhum conhecimento de toolchain. O tradeoff é maior tempo de carregamento inicial vs. builds com npm.",
-      "A automação de câmera cinemática melhora significativamente a qualidade das demos — presets de câmera estáticos exigiam que o usuário memorizasse posições. O sistema de takes fez as demos de produto parecerem vídeos dirigidos sem exigir que o apresentador operasse a câmera.",
-      "Configurações de luz por cenário evitam um bug de acumulação 'superiluminada' — compartilhar uma luz direcional global entre cenários a fazia se acumular com luzes específicas do cenário ao trocar ambientes. Descartar e recriar luzes na troca de cenário foi o modelo de isolamento correto.",
-    ],
-    status: "Delivered to client — Evolut Digital",
-    statusPt: "Entregue ao cliente — Evolut Digital",
-    githubUrl: "https://github.com/claytonbrgsdev/product-showcase-v2",
-    liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
-    featured: false,
-    year: 2025,
-    client: "Evolut Digital",
-  },
-  {
     id: "reacto",
     nameEn: "REACTO – Web Audio-Visual Experiments",
     image: "/projects/reacto/project-reacto.png",
@@ -827,6 +758,8 @@ export const projects: Project[] = [
     namePt: "SlackTranslator – Bot de Tradução em Tempo Real",
     name: "SlackTranslator",
     type: "Real-Time Communication Tool / AI Integration",
+    image: "/projects/slack-translator/cover.png",
+    gallery: ["/projects/slack-translator/cover.png"],
     descriptionEn:
       "Privacy-first real-time Slack translator built in pure Ruby. Incoming messages are translated English→Portuguese by a local LLM (Ollama) and pushed to a two-column web UI via SSE. Replies are translated back before posting, with a confirmation step to catch LLM errors. No cloud API keys — all inference runs on-device.",
     descriptionPt:
