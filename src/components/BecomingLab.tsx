@@ -19,7 +19,7 @@ const PROJECTS: ProjectEntry[] = [
     year: "2025",
     desc: "3D car cover showroom with live customization. One rigged GLB per vehicle category (12+ types); Three.js applies fabric color, sewing line color, and customer-uploaded logo in real time. Zero pre-rendered composites.",
     tags: ["Three.js", "GLB", "Next.js", "TypeScript"],
-    href: "https://claytonbrgsdev.github.io/product-showcase-v2/",
+    href: "https://claytonbrgsdev.github.io/mz-prime/",
   },
   {
     title: "Moveo Filmes",

@@ -98,7 +98,7 @@ function ThumbWave() {
 
 const PROJECT_BASE = [
   { id: "W-001", name: "Moveo Filmes", tech: "Next.js 16 · Supabase RLS · TipTap · dnd-kit · GSAP", Thumb: ThumbGrid, href: null },
-  { id: "W-002", name: "MzPrime",       tech: "Three.js · React Three Fiber · MeshStandardMaterial · CanvasTexture", Thumb: ThumbOrbs, href: "https://claytonbrgsdev.github.io/product-showcase-v2/" },
+  { id: "W-002", name: "MzPrime",       tech: "Three.js · React Three Fiber · MeshStandardMaterial · CanvasTexture", Thumb: ThumbOrbs, href: "https://claytonbrgsdev.github.io/mz-prime/" },
   { id: "W-003", name: "Metanova Labs", tech: "Next.js 15 · TypeScript · Radix UI · SWR", Thumb: ThumbNet, href: "https://metanovalabs.ai/dashboard" },
   { id: "W-004", name: "DSRPTV Records", tech: "Stripe · Mercado Pago · Spotify API · AWS S3 · Three.js", Thumb: ThumbWave, href: "http://dsrptvrec.com" },
 ];
