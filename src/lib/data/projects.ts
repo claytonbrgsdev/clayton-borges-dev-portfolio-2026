@@ -666,6 +666,9 @@ export const projects: Project[] = [
     namePt: "Rastreador de Ciclos de Medicação",
     name: "Medication Cycles Tracker",
     type: "Interactive 3D Web App / Personal Health Tool",
+    image: "/projects/medication/medication-1.png",
+    gallery: ["/projects/medication/medication-1.png"],
+    videos: ["https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/medication/medication-1.mp4"],
     descriptionEn:
       "Browser-based pharmacokinetic tracker for Venvanse (ADHD medication). A 3D parametric helix spiral visualizes the 15-hour medication cycle across 5 phases, with dual concentration models (linear and exponential half-life), system notifications at phase transitions, and task recommendations based on energy level.",
     descriptionPt:
