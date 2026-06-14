@@ -273,7 +273,7 @@ export const caseStudies: CaseStudy[] = [
       "Atualizações de material, shader e textura via Three.js sem recarregar modelos completos.",
       "Otimização de performance no navegador para uma experiência 3D interativa e leve.",
     ],
-    liveUrl: "https://claytonbrgsdev.github.io/product-showcase-v2/",
+    liveUrl: "https://claytonbrgsdev.github.io/mz-prime/",
   },
 ];
 
