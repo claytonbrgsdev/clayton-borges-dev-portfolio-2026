@@ -526,6 +526,7 @@ export const projects: Project[] = [
     id: "reacto",
     nameEn: "REACTO – Web Audio-Visual Experiments",
     image: "/projects/reacto/project-reacto.png",
+    videos: ["https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/reacto/reacto-1.mp4"],
     namePt: "REACTO – Experimentos Audio-Visuais Web",
     name: "REACTO",
     type: "Creative Web Application / Audio-Visual Suite",
