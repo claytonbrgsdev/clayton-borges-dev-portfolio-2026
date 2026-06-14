@@ -389,6 +389,7 @@ export const projects: Project[] = [
     namePt: "ASA Player – Visualizador de Música ASCII",
     name: "ASA Player",
     type: "Creative Web Application / Audio Visualization",
+    videos: ["https://widxfmqb2xaemqo0.public.blob.vercel-storage.com/projects/asa-player/asa-player.mp4"],
     descriptionEn:
       "Retro music player with a real-time 140×16 ASCII spectrum analyzer, adaptive quality system, VU meters, oscilloscope, and glitch visual effects — all built with Web Audio API and Next.js.",
     descriptionPt:
