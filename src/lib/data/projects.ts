@@ -238,7 +238,7 @@ export const projects: Project[] = [
     ],
     status: "Delivered — live in production",
     statusPt: "Entregue — no ar em produção",
-    liveUrl: "https://metanovalabs.ai/dashboard",
+    liveUrl: "https://www.metanova-labs.ai/dashboard",
     featured: true,
     year: 2025,
     client: "Metanova Labs",
